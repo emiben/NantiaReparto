@@ -1,0 +1,52 @@
+<resources>
+    <string name="app_name">RepartoNantia</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="login_nombre_usuario">Nombre Usuario</string>
+    <string name="login_contrasenia">Contraseña</string>
+    <string name="login_ingresar">Ingresar</string>
+    <string name="title_activity_producto">ProductoActivity</string>
+
+    <!-- Strings related to producto -->
+    <string name="producto_no_retornable">No Retornable</string>
+    <string name="producto_retornable">Retornable</string>
+    <string name="producto_nombre">Nombre:</string>
+    <string name="envases">Envases</string>
+    <string name="producto_presentacion">Presentación:</string>
+    <string name="producto_descripcion">Descripción:</string>
+
+    <!-- Strings related to cliente -->
+    <string name="cliente_CI">C.I.</string>
+    <string name="cliente_RUT">RUT</string>
+    <string name="cliente_telefono">Tel.</string>
+    <string name="cliente_celular">Móvil</string>
+    <string name="cliente_direccion">Dirección</string>
+    <string name="cliente_saldo">Saldo</string>
+    <string name="cliente_envases_prestamo">Envases a prestamo</string>
+    <string name="cliente_envase_prestamo">Envase a prestamo</string>
+    <string name="cliente_cantidad">Cantidad</string>
+    <string name="cliente_mail">Mail</string>
+    <string name="cliente_observaciones">Observaciones</string>
+    <string name="cliente_nombre">Nombre</string>
+    <string name="cliente_apellido">Apellido</string>
+    <string name="cliente_nro_CI">Numero de C.I.</string>
+    <string name="cliente_nro_RUT">Numero de RUT</string>
+    <string name="cliente_fecha_nac">Fecha de Nacimiento</string>
+    <string name="cliente_tel_1">Telefono 1</string>
+    <string name="cliente_tel_2">Telefono 2</string>
+    <string name="cliente_dir_mail">Dirección de correo electronico</string>
+    <string name="cliente_ciudad">Ciudad</string>
+    <string name="cliente_departamento">Departamento</string>
+    <string name="cliente_cp">Código Postal</string>
+    <string name="cliente_empresa_nombre_fantasia">Nombre fantasía</string>
+    <string name="cliente_empresa_nombre_legal">Nombre Legal</string>
+    <string name="cliente_nuevo">Cliente Nuevo</string>
+    <string name="cliente_eliminar_env_prestamo">Eliminar envase a prestamo</string>
+    <string name="cliente_eliminar_env_prestamo_desc">Confirme que desea eliminar envase a prestamo</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+</resources>
