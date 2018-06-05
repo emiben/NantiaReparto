@@ -15,6 +15,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="@dimen/recycler_view_margin"
             android:clipToPadding="true">
 
             <LinearLayout
@@ -101,10 +102,10 @@
                             android:id="@+id/fecha_de_nac_et"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:hint="@string/cliente_fecha_nac"
                             android:clickable="true"
+                            android:ems="10"
                             android:focusable="false"
+                            android:hint="@string/cliente_fecha_nac"
                             android:inputType="none" />
                     </LinearLayout>
                 </android.support.constraint.ConstraintLayout>
@@ -205,7 +206,8 @@
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/recycler_view_margin">
 
                     <ImageView
                         android:id="@+id/home_image"
@@ -281,7 +283,8 @@
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/recycler_view_margin">
 
                     <ImageView
                         android:id="@+id/prod_image"
@@ -301,14 +304,14 @@
                         android:id="@+id/agreagr_env_prestamo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/mas_icono_azul"
+                        android:layout_marginBottom="8dp"
                         android:layout_marginRight="16dp"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
                         android:layout_marginTop="8dp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:layout_marginBottom="8dp"
-                        app:layout_constraintVertical_bias="0.0" />
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0"
+                        app:srcCompat="@drawable/mas_icono_azul" />
 
                     <LinearLayout
                         android:id="@+id/env_prestamo_lo"
@@ -327,6 +330,54 @@
                     </LinearLayout>
 
                 </android.support.constraint.ConstraintLayout>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/recycler_view_margin">
+
+                    <ImageView
+                        android:id="@+id/comentario_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0"
+                        app:srcCompat="@drawable/comments_2" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toRightOf="@+id/comentario_image"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <EditText
+                            android:id="@+id/comentario_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:hint="@string/cliente_comentarios"
+                            android:inputType="textMultiLine"
+                            android:minLines="3"
+                            android:gravity="top|left"
+                            android:maxLines="8" />
+
+                    </LinearLayout>
+                </android.support.constraint.ConstraintLayout>
+
 
             </LinearLayout>
         </ScrollView>

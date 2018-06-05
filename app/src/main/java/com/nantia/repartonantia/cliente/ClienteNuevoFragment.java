@@ -7,10 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -24,9 +21,9 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.nantia.repartonantia.R;
+import com.nantia.repartonantia.adapters.EnvaseSpinnerAdapter;
 import com.nantia.repartonantia.map.ClienteMapaFragment;
 import com.nantia.repartonantia.producto.Envase;
-import com.nantia.repartonantia.utils.CustomEditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +45,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     private TextView ciudad;
     private TextView departamento;
     private TextView codigoPostal;
-    private ArrayList<CustomEditText> envAPrestamoETs = new ArrayList<>();
+    private ArrayList<Spinner> envAPrestamoSPs = new ArrayList<>();
     private ArrayList<TextView> envAPrestamoCantETs = new ArrayList<>();
     private LinearLayout envAPrestamoLO;
     private ImageView usuarioImage;
@@ -79,6 +76,13 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         initializeViewObjects(view);
         setOnClickListeners();
         loadSpinner();
+
+        //TODO: Traer envases posta
+        envases = new ArrayList<>();
+        envases.add(new Envase(0, "Nuevo envase a prestamo..."));
+        for(int i=1; i < 50; i++){
+            envases.add(new Envase(i, "Envase " + i));
+        }
         addEditTexts();
 
         if(getArguments() != null){
@@ -179,35 +183,6 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
                 .commit();
     }
 
-    private void singleChoiceWithRadioButton(final int viewId) {
-        //TODO: Traer los envases originales
-        final CharSequence[] envNombre = new CharSequence[50];
-        envases = new ArrayList<>();
-        for(int i=0; i < 50; i++){
-            envases.add(new Envase(i, "Envase " + i));
-            envNombre[i] = "Envase " + i;
-        }
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(getString(R.string.envases));
-        builder.setSingleChoiceItems(envNombre, -1,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ((TextView)getActivity().findViewById(viewId)).setText(envNombre[which]);
-                        dialog.dismiss();
-                    }
-                });
-        builder.setNegativeButton("Cancelar",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
     private void removeEditTextsDialog(final int viewId){
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(getString(R.string.cliente_eliminar_env_prestamo));
@@ -230,21 +205,12 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     }
 
     private void addEditTexts(){
-        CustomEditText envaseET = new CustomEditText(getActivity());
-        envaseET.setId(Integer.parseInt("1"+envAPrestamoETs.size() + 1));
-        envaseET.setLayoutParams(
-                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        envaseET.setHint(getString(R.string.cliente_envase_prestamo));
-        envaseET.setFocusable(false);
-        envaseET.setClickable(true);
-        envaseET.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                singleChoiceWithRadioButton(v.getId());
-            }
-        });
+        EnvaseSpinnerAdapter envaseSpinnerAdapter = new EnvaseSpinnerAdapter(getActivity(), envases);
 
-        envaseET.setOnLongClickListener(new View.OnLongClickListener() {
+        Spinner envaseSp = new Spinner(getActivity());
+        envaseSp.setAdapter(envaseSpinnerAdapter);
+        envaseSp.setId(Integer.parseInt("1"+envAPrestamoSPs.size() + 1));
+        envaseSp.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 removeEditTextsDialog(v.getId());
@@ -259,17 +225,34 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         envaseCantET.setHint(R.string.cliente_cantidad);
 
-        envAPrestamoETs.add(envaseET);
+        envAPrestamoSPs.add(envaseSp);
         envAPrestamoCantETs.add(envaseCantET);
-        envAPrestamoLO.addView(envaseET, 0);
+        envAPrestamoLO.addView(envaseSp, 0);
         envAPrestamoLO.addView(envaseCantET, 1);
     }
 
     private void removeEditTexts(int viewId){
-        //TODO: remove from arrayLists
-        envAPrestamoLO.removeView(getActivity().findViewById(viewId));
         String cantId = Integer.toString(viewId);
         cantId = cantId.substring(1);
+        boolean encontre = false;
+        int i = 0;
+        while (!encontre && i < envAPrestamoSPs.size()){
+            if(envAPrestamoSPs.get(i).getId() == viewId){
+                envAPrestamoSPs.remove(i);
+                encontre = true;
+            }
+            i++;
+        }
+        encontre = false;
+        i = 0;
+        while (!encontre && i < envAPrestamoCantETs.size()){
+            if(envAPrestamoCantETs.get(i).getId() == Integer.parseInt("2"+cantId)){
+                envAPrestamoCantETs.remove(i);
+                encontre = true;
+            }
+            i++;
+        }
+        envAPrestamoLO.removeView(getActivity().findViewById(viewId));
         envAPrestamoLO.removeView(getActivity().findViewById(Integer.parseInt("2"+cantId)));
     }
 }

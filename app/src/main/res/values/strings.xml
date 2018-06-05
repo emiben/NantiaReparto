@@ -36,6 +36,7 @@
     <string name="cliente_tel_1">Telefono 1</string>
     <string name="cliente_tel_2">Telefono 2</string>
     <string name="cliente_dir_mail">Dirección de correo electronico</string>
+    <string name="cliente_comentarios">Comentarios...</string>
     <string name="cliente_ciudad">Ciudad</string>
     <string name="cliente_departamento">Departamento</string>
     <string name="cliente_cp">Código Postal</string>
