@@ -33,6 +33,7 @@ import java.util.List;
  */
 public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, View.OnClickListener {
     private ClienteNuevoPresenter presenter;
+    private Cliente cliente;
     private TextView nombre1;
     private TextView nombre2;
     private TextView nroDeDoc;
@@ -45,6 +46,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     private TextView ciudad;
     private TextView departamento;
     private TextView codigoPostal;
+    private TextView comentarios;
     private ArrayList<Spinner> envAPrestamoSPs = new ArrayList<>();
     private ArrayList<TextView> envAPrestamoCantETs = new ArrayList<>();
     private LinearLayout envAPrestamoLO;
@@ -89,10 +91,15 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
             if(getArguments().getDouble("lat") != 0.0){
                 posicionMapa = new LatLng(getArguments().getDouble("lat"), getArguments().getDouble("lng"));
             }
+            if(getArguments().getSerializable("cliente") != null){
+                cliente = (Cliente) getArguments().getSerializable("cliente");
+                loadClienteData(cliente);
+            }
         }
 
         return view;
     }
+
 
     private void initializeViewObjects(View view){
         nombre1 = view.findViewById(R.id.nombre_1_et);
@@ -112,6 +119,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         fab = view.findViewById(R.id.cliente_nuevo_fab);
         envAPrestamoLO = view.findViewById(R.id.env_prestamo_lo);
         agregarEnvPrestamo = view.findViewById(R.id.agreagr_env_prestamo);
+        comentarios = view.findViewById(R.id.comentario_et);
     }
 
     private void setOnClickListeners(){
@@ -134,7 +142,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         List<String> list = new ArrayList<>();
         list.add(TipoDocumento.CI.name());
         list.add(TipoDocumento.RUT.name());
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         tipoDeDoc.setAdapter(adapter);
     }
@@ -254,5 +262,27 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         }
         envAPrestamoLO.removeView(getActivity().findViewById(viewId));
         envAPrestamoLO.removeView(getActivity().findViewById(Integer.parseInt("2"+cantId)));
+    }
+
+    private void loadClienteData(Cliente cliente) {
+        nombre1.setText(cliente.getNombre1());
+        nombre2.setText(cliente.getNombre2());
+        nroDeDoc.setText(cliente.getNroDocumento());
+        if(cliente.getTipoDocumento() == TipoDocumento.RUT){
+            tipoDeDoc.setSelection(1);
+            usuarioImage.setImageResource(R.drawable.factory_2);
+            casaImage.setImageResource(R.drawable.factory_2);
+        }
+        fecDeNac.setText(cliente.getFechaNacimiento().toString());
+        telefono1.setText(String.valueOf(cliente.getCelular()));
+        telefono2.setText(String.valueOf(cliente.getDireccion().getTelefono()));
+        email.setText(cliente.getMail());
+        direccion.setText(cliente.getDireccion().getDireccion());
+
+        posicionMapa = new LatLng(cliente.getDireccion().getCordLat(), cliente.getDireccion().getCordLon());
+        //TODO: Actualizar esto con el nuevo modelo
+//        ciudad;
+//        departamento;
+//        codigoPostal;
     }
 }

@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -50,7 +51,25 @@ public class ClienteFragment extends Fragment implements ClienteView {
         initializeViewObjects(view);
         clientePresenter.cargarInfo();
 
+        editFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToActualizarCliente();
+            }
+        });
+
         return view;
+    }
+
+    private void navigateToActualizarCliente() {
+        Bundle b = new Bundle();
+        b.putSerializable("cliente", cliente);
+        ClienteNuevoFragment clienteNuevoFragment = new ClienteNuevoFragment();
+        clienteNuevoFragment.setArguments(b);
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.cliente_lista_layout, clienteNuevoFragment, "clienteNuevoFragment")
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
