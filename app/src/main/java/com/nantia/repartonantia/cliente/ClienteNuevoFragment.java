@@ -83,6 +83,30 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     private Button guardar;
     private ProgressBar progressBar;
 
+    @Override
+    public void saveCliente() {
+        if(cliente == null){
+            cliente = new Cliente();
+        }
+        cliente.setNombre1(nombre1.getText().toString());
+        cliente.setNombre2(nombre2.getText().toString());
+        cliente.setNroDocumento(nroDeDoc.getText().toString());
+        if(tipoDeDoc.getSelectedItem().equals(TipoDocumento.CI.name())){
+            cliente.setTipoDocumento(TipoDocumento.CI);
+        }else if (tipoDeDoc.getSelectedItem().equals(TipoDocumento.RUT.name())){
+            cliente.setTipoDocumento(TipoDocumento.RUT);
+        }else {
+            cliente.setTipoDocumento(TipoDocumento.NA);
+        }
+        cliente.setFechaNacimiento(fecDeNac.getText().toString());
+        cliente.setCelular(telefono1.getText().toString());
+        cliente.setMail(email.getText().toString());
+        Direccion direccion = new Direccion(0, this.direccion.getText().toString(), this.posicionMapa.longitude, this.posicionMapa.latitude,
+            this.telefono2.getText().toString(), this.ciudad.getText().toString(), this.departamento.getText().toString(), this.codigoPostal.getText().toString());
+        cliente.setDireccion(direccion);
+        cliente.setObservaciones(comentarios.getText().toString());
+        cliente.setDias(dias);
+    }
 
     public ClienteNuevoFragment() {
         // Required empty public constructor
@@ -403,10 +427,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     }
 
 
-    @Override
-    public void saveCliente() {
 
-    }
 
     @Override
     public void setEnvases(ArrayList<Envase> envases) {

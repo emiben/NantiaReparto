@@ -66,7 +66,6 @@ public class EnvaseSpinnerAdapter extends ArrayAdapter<Envase> {
         return listItem;
     }
 
-
     //    public EnvaseSpinnerAdapter(Context mContext, ArrayList<Envase> items) {
 //        this.mContext = mContext;
 //        this.items = items;
