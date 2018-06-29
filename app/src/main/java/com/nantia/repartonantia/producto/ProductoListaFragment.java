@@ -59,19 +59,21 @@ public class ProductoListaFragment extends Fragment implements ProductoListaView
 
     @Override
     public void addListeners(){
-        buscarSV.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                productoAdapter.getFilter().filter(s);
-                return false;
-            }
+        if(productoAdapter != null){
+            buscarSV.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String s) {
+                    productoAdapter.getFilter().filter(s);
+                    return false;
+                }
 
-            @Override
-            public boolean onQueryTextChange(String s) {
-                productoAdapter.getFilter().filter(s);
-                return false;
-            }
-        });
+                @Override
+                public boolean onQueryTextChange(String s) {
+                    productoAdapter.getFilter().filter(s);
+                    return false;
+                }
+            });
+        }
     }
 
     @Override
@@ -104,7 +106,9 @@ public class ProductoListaFragment extends Fragment implements ProductoListaView
 
     @Override
     public void setProductosInfo(ArrayList<Producto> productos) {
-        productoAdapter = new ProductoAdapter(getActivity(), productos, this);
-        productosLV.setAdapter(productoAdapter);
+        if (productos != null){
+            productoAdapter = new ProductoAdapter(getActivity(), productos, this);
+            productosLV.setAdapter(productoAdapter);
+        }
     }
 }

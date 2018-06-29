@@ -1,5 +1,6 @@
 package com.nantia.repartonantia.cliente;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,25 +14,37 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.adapters.EnvaseSpinnerAdapter;
+import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.map.ClienteMapaFragment;
 import com.nantia.repartonantia.producto.Envase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
+
+import static com.nantia.repartonantia.cliente.Dia.DOMINGO;
 
 /**
  *
  */
-public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, View.OnClickListener {
+public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private ClienteNuevoPresenter presenter;
     private Cliente cliente;
     private TextView nombre1;
@@ -55,9 +68,20 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     private FloatingActionButton fab;
     private LatLng posicionMapa;
     private ImageView agregarEnvPrestamo;
-
+    private DatePickerDialog.OnDateSetListener date;
+    private Calendar calendar = Calendar.getInstance();
     private ArrayList<EnvaseEnPrestamo> envasesEnPrestamo;
     private ArrayList<Envase> envases;
+    private ArrayList<Dia> dias;
+    private RadioButton domingo;
+    private RadioButton lunes;
+    private RadioButton martes;
+    private RadioButton miercoles;
+    private RadioButton jueves;
+    private RadioButton viernes;
+    private RadioButton sabado;
+    private Button guardar;
+    private ProgressBar progressBar;
 
 
     public ClienteNuevoFragment() {
@@ -80,12 +104,13 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         loadSpinner();
 
         //TODO: Traer envases posta
-        envases = new ArrayList<>();
-        envases.add(new Envase(0, "Nuevo envase a prestamo..."));
-        for(int i=1; i < 50; i++){
-            envases.add(new Envase(i, "Envase " + i));
-        }
-        addEditTexts();
+//        envases = new ArrayList<>();
+//        envases.add(new Envase(0, "Nuevo envase a prestamo..."));
+//        for(int i=1; i < 50; i++){
+//            envases.add(new Envase(i, "Envase " + i));
+//        }
+        presenter.getEnvases();
+        addEditTexts(null);
 
         if(getArguments() != null){
             if(getArguments().getDouble("lat") != 0.0){
@@ -96,6 +121,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
                 loadClienteData(cliente);
             }
         }
+
 
         return view;
     }
@@ -120,6 +146,15 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         envAPrestamoLO = view.findViewById(R.id.env_prestamo_lo);
         agregarEnvPrestamo = view.findViewById(R.id.agreagr_env_prestamo);
         comentarios = view.findViewById(R.id.comentario_et);
+        domingo = view.findViewById(R.id.domingo_rb);
+        lunes = view.findViewById(R.id.lunes_rb);
+        martes = view.findViewById(R.id.martes_rb);
+        miercoles = view.findViewById(R.id.miercoles_rb);
+        jueves = view.findViewById(R.id.jueves_rb);
+        viernes = view.findViewById(R.id.viernes_rb);
+        sabado = view.findViewById(R.id.sabado_rb);
+        guardar = view.findViewById(R.id.boton_guardar);
+        progressBar = view.findViewById(R.id.cliente_nuevo_progress);
     }
 
     private void setOnClickListeners(){
@@ -136,6 +171,39 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
 
             }
         });
+
+        date = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                // TODO Auto-generated method stub
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, monthOfYear);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel();
+            }
+
+        };
+
+        fecDeNac.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                new DatePickerDialog(getContext(), date, calendar
+                        .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+        domingo.setOnCheckedChangeListener(this);
+        lunes.setOnCheckedChangeListener(this);
+        martes.setOnCheckedChangeListener(this);
+        miercoles.setOnCheckedChangeListener(this);
+        jueves.setOnCheckedChangeListener(this);
+        viernes.setOnCheckedChangeListener(this);
+        sabado.setOnCheckedChangeListener(this);
     }
 
     private void loadSpinner(){
@@ -171,7 +239,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
                 navigateToClienteNuevoMapaFragment();
                 break;
             case R.id.agreagr_env_prestamo:
-                addEditTexts();
+                addEditTexts(null);
                 break;
             default:
                 break;
@@ -212,8 +280,16 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         alert.show();
     }
 
-    private void addEditTexts(){
-        EnvaseSpinnerAdapter envaseSpinnerAdapter = new EnvaseSpinnerAdapter(getActivity(), envases);
+    private void addEditTexts(EnvaseEnPrestamo envaseEnPrestamo){
+        EnvaseSpinnerAdapter envaseSpinnerAdapter = null;
+
+        if(envaseEnPrestamo != null){
+            ArrayList<Envase> envase = new ArrayList<>();
+            envase.add(envaseEnPrestamo.getEnvase());
+            envaseSpinnerAdapter = new EnvaseSpinnerAdapter(getActivity(), envase);
+        }else{
+            envaseSpinnerAdapter = new EnvaseSpinnerAdapter(getActivity(), envases);
+        }
 
         Spinner envaseSp = new Spinner(getActivity());
         envaseSp.setAdapter(envaseSpinnerAdapter);
@@ -232,6 +308,10 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         envaseCantET.setLayoutParams(
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         envaseCantET.setHint(R.string.cliente_cantidad);
+
+        if(envaseEnPrestamo != null){
+            envaseCantET.setText(envaseEnPrestamo.getCantidad());
+        }
 
         envAPrestamoSPs.add(envaseSp);
         envAPrestamoCantETs.add(envaseCantET);
@@ -278,11 +358,108 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         telefono2.setText(String.valueOf(cliente.getDireccion().getTelefono()));
         email.setText(cliente.getMail());
         direccion.setText(cliente.getDireccion().getDireccion());
+        ciudad.setText(cliente.getDireccion().getCiudad());
+        departamento.setText(cliente.getDireccion().getDepartamento());
+        codigoPostal.setText(cliente.getDireccion().getCodPostal());
+        envasesEnPrestamo = cliente.getEnvasesEnPrestamo();
 
+        for(int i = 0; i < envasesEnPrestamo.size(); i++){
+            addEditTexts(envasesEnPrestamo.get(i));
+        }
+        dias = cliente.getDias();
+        for(int i  =0; i < dias.size(); i++){
+            selectDias(dias.get(i));
+        }
         posicionMapa = new LatLng(cliente.getDireccion().getCordLat(), cliente.getDireccion().getCordLon());
-        //TODO: Actualizar esto con el nuevo modelo
-//        ciudad;
-//        departamento;
-//        codigoPostal;
+    }
+
+
+    private void selectDias(Dia dia){
+        switch (dia){
+            case DOMINGO:
+                domingo.setChecked(true);
+                break;
+            case LUNES:
+                lunes.setChecked(true);
+                break;
+            case MARTES:
+                martes.setChecked(true);
+                break;
+            case MIERCOLES:
+                miercoles.setChecked(true);
+                break;
+            case JUEVES:
+                jueves.setChecked(true);
+                break;
+            case VIERNES:
+                viernes.setChecked(true);
+                break;
+            case SABADO:
+                sabado.setChecked(true);
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    @Override
+    public void saveCliente() {
+
+    }
+
+    @Override
+    public void setEnvases(ArrayList<Envase> envases) {
+        envases.add(0, new Envase(0, "Nuevo envase a prestamo..."));
+        this.envases = envases;
+    }
+
+    @Override
+    public void onSetProgressBarVisibility(int visibility) {
+        progressBar.setVisibility(visibility);
+    }
+
+    private void updateLabel() {
+        String myFormat = "dd/MM/yyyy";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        fecDeNac.setText(sdf.format(calendar.getTime()));
+    }
+
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()){
+            case R.id.domingo_rb:
+                addRemoveDia(isChecked, Dia.DOMINGO);
+                break;
+            case R.id.lunes_rb:
+                addRemoveDia(isChecked, Dia.LUNES);
+                break;
+            case R.id.martes_rb:
+                addRemoveDia(isChecked, Dia.MARTES);
+                break;
+            case R.id.miercoles_rb:
+                addRemoveDia(isChecked, Dia.MIERCOLES);
+                break;
+            case R.id.jueves_rb:
+                addRemoveDia(isChecked, Dia.JUEVES);
+                break;
+            case R.id.viernes_rb:
+                addRemoveDia(isChecked, Dia.VIERNES);
+                break;
+            case R.id.sabado_rb:
+                addRemoveDia(isChecked, Dia.SABADO);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void addRemoveDia(boolean add, Dia dia){
+        if(add){
+            dias.add(dia);
+        }else{
+            dias.remove(dia);
+        }
     }
 }

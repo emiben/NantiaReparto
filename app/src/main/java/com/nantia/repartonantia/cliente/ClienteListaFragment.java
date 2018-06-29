@@ -1,5 +1,6 @@
 package com.nantia.repartonantia.cliente;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.adapters.ClienteListaAdapter;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  *
@@ -91,29 +93,32 @@ public class ClienteListaFragment extends Fragment implements ClienteListaAdapte
 
     @Override
     public void setClienteInfo(ArrayList<Cliente> clientes) {
-        this.clientes = clientes;
-        clientesRV.setLayoutManager(new LinearLayoutManager(getActivity()));
-        clienteListaAdapter = new ClienteListaAdapter(getActivity(), clientes);
-        clienteListaAdapter.setClickListener(this);
-        clientesRV.setAdapter(clienteListaAdapter);
-
+        if (clientes != null){
+            this.clientes = clientes;
+            clientesRV.setLayoutManager(new LinearLayoutManager(getActivity()));
+            clienteListaAdapter = new ClienteListaAdapter(getActivity(), clientes);
+            clienteListaAdapter.setClickListener(this);
+            clientesRV.setAdapter(clienteListaAdapter);
+        }
     }
 
     @Override
     public void addListeners() {
-        buscarSV.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                clienteListaAdapter.getFilter().filter(s);
-                return false;
-            }
+        if (clienteListaAdapter != null){
+            buscarSV.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String s) {
+                    clienteListaAdapter.getFilter().filter(s);
+                    return false;
+                }
 
-            @Override
-            public boolean onQueryTextChange(String s) {
-                clienteListaAdapter.getFilter().filter(s);
-                return false;
-            }
-        });
+                @Override
+                public boolean onQueryTextChange(String s) {
+                    clienteListaAdapter.getFilter().filter(s);
+                    return false;
+                }
+            });
+        }
 
         clientesFAB.setOnClickListener(new View.OnClickListener() {
             @Override

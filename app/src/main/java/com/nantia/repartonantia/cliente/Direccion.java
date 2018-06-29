@@ -25,34 +25,30 @@ public class Direccion implements Serializable {
     @SerializedName("telefono")
     private int telefono;
 
-    @SerializedName("esquina1")
+    @SerializedName("tel")
     private String esquina1;
 
-    @SerializedName("esquina2")
-    private String esquina2;
+    @SerializedName("ciudad")
+    private String ciudad;
 
-    @SerializedName("observaciones")
-    private String observaciones;
+    @SerializedName("departamento")
+    private String departamento;
 
-    @SerializedName("principal")
-    private boolean principal;
+    @SerializedName("codPostal")
+    private String codPostal;
 
-    @SerializedName("dirCobro")
-    private boolean dirCobro;
-
-
-    public Direccion(int id, String direccion, float cordLon, float cordLat, int telefono, String esquina1,
-                     String esquina2, String observaciones, boolean principal, boolean dirCobro) {
+    public Direccion(int id, String direccion, float cordLon, float cordLat,
+                     int telefono, String esquina1, String ciudad,
+                     String departamento, String codPostal) {
         this.id = id;
         this.direccion = direccion;
         this.cordLon = cordLon;
         this.cordLat = cordLat;
         this.telefono = telefono;
         this.esquina1 = esquina1;
-        this.esquina2 = esquina2;
-        this.observaciones = observaciones;
-        this.principal = principal;
-        this.dirCobro = dirCobro;
+        this.ciudad = ciudad;
+        this.departamento = departamento;
+        this.codPostal = codPostal;
     }
 
     public int getId() {
@@ -103,35 +99,27 @@ public class Direccion implements Serializable {
         this.esquina1 = esquina1;
     }
 
-    public String getEsquina2() {
-        return esquina2;
+    public String getCiudad() {
+        return ciudad;
     }
 
-    public void setEsquina2(String esquina2) {
-        this.esquina2 = esquina2;
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
     }
 
-    public String getObservaciones() {
-        return observaciones;
+    public String getDepartamento() {
+        return departamento;
     }
 
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
+    public void setDepartamento(String departamento) {
+        this.departamento = departamento;
     }
 
-    public boolean isPrincipal() {
-        return principal;
+    public String getCodPostal() {
+        return codPostal;
     }
 
-    public void setPrincipal(boolean principal) {
-        this.principal = principal;
-    }
-
-    public boolean isDirCobro() {
-        return dirCobro;
-    }
-
-    public void setDirCobro(boolean dirCobro) {
-        this.dirCobro = dirCobro;
+    public void setCodPostal(String codPostal) {
+        this.codPostal = codPostal;
     }
 }

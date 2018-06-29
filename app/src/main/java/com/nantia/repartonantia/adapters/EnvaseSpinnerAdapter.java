@@ -58,7 +58,7 @@ public class EnvaseSpinnerAdapter extends ArrayAdapter<Envase> {
         TextView envDesc = listItem.findViewById(R.id.envase_tv);
         envDesc.setText(envase.getDescripcion());
 
-        if(position == 0){
+        if(position == 0 && envase.getId() == 0){
             envDesc.setTextColor(Color.GRAY);
         }else{
             envDesc.setTextColor(Color.BLACK);

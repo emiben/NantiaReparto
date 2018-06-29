@@ -1,5 +1,6 @@
 package com.nantia.repartonantia.cliente;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,6 +21,7 @@ import com.nantia.repartonantia.adapters.ClienteInfoPOJO;
 import com.nantia.repartonantia.producto.Envase;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class ClienteFragment extends Fragment implements ClienteView {
@@ -29,6 +31,8 @@ public class ClienteFragment extends Fragment implements ClienteView {
     private FloatingActionButton editFAB;
     private ClienteAdapter clienteAdapter;
     private ClientePresenter clientePresenter;
+    DatePickerDialog.OnDateSetListener date;
+    Calendar calendar = Calendar.getInstance();
 
     public ClienteFragment() {
         // Required empty public constructor
@@ -83,6 +87,11 @@ public class ClienteFragment extends Fragment implements ClienteView {
         clienteInfo.setLayoutManager(new LinearLayoutManager(getActivity()));
         clienteAdapter = new ClienteAdapter(getActivity(), cliente);
         clienteInfo.setAdapter(clienteAdapter);
+    }
+
+    @Override
+    public void addListeners() {
+
     }
 
     private void initializeViewObjects(View view){

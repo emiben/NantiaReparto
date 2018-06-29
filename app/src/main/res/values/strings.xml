@@ -40,6 +40,7 @@
     <string name="cliente_ciudad">Ciudad</string>
     <string name="cliente_departamento">Departamento</string>
     <string name="cliente_cp">Código Postal</string>
+    <string name="cliente_dias">Días</string>
     <string name="cliente_empresa_nombre_fantasia">Nombre fantasía</string>
     <string name="cliente_empresa_nombre_legal">Nombre Legal</string>
     <string name="cliente_nuevo">Cliente Nuevo</string>
