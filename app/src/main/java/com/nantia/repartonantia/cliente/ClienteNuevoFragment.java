@@ -106,6 +106,17 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         cliente.setDireccion(direccion);
         cliente.setObservaciones(comentarios.getText().toString());
         cliente.setDias(dias);
+        envasesEnPrestamo.clear();
+        for (int i = 0; i < envAPrestamoSPs.size(); i++){
+            Envase envase = (Envase) envAPrestamoSPs.get(i).getSelectedItem();
+            if(envase.getId() != 0){
+                EnvaseEnPrestamo envaseEnPrestamo =
+                        new EnvaseEnPrestamo(envase, Integer.valueOf(envAPrestamoCantETs.get(i).getText().toString()));
+                envasesEnPrestamo.add(envaseEnPrestamo);
+            }
+        }
+        cliente.setEnvasesEnPrestamo(envasesEnPrestamo);
+        presenter.saveCliente(cliente);
     }
 
     public ClienteNuevoFragment() {

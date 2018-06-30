@@ -1,6 +1,8 @@
 package com.nantia.repartonantia.cliente;
 
+import android.opengl.Visibility;
 import android.util.Log;
+import android.view.View;
 
 import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.producto.Envase;
@@ -30,9 +32,7 @@ public class ClienteNuevoPresenter {
     }
 
     public void getEnvases(){
-
-        //TODO: Agregar el spinner
-
+        view.onSetProgressBarVisibility(View.VISIBLE);
         if (DataHolder.getEnvases() != null){
             view.setEnvases(DataHolder.getEnvases());
         }else {
@@ -43,13 +43,34 @@ public class ClienteNuevoPresenter {
                 public void onResponse(Call<ArrayList<Envase>> call, Response<ArrayList<Envase>> response) {
                     DataHolder.setEnvases(response.body());
                     view.setEnvases(response.body());
+                    view.onSetProgressBarVisibility(View.GONE);
                 }
 
                 @Override
                 public void onFailure(Call<ArrayList<Envase>> call, Throwable t) {
                     Log.e(TAG, t.getMessage());
+                    view.onSetProgressBarVisibility(View.GONE);
                 }
             });
         }
+    }
+
+    public void saveCliente(Cliente cliente){
+        view.onSetProgressBarVisibility(View.VISIBLE);
+        ClienteService clienteService = RetrofitClientInstance.getRetrofitInstance().create(ClienteService.class);
+        Call<Cliente> call = clienteService.saveCliente(cliente);
+        call.enqueue(new Callback<Cliente>() {
+            @Override
+            public void onResponse(Call<Cliente> call, Response<Cliente> response) {
+                //TODO si existe en clientes remplazarlo, sino agregarlo
+                view.onSetProgressBarVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(Call<Cliente> call, Throwable t) {
+                //TODO manejar el error
+                view.onSetProgressBarVisibility(View.GONE);
+            }
+        });
     }
 }
