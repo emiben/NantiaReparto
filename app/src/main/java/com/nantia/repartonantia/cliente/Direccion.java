@@ -17,16 +17,13 @@ public class Direccion implements Serializable {
     private String direccion;
 
     @SerializedName("cordLon")
-    private float cordLon;
+    private double cordLon;
 
     @SerializedName("cordLat")
-    private float cordLat;
+    private double cordLat;
 
     @SerializedName("telefono")
-    private int telefono;
-
-    @SerializedName("tel")
-    private String esquina1;
+    private String telefono;
 
     @SerializedName("ciudad")
     private String ciudad;
@@ -37,15 +34,14 @@ public class Direccion implements Serializable {
     @SerializedName("codPostal")
     private String codPostal;
 
-    public Direccion(int id, String direccion, float cordLon, float cordLat,
-                     int telefono, String esquina1, String ciudad,
+    public Direccion(int id, String direccion, double cordLon, double cordLat,
+                     String telefono, String ciudad,
                      String departamento, String codPostal) {
         this.id = id;
         this.direccion = direccion;
         this.cordLon = cordLon;
         this.cordLat = cordLat;
         this.telefono = telefono;
-        this.esquina1 = esquina1;
         this.ciudad = ciudad;
         this.departamento = departamento;
         this.codPostal = codPostal;
@@ -67,7 +63,7 @@ public class Direccion implements Serializable {
         this.direccion = direccion;
     }
 
-    public float getCordLon() {
+    public double getCordLon() {
         return cordLon;
     }
 
@@ -75,7 +71,7 @@ public class Direccion implements Serializable {
         this.cordLon = cordLon;
     }
 
-    public float getCordLat() {
+    public double getCordLat() {
         return cordLat;
     }
 
@@ -83,21 +79,14 @@ public class Direccion implements Serializable {
         this.cordLat = cordLat;
     }
 
-    public int getTelefono() {
+    public String getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(int telefono) {
+    public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
 
-    public String getEsquina1() {
-        return esquina1;
-    }
-
-    public void setEsquina1(String esquina1) {
-        this.esquina1 = esquina1;
-    }
 
     public String getCiudad() {
         return ciudad;

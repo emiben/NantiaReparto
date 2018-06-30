@@ -31,19 +31,19 @@ public class Cliente implements Serializable {
     private float saldo;
 
     @SerializedName("fechaNacimiento")
-    private Date fechaNacimiento;
+    private String fechaNacimiento;
 
     @SerializedName("fechaAlta")
-    private Date fechaAlta;
+    private String fechaAlta;
 
     @SerializedName("mail")
     private String mail;
 
     @SerializedName("celular")
-    private int celular;
+    private String celular;
 
     @SerializedName("idLista")
-    private int idLista;
+    private String idLista;
 
     @SerializedName("observaciones")
     private String observaciones;
@@ -60,9 +60,13 @@ public class Cliente implements Serializable {
     @SerializedName("dias")
     private ArrayList<Dia> dias;
 
+    public Cliente(){
+
+    }
+
     public Cliente(long id, String nroDocumento, TipoDocumento tipoDocumento,
-                   String nombre1, String nombre2, float saldo, Date fechaNacimiento,
-                   Date fechaAlta, String mail, int celular, int idLista, String observaciones,
+                   String nombre1, String nombre2, float saldo, String fechaNacimiento,
+                   String fechaAlta, String mail, String celular, String idLista, String observaciones,
                    boolean activo, Direccion direccion, ArrayList<EnvaseEnPrestamo> envasesEnPrestamo,
                    ArrayList<Dia> dias) {
         this.id = id;
@@ -147,27 +151,27 @@ public class Cliente implements Serializable {
         this.envasesEnPrestamo = envasesEnPrestamo;
     }
 
-    public Date getFechaNacimiento() {
+    public String getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(Date fechaNacimiento) {
+    public void setFechaNacimiento(String fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public Date getFechaAlta() {
+    public String getFechaAlta() {
         return fechaAlta;
     }
 
-    public void setFechaAlta(Date fechaAlta) {
+    public void setFechaAlta(String fechaAlta) {
         this.fechaAlta = fechaAlta;
     }
 
-    public int getCelular() {
+    public String getCelular() {
         return celular;
     }
 
-    public void setCelular(int celular) {
+    public void setCelular(String celular) {
         this.celular = celular;
     }
 
@@ -179,11 +183,11 @@ public class Cliente implements Serializable {
         this.mail = mail;
     }
 
-    public int getIdLista() {
+    public String getIdLista() {
         return idLista;
     }
 
-    public void setIdLista(int idLista) {
+    public void setIdLista(String idLista) {
         this.idLista = idLista;
     }
 
