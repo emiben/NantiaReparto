@@ -16,11 +16,11 @@ public class Direccion implements Serializable {
     @SerializedName("direccion")
     private String direccion;
 
-    @SerializedName("cordLon")
-    private double cordLon;
+    @SerializedName("coordLon")
+    private String coordLon;
 
-    @SerializedName("cordLat")
-    private double cordLat;
+    @SerializedName("coordLat")
+    private String coordLat;
 
     @SerializedName("telefono")
     private String telefono;
@@ -34,13 +34,13 @@ public class Direccion implements Serializable {
     @SerializedName("codPostal")
     private String codPostal;
 
-    public Direccion(int id, String direccion, double cordLon, double cordLat,
+    public Direccion(int id, String direccion, String coordLon, String coordLat,
                      String telefono, String ciudad,
                      String departamento, String codPostal) {
         this.id = id;
         this.direccion = direccion;
-        this.cordLon = cordLon;
-        this.cordLat = cordLat;
+        this.coordLon = coordLon;
+        this.coordLat = coordLat;
         this.telefono = telefono;
         this.ciudad = ciudad;
         this.departamento = departamento;
@@ -63,20 +63,20 @@ public class Direccion implements Serializable {
         this.direccion = direccion;
     }
 
-    public double getCordLon() {
-        return cordLon;
+    public String getCoordLon() {
+        return coordLon;
     }
 
-    public void setCordLon(float cordLon) {
-        this.cordLon = cordLon;
+    public void setCoordLon(String coordLon) {
+        this.coordLon = coordLon;
     }
 
-    public double getCordLat() {
-        return cordLat;
+    public String getCoordLat() {
+        return coordLat;
     }
 
-    public void setCordLat(float cordLat) {
-        this.cordLat = cordLat;
+    public void setCoordLat(String coordLat) {
+        this.coordLat = coordLat;
     }
 
     public String getTelefono() {

@@ -41,13 +41,14 @@ public class ClientePresenter {
             clienteInfo.add(clienteInfoPOJO);
         }
 
-        if(cliente.getDireccion().getTelefono() != 0){
+        if(cliente.getDireccion().getTelefono() != null && !cliente.getDireccion().getTelefono().isEmpty()){
             ClienteInfoPOJO clienteInfoPOJO = new ClienteInfoPOJO(context, R.drawable.phone,
                     String.valueOf(cliente.getDireccion().getTelefono()), R.string.cliente_telefono);
             clienteInfo.add(clienteInfoPOJO);
         }
 
-        if(cliente.getDireccion().getTelefono() != 0){
+        if(cliente.getCelular()
+                != null && !cliente.getCelular().isEmpty()){
             ClienteInfoPOJO clienteInfoPOJO = new ClienteInfoPOJO(context, R.drawable.mobile_phone,
                     String.valueOf(cliente.getCelular()), R.string.cliente_celular);
             clienteInfo.add(clienteInfoPOJO);

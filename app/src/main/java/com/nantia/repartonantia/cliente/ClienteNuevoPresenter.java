@@ -35,6 +35,7 @@ public class ClienteNuevoPresenter {
         view.onSetProgressBarVisibility(View.VISIBLE);
         if (DataHolder.getEnvases() != null){
             view.setEnvases(DataHolder.getEnvases());
+            view.onSetProgressBarVisibility(View.GONE);
         }else {
             EnvaseService envaseService = RetrofitClientInstance.getRetrofitInstance().create(EnvaseService.class);
             Call<ArrayList<Envase>> call = envaseService.getEnvases();
@@ -50,26 +51,32 @@ public class ClienteNuevoPresenter {
                 public void onFailure(Call<ArrayList<Envase>> call, Throwable t) {
                     Log.e(TAG, t.getMessage());
                     view.onSetProgressBarVisibility(View.GONE);
+                    view.showError(t.getMessage());
                 }
             });
         }
     }
 
-    public void saveCliente(Cliente cliente){
+    public void saveCliente(final Cliente cliente){
         view.onSetProgressBarVisibility(View.VISIBLE);
         ClienteService clienteService = RetrofitClientInstance.getRetrofitInstance().create(ClienteService.class);
         Call<Cliente> call = clienteService.saveCliente(cliente);
         call.enqueue(new Callback<Cliente>() {
             @Override
             public void onResponse(Call<Cliente> call, Response<Cliente> response) {
-                //TODO si existe en clientes remplazarlo, sino agregarlo
+                //TODO revisar se el contains se maneja por el id
+                if(DataHolder.getClientes().contains(response.body())){
+                    DataHolder.getClientes().remove(response.body());
+                }
+                DataHolder.getClientes().add(response.body());
                 view.onSetProgressBarVisibility(View.GONE);
             }
 
             @Override
             public void onFailure(Call<Cliente> call, Throwable t) {
-                //TODO manejar el error
+                Log.e(TAG, t.getMessage());
                 view.onSetProgressBarVisibility(View.GONE);
+                view.showError(t.getMessage());
             }
         });
     }

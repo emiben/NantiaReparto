@@ -3,7 +3,9 @@ package com.nantia.repartonantia.cliente;
 import java.util.ArrayList;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
 /**
@@ -16,5 +18,8 @@ public interface ClienteService {
     Call<ArrayList<Cliente>> getClientes();
 
     @POST("clientes")
-    Call<Cliente> saveCliente(Cliente cliente);
+    @Headers({
+            "Content-Type: application/json;charset=utf-8",
+            "Accept: application/json;charset=utf-8"})
+    Call<Cliente> saveCliente(@Body Cliente cliente);
 }

@@ -3,6 +3,7 @@ package com.nantia.repartonantia.cliente;
 import android.util.Log;
 import android.view.View;
 
+import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.producto.Envase;
 import com.nantia.repartonantia.utils.RetrofitClientInstance;
 
@@ -29,23 +30,29 @@ public class ClienteListaPresenter {
     public void getClientes() {
         clienteListaView.onSetProgressBarVisibility(View.VISIBLE);
 
-        ClienteService clienteService = RetrofitClientInstance.getRetrofitInstance().create(ClienteService.class);
-        Call<ArrayList<Cliente>> call = clienteService.getClientes();
-        call.enqueue(new Callback<ArrayList<Cliente>>() {
-            @Override
-            public void onResponse(Call<ArrayList<Cliente>> call, Response<ArrayList<Cliente>> response) {
-                clienteListaView.setClienteInfo(response.body());
-                clienteListaView.addListeners();
-                clienteListaView.onSetProgressBarVisibility(View.GONE);
-            }
+        if(DataHolder.getClientes() == null || DataHolder.getClientes().size() == 0){
+            ClienteService clienteService = RetrofitClientInstance.getRetrofitInstance().create(ClienteService.class);
+            Call<ArrayList<Cliente>> call = clienteService.getClientes();
+            call.enqueue(new Callback<ArrayList<Cliente>>() {
+                @Override
+                public void onResponse(Call<ArrayList<Cliente>> call, Response<ArrayList<Cliente>> response) {
+                    clienteListaView.setClienteInfo(response.body());
+                    clienteListaView.addListeners();
+                    clienteListaView.onSetProgressBarVisibility(View.GONE);
+                }
 
-            @Override
-            public void onFailure(Call<ArrayList<Cliente>> call, Throwable t) {
-                clienteListaView.onSetProgressBarVisibility(View.GONE);
-                Log.e(TAG, t.getMessage());
-                clienteListaView.showError(t.getMessage());
-            }
-        });
+                @Override
+                public void onFailure(Call<ArrayList<Cliente>> call, Throwable t) {
+                    clienteListaView.onSetProgressBarVisibility(View.GONE);
+                    Log.e(TAG, t.getMessage());
+                    clienteListaView.showError(t.getMessage());
+                }
+            });
+        } else{
+            clienteListaView.setClienteInfo(DataHolder.getClientes());
+            clienteListaView.addListeners();
+            clienteListaView.onSetProgressBarVisibility(View.GONE);
+        }
 
 //        ArrayList<Cliente> clientes = new ArrayList<>();
 //        ArrayList<EnvaseEnPrestamo> envasesEnPrestamo = new ArrayList<>();

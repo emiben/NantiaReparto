@@ -54,7 +54,7 @@ public class Cliente implements Serializable {
     @SerializedName("direccion")
     private Direccion direccion;
 
-    @SerializedName("envaseEnPrestamo")
+    @SerializedName("setEnvasesEnPrestamo")
     private ArrayList<EnvaseEnPrestamo> envasesEnPrestamo;
 
     @SerializedName("dias")

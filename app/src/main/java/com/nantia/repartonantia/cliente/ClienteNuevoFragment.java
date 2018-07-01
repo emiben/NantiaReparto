@@ -23,13 +23,13 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
 import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.adapters.EnvaseSpinnerAdapter;
-import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.map.ClienteMapaFragment;
 import com.nantia.repartonantia.producto.Envase;
 
@@ -38,8 +38,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-
-import static com.nantia.repartonantia.cliente.Dia.DOMINGO;
 
 /**
  *
@@ -82,42 +80,8 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     private RadioButton sabado;
     private Button guardar;
     private ProgressBar progressBar;
+    private String fechaDeNacimiento;
 
-    @Override
-    public void saveCliente() {
-        if(cliente == null){
-            cliente = new Cliente();
-        }
-        cliente.setNombre1(nombre1.getText().toString());
-        cliente.setNombre2(nombre2.getText().toString());
-        cliente.setNroDocumento(nroDeDoc.getText().toString());
-        if(tipoDeDoc.getSelectedItem().equals(TipoDocumento.CI.name())){
-            cliente.setTipoDocumento(TipoDocumento.CI);
-        }else if (tipoDeDoc.getSelectedItem().equals(TipoDocumento.RUT.name())){
-            cliente.setTipoDocumento(TipoDocumento.RUT);
-        }else {
-            cliente.setTipoDocumento(TipoDocumento.NA);
-        }
-        cliente.setFechaNacimiento(fecDeNac.getText().toString());
-        cliente.setCelular(telefono1.getText().toString());
-        cliente.setMail(email.getText().toString());
-        Direccion direccion = new Direccion(0, this.direccion.getText().toString(), this.posicionMapa.longitude, this.posicionMapa.latitude,
-            this.telefono2.getText().toString(), this.ciudad.getText().toString(), this.departamento.getText().toString(), this.codigoPostal.getText().toString());
-        cliente.setDireccion(direccion);
-        cliente.setObservaciones(comentarios.getText().toString());
-        cliente.setDias(dias);
-        envasesEnPrestamo.clear();
-        for (int i = 0; i < envAPrestamoSPs.size(); i++){
-            Envase envase = (Envase) envAPrestamoSPs.get(i).getSelectedItem();
-            if(envase.getId() != 0){
-                EnvaseEnPrestamo envaseEnPrestamo =
-                        new EnvaseEnPrestamo(envase, Integer.valueOf(envAPrestamoCantETs.get(i).getText().toString()));
-                envasesEnPrestamo.add(envaseEnPrestamo);
-            }
-        }
-        cliente.setEnvasesEnPrestamo(envasesEnPrestamo);
-        presenter.saveCliente(cliente);
-    }
 
     public ClienteNuevoFragment() {
         // Required empty public constructor
@@ -147,12 +111,18 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         presenter.getEnvases();
         addEditTexts(null);
 
+        dias = new ArrayList<>();
+        envasesEnPrestamo = new ArrayList<>();
         if(getArguments() != null){
             if(getArguments().getDouble("lat") != 0.0){
                 posicionMapa = new LatLng(getArguments().getDouble("lat"), getArguments().getDouble("lng"));
             }
             if(getArguments().getSerializable("cliente") != null){
                 cliente = (Cliente) getArguments().getSerializable("cliente");
+                if(posicionMapa != null){
+                    cliente.getDireccion().setCoordLat(String.valueOf(posicionMapa.latitude));
+                    cliente.getDireccion().setCoordLon(String.valueOf(posicionMapa.longitude));
+                }
                 loadClienteData(cliente);
             }
         }
@@ -161,6 +131,115 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         return view;
     }
 
+    @Override
+    public void saveCliente() {
+        if(cliente == null){
+            cliente = new Cliente();
+        }
+        cliente.setNombre1(nombre1.getText().toString());
+        cliente.setNombre2(nombre2.getText().toString());
+        cliente.setNroDocumento(nroDeDoc.getText().toString());
+        if(tipoDeDoc.getSelectedItem().equals(TipoDocumento.CI.name())){
+            cliente.setTipoDocumento(TipoDocumento.CI);
+        }else if (tipoDeDoc.getSelectedItem().equals(TipoDocumento.RUT.name())){
+            cliente.setTipoDocumento(TipoDocumento.RUT);
+        }else {
+            cliente.setTipoDocumento(TipoDocumento.NA);
+        }
+        cliente.setFechaNacimiento(fechaDeNacimiento);
+        //TODO cambiar a fecha de creado
+        cliente.setFechaAlta(fechaDeNacimiento);
+        cliente.setCelular(telefono1.getText().toString());
+        cliente.setMail(email.getText().toString());
+        String coordLat = "";
+        String coordLng = "";
+        if(this.posicionMapa != null){
+            coordLat = String.valueOf(this.posicionMapa.longitude);
+            coordLng = String.valueOf(this.posicionMapa.latitude);
+        }
+        Direccion direccion = new Direccion(0, this.direccion.getText().toString(),
+                coordLat, coordLng, this.telefono2.getText().toString(), this.ciudad.getText().toString(),
+                this.departamento.getText().toString(), this.codigoPostal.getText().toString());
+        cliente.setDireccion(direccion);
+        cliente.setObservaciones(comentarios.getText().toString());
+        cliente.setDias(dias);
+        envasesEnPrestamo.clear();
+        for (int i = 0; i < envAPrestamoSPs.size(); i++){
+            Envase envase = (Envase) envAPrestamoSPs.get(i).getSelectedItem();
+            if(envase.getId() != 0){
+                //TODO manejar los que ya existian
+                EnvaseEnPrestamo envaseEnPrestamo =
+                        new EnvaseEnPrestamo(0, envase, Integer.valueOf(envAPrestamoCantETs.get(i).getText().toString()));
+                envasesEnPrestamo.add(envaseEnPrestamo);
+            }
+        }
+        cliente.setEnvasesEnPrestamo(envasesEnPrestamo);
+        presenter.saveCliente(cliente);
+    }
+
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.cliente_nuevo_fab:
+                navigateToClienteNuevoMapaFragment();
+                break;
+            case R.id.agreagr_env_prestamo:
+                addEditTexts(null);
+                break;
+            case R.id.boton_guardar:
+                saveCliente();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void setEnvases(ArrayList<Envase> envases) {
+        envases.add(0, new Envase(0, "Nuevo envase a prestamo..."));
+        this.envases = envases;
+    }
+
+    @Override
+    public void onSetProgressBarVisibility(int visibility) {
+        progressBar.setVisibility(visibility);
+    }
+
+    @Override
+    public void showError(String error) {
+        Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()){
+            case R.id.domingo_rb:
+                addRemoveDia(isChecked, Dia.DOMINGO);
+                break;
+            case R.id.lunes_rb:
+                addRemoveDia(isChecked, Dia.LUNES);
+                break;
+            case R.id.martes_rb:
+                addRemoveDia(isChecked, Dia.MARTES);
+                break;
+            case R.id.miercoles_rb:
+                addRemoveDia(isChecked, Dia.MIERCOLES);
+                break;
+            case R.id.jueves_rb:
+                addRemoveDia(isChecked, Dia.JUEVES);
+                break;
+            case R.id.viernes_rb:
+                addRemoveDia(isChecked, Dia.VIERNES);
+                break;
+            case R.id.sabado_rb:
+                addRemoveDia(isChecked, Dia.SABADO);
+                break;
+            default:
+                break;
+        }
+    }
 
     private void initializeViewObjects(View view){
         nombre1 = view.findViewById(R.id.nombre_1_et);
@@ -195,6 +274,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     private void setOnClickListeners(){
         fab.setOnClickListener(this);
         agregarEnvPrestamo.setOnClickListener(this);
+        guardar.setOnClickListener(this);
         tipoDeDoc.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -266,20 +346,6 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         }
     }
 
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.cliente_nuevo_fab:
-                navigateToClienteNuevoMapaFragment();
-                break;
-            case R.id.agreagr_env_prestamo:
-                addEditTexts(null);
-                break;
-            default:
-                break;
-        }
-    }
 
     private void navigateToClienteNuevoMapaFragment() {
         ClienteMapaFragment clienteMapaFragment = new ClienteMapaFragment();
@@ -405,7 +471,8 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         for(int i  =0; i < dias.size(); i++){
             selectDias(dias.get(i));
         }
-        posicionMapa = new LatLng(cliente.getDireccion().getCordLat(), cliente.getDireccion().getCordLon());
+        posicionMapa = new LatLng(Float.valueOf(cliente.getDireccion().getCoordLat()),
+                Float.valueOf(cliente.getDireccion().getCoordLon()));
     }
 
 
@@ -437,55 +504,15 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         }
     }
 
-
-
-
-    @Override
-    public void setEnvases(ArrayList<Envase> envases) {
-        envases.add(0, new Envase(0, "Nuevo envase a prestamo..."));
-        this.envases = envases;
-    }
-
-    @Override
-    public void onSetProgressBarVisibility(int visibility) {
-        progressBar.setVisibility(visibility);
-    }
-
     private void updateLabel() {
         String myFormat = "dd/MM/yyyy";
+        String myFormat2 = "yyyy-MM-dd";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        SimpleDateFormat sdf2 = new SimpleDateFormat(myFormat2, Locale.US);
+        fechaDeNacimiento = sdf2.format(calendar.getTime());
         fecDeNac.setText(sdf.format(calendar.getTime()));
     }
 
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()){
-            case R.id.domingo_rb:
-                addRemoveDia(isChecked, Dia.DOMINGO);
-                break;
-            case R.id.lunes_rb:
-                addRemoveDia(isChecked, Dia.LUNES);
-                break;
-            case R.id.martes_rb:
-                addRemoveDia(isChecked, Dia.MARTES);
-                break;
-            case R.id.miercoles_rb:
-                addRemoveDia(isChecked, Dia.MIERCOLES);
-                break;
-            case R.id.jueves_rb:
-                addRemoveDia(isChecked, Dia.JUEVES);
-                break;
-            case R.id.viernes_rb:
-                addRemoveDia(isChecked, Dia.VIERNES);
-                break;
-            case R.id.sabado_rb:
-                addRemoveDia(isChecked, Dia.SABADO);
-                break;
-            default:
-                break;
-        }
-    }
 
     private void addRemoveDia(boolean add, Dia dia){
         if(add){

@@ -12,4 +12,5 @@ public interface ClienteNuevoView {
     void saveCliente();
     void setEnvases(ArrayList<Envase> envases);
     void onSetProgressBarVisibility(int visibility);
+    void showError(String error);
 }
