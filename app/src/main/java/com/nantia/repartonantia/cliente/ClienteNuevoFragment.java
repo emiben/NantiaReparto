@@ -81,6 +81,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     private Button guardar;
     private ProgressBar progressBar;
     private String fechaDeNacimiento;
+    private boolean updateCliente = false;
 
 
     public ClienteNuevoFragment() {
@@ -102,12 +103,6 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         setOnClickListeners();
         loadSpinner();
 
-        //TODO: Traer envases posta
-//        envases = new ArrayList<>();
-//        envases.add(new Envase(0, "Nuevo envase a prestamo..."));
-//        for(int i=1; i < 50; i++){
-//            envases.add(new Envase(i, "Envase " + i));
-//        }
         presenter.getEnvases();
         addEditTexts(null);
 
@@ -118,6 +113,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
                 posicionMapa = new LatLng(getArguments().getDouble("lat"), getArguments().getDouble("lng"));
             }
             if(getArguments().getSerializable("cliente") != null){
+                updateCliente = true;
                 cliente = (Cliente) getArguments().getSerializable("cliente");
                 if(posicionMapa != null){
                     cliente.getDireccion().setCoordLat(String.valueOf(posicionMapa.latitude));
@@ -126,8 +122,6 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
                 loadClienteData(cliente);
             }
         }
-
-
         return view;
     }
 
@@ -174,7 +168,12 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
             }
         }
         cliente.setEnvasesEnPrestamo(envasesEnPrestamo);
-        presenter.saveCliente(cliente);
+
+        if(updateCliente){
+            presenter.updateCliente(cliente);
+        }else {
+            presenter.saveCliente(cliente);
+        }
     }
 
 
