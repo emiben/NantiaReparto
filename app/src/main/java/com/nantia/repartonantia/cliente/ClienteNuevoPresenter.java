@@ -80,4 +80,28 @@ public class ClienteNuevoPresenter {
             }
         });
     }
+
+    public void updateCliente(final Cliente cliente){
+        view.onSetProgressBarVisibility(View.VISIBLE);
+        ClienteService clienteService = RetrofitClientInstance.getRetrofitInstance().create(ClienteService.class);
+        Call<Cliente> call = clienteService.updateCliente(cliente.getId(), cliente);
+        call.enqueue(new Callback<Cliente>() {
+            @Override
+            public void onResponse(Call<Cliente> call, Response<Cliente> response) {
+                //TODO revisar se el contains se maneja por el id
+                if(DataHolder.getClientes().contains(response.body())){
+                    DataHolder.getClientes().remove(response.body());
+                }
+                DataHolder.getClientes().add(response.body());
+                view.onSetProgressBarVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(Call<Cliente> call, Throwable t) {
+                Log.e(TAG, t.getMessage());
+                view.onSetProgressBarVisibility(View.GONE);
+                view.showError(t.getMessage());
+            }
+        });
+    }
 }
