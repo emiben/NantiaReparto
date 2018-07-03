@@ -118,7 +118,6 @@ public class ClienteMapaFragment extends Fragment implements OnMapReadyCallback,
         }
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.cliente_lista_layout, clienteNuevoFragment)
-                .addToBackStack(null)
                 .commit();
     }
 }

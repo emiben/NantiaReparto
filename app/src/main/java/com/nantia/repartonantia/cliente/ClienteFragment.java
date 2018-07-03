@@ -72,7 +72,6 @@ public class ClienteFragment extends Fragment implements ClienteView {
         clienteNuevoFragment.setArguments(b);
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.cliente_lista_layout, clienteNuevoFragment, "clienteNuevoFragment")
-                .addToBackStack(null)
                 .commit();
     }
 

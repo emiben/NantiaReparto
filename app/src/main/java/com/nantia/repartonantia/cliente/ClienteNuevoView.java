@@ -13,4 +13,5 @@ public interface ClienteNuevoView {
     void setEnvases(ArrayList<Envase> envases);
     void onSetProgressBarVisibility(int visibility);
     void showError(String error);
+    void navigateToClienteFragment(Cliente cliente);
 }

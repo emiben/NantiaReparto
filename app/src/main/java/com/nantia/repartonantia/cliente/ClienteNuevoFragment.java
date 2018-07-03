@@ -104,7 +104,6 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         loadSpinner();
 
         presenter.getEnvases();
-        addEditTexts(null);
 
         dias = new ArrayList<>();
         envasesEnPrestamo = new ArrayList<>();
@@ -122,6 +121,11 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
                 loadClienteData(cliente);
             }
         }
+
+        if(!updateCliente){
+            addEditTexts(null);
+        }
+
         return view;
     }
 
@@ -240,6 +244,17 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         }
     }
 
+    @Override
+    public void navigateToClienteFragment(Cliente cliente) {
+        Bundle b = new Bundle();
+        b.putSerializable("cliente", cliente);
+        ClienteFragment clienteFragmentf = new ClienteFragment();
+        clienteFragmentf.setArguments(b);
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.cliente_lista_layout, clienteFragmentf)
+                .commit();
+    }
+
     private void initializeViewObjects(View view){
         nombre1 = view.findViewById(R.id.nombre_1_et);
         nombre2 = view.findViewById(R.id.nombre_2_et);
@@ -355,7 +370,6 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         }
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.cliente_lista_layout, clienteMapaFragment)
-                .addToBackStack(null)
                 .commit();
     }
 
@@ -410,7 +424,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         envaseCantET.setHint(R.string.cliente_cantidad);
 
         if(envaseEnPrestamo != null){
-            envaseCantET.setText(envaseEnPrestamo.getCantidad());
+            envaseCantET.setText(String.valueOf(envaseEnPrestamo.getCantidad()));
         }
 
         envAPrestamoSPs.add(envaseSp);
@@ -466,12 +480,15 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         for(int i = 0; i < envasesEnPrestamo.size(); i++){
             addEditTexts(envasesEnPrestamo.get(i));
         }
-        dias = cliente.getDias();
-        for(int i  =0; i < dias.size(); i++){
-            selectDias(dias.get(i));
+        ArrayList<Dia> diasTemp = cliente.getDias();
+        for(int i  =0; i < diasTemp.size(); i++){
+            selectDias(diasTemp.get(i));
         }
-        posicionMapa = new LatLng(Float.valueOf(cliente.getDireccion().getCoordLat()),
-                Float.valueOf(cliente.getDireccion().getCoordLon()));
+        if(cliente.getDireccion().getCoordLat() != null &&
+                cliente.getDireccion().getCoordLat().isEmpty()){
+            posicionMapa = new LatLng(Float.valueOf(cliente.getDireccion().getCoordLat()),
+                    Float.valueOf(cliente.getDireccion().getCoordLon()));
+        }
     }
 
 

@@ -1,9 +1,12 @@
 package com.nantia.repartonantia.cliente;
 
 import android.opengl.Visibility;
+import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 
+import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.producto.Envase;
 import com.nantia.repartonantia.producto.EnvaseService;
@@ -70,6 +73,7 @@ public class ClienteNuevoPresenter {
                 }
                 DataHolder.getClientes().add(response.body());
                 view.onSetProgressBarVisibility(View.GONE);
+                view.navigateToClienteFragment(response.body());
             }
 
             @Override
@@ -94,6 +98,7 @@ public class ClienteNuevoPresenter {
                 }
                 DataHolder.getClientes().add(response.body());
                 view.onSetProgressBarVisibility(View.GONE);
+                view.navigateToClienteFragment(response.body());
             }
 
             @Override
