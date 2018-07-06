@@ -1,9 +1,11 @@
 package com.nantia.repartonantia.cliente;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +21,7 @@ import com.nantia.repartonantia.adapters.ClienteInfoPOJO;
 import com.nantia.repartonantia.producto.Envase;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class ClienteFragment extends Fragment implements ClienteView {
@@ -28,6 +31,8 @@ public class ClienteFragment extends Fragment implements ClienteView {
     private FloatingActionButton editFAB;
     private ClienteAdapter clienteAdapter;
     private ClientePresenter clientePresenter;
+    DatePickerDialog.OnDateSetListener date;
+    Calendar calendar = Calendar.getInstance();
 
     public ClienteFragment() {
         // Required empty public constructor
@@ -50,7 +55,24 @@ public class ClienteFragment extends Fragment implements ClienteView {
         initializeViewObjects(view);
         clientePresenter.cargarInfo();
 
+        editFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToActualizarCliente();
+            }
+        });
+
         return view;
+    }
+
+    private void navigateToActualizarCliente() {
+        Bundle b = new Bundle();
+        b.putSerializable("cliente", cliente);
+        ClienteNuevoFragment clienteNuevoFragment = new ClienteNuevoFragment();
+        clienteNuevoFragment.setArguments(b);
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.cliente_lista_layout, clienteNuevoFragment, "clienteNuevoFragment")
+                .commit();
     }
 
     @Override
@@ -64,6 +86,11 @@ public class ClienteFragment extends Fragment implements ClienteView {
         clienteInfo.setLayoutManager(new LinearLayoutManager(getActivity()));
         clienteAdapter = new ClienteAdapter(getActivity(), cliente);
         clienteInfo.setAdapter(clienteAdapter);
+    }
+
+    @Override
+    public void addListeners() {
+
     }
 
     private void initializeViewObjects(View view){

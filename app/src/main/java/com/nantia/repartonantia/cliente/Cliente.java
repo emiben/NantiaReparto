@@ -15,14 +15,11 @@ public class Cliente implements Serializable {
     @SerializedName("id")
     private long id;
 
-    @SerializedName("direccion")
-    private Direccion direccion;
+    @SerializedName("nroDocumento")
+    private String nroDocumento;
 
     @SerializedName("tipoDocumento")
     private TipoDocumento tipoDocumento;
-
-    @SerializedName("nroDocumento")
-    private String nroDocumento;
 
     @SerializedName("nombre1")
     private String nombre1;
@@ -33,23 +30,20 @@ public class Cliente implements Serializable {
     @SerializedName("saldo")
     private float saldo;
 
-    @SerializedName("envaseEnPrestamo")
-    private ArrayList<EnvaseEnPrestamo> envasesEnPrestamo;
-
     @SerializedName("fechaNacimiento")
-    private Date fechaNacimiento;
+    private String fechaNacimiento;
 
     @SerializedName("fechaAlta")
-    private Date fechaAlta;
-
-    @SerializedName("celular")
-    private int celular;
+    private String fechaAlta;
 
     @SerializedName("mail")
     private String mail;
 
+    @SerializedName("celular")
+    private String celular;
+
     @SerializedName("idLista")
-    private int idLista;
+    private String idLista;
 
     @SerializedName("observaciones")
     private String observaciones;
@@ -57,25 +51,40 @@ public class Cliente implements Serializable {
     @SerializedName("activo")
     private boolean activo;
 
-    public Cliente(long id, Direccion direccion, TipoDocumento tipoDocumento, String nroDocumento,
-                   String nombre1, String nombre2, float saldo, ArrayList<EnvaseEnPrestamo> envasesEnPrestamo,
-                   Date fechaNacimiento, Date fechaAlta, int celular, String mail, int idLista,
-                   String observaciones, boolean activo) {
+    @SerializedName("direccion")
+    private Direccion direccion;
+
+    @SerializedName("setEnvasesEnPrestamo")
+    private ArrayList<EnvaseEnPrestamo> envasesEnPrestamo;
+
+    @SerializedName("dias")
+    private ArrayList<Dia> dias;
+
+    public Cliente(){
+
+    }
+
+    public Cliente(long id, String nroDocumento, TipoDocumento tipoDocumento,
+                   String nombre1, String nombre2, float saldo, String fechaNacimiento,
+                   String fechaAlta, String mail, String celular, String idLista, String observaciones,
+                   boolean activo, Direccion direccion, ArrayList<EnvaseEnPrestamo> envasesEnPrestamo,
+                   ArrayList<Dia> dias) {
         this.id = id;
-        this.direccion = direccion;
-        this.tipoDocumento = tipoDocumento;
         this.nroDocumento = nroDocumento;
+        this.tipoDocumento = tipoDocumento;
         this.nombre1 = nombre1;
         this.nombre2 = nombre2;
         this.saldo = saldo;
-        this.envasesEnPrestamo = envasesEnPrestamo;
         this.fechaNacimiento = fechaNacimiento;
         this.fechaAlta = fechaAlta;
-        this.celular = celular;
         this.mail = mail;
+        this.celular = celular;
         this.idLista = idLista;
         this.observaciones = observaciones;
         this.activo = activo;
+        this.direccion = direccion;
+        this.envasesEnPrestamo = envasesEnPrestamo;
+        this.dias = dias;
     }
 
     public long getId() {
@@ -142,27 +151,27 @@ public class Cliente implements Serializable {
         this.envasesEnPrestamo = envasesEnPrestamo;
     }
 
-    public Date getFechaNacimiento() {
+    public String getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(Date fechaNacimiento) {
+    public void setFechaNacimiento(String fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public Date getFechaAlta() {
+    public String getFechaAlta() {
         return fechaAlta;
     }
 
-    public void setFechaAlta(Date fechaAlta) {
+    public void setFechaAlta(String fechaAlta) {
         this.fechaAlta = fechaAlta;
     }
 
-    public int getCelular() {
+    public String getCelular() {
         return celular;
     }
 
-    public void setCelular(int celular) {
+    public void setCelular(String celular) {
         this.celular = celular;
     }
 
@@ -174,11 +183,11 @@ public class Cliente implements Serializable {
         this.mail = mail;
     }
 
-    public int getIdLista() {
+    public String getIdLista() {
         return idLista;
     }
 
-    public void setIdLista(int idLista) {
+    public void setIdLista(String idLista) {
         this.idLista = idLista;
     }
 
@@ -196,5 +205,13 @@ public class Cliente implements Serializable {
 
     public void setActivo(boolean activo) {
         this.activo = activo;
+    }
+
+    public ArrayList<Dia> getDias() {
+        return dias;
+    }
+
+    public void setDias(ArrayList<Dia> dias) {
+        this.dias = dias;
     }
 }
