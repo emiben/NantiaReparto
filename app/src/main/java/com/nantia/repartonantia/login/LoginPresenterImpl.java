@@ -8,7 +8,10 @@ import android.widget.Toast;
 
 import com.nantia.repartonantia.cliente.Cliente;
 import com.nantia.repartonantia.cliente.ClienteService;
+import com.nantia.repartonantia.cliente.TipoDocumento;
 import com.nantia.repartonantia.data.DataHolder;
+import com.nantia.repartonantia.listadeprecios.ListaDePrecio;
+import com.nantia.repartonantia.listadeprecios.ListaDePreciosService;
 import com.nantia.repartonantia.producto.Envase;
 import com.nantia.repartonantia.producto.EnvaseService;
 import com.nantia.repartonantia.producto.Producto;
@@ -84,6 +87,7 @@ public class LoginPresenterImpl implements ILoginPresenter{
         getEnvases();
         getProductos();
         getClientes();
+        getListasDePrecios();
     }
 
     private void getEnvases(){
@@ -132,5 +136,23 @@ public class LoginPresenterImpl implements ILoginPresenter{
                 Log.e(TAG, t.getMessage());
             }
         });
+    }
+
+    private void getListasDePrecios(){
+        ListaDePreciosService listaDePreciosService =
+                RetrofitClientInstance.getRetrofitInstance().create(ListaDePreciosService.class);
+        Call<ArrayList<ListaDePrecio>> call = listaDePreciosService.getListasDePrecios();
+        call.enqueue(new Callback<ArrayList<ListaDePrecio>>() {
+            @Override
+            public void onResponse(Call<ArrayList<ListaDePrecio>> call, Response<ArrayList<ListaDePrecio>> response) {
+                DataHolder.setListasDePrecios(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<ListaDePrecio>> call, Throwable t) {
+                Log.e(TAG, t.getMessage());
+            }
+        });
+
     }
 }

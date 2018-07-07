@@ -66,7 +66,7 @@ public class ClienteListaPresenter {
 //                    envasesEnPrestamo, date, date,i, "Cli"+i, i, "Cli"+i, true);
 //            clientes.add(cli);
 //        }
-//        clienteListaView.setClienteInfo(clientes);
+//        clienteListaView.setListasDePrecioInfo(clientes);
 //        clienteListaView.addListeners();
 //        clienteListaView.onSetProgressBarVisibility(View.GONE);
     }

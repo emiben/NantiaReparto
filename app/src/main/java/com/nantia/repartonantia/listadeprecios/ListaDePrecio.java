@@ -10,7 +10,7 @@ import java.util.Date;
  * Created by Emi on 11/6/2018.
  */
 
-public class ListaPrecio implements Serializable {
+public class ListaDePrecio implements Serializable {
 
     @SerializedName("id")
     private long id;
@@ -19,12 +19,12 @@ public class ListaPrecio implements Serializable {
     private String nombreLista;
 
     @SerializedName("fechAlta")
-    private Date fechAlta;
+    private String fechAlta;
 
-    @SerializedName("productosLista")
+    @SerializedName("setProductoLista")
     private ArrayList<ProductoLista> productosLista;
 
-    public ListaPrecio(long id, String nombreLista, Date fechAlta, ArrayList<ProductoLista> productosLista) {
+    public ListaDePrecio(long id, String nombreLista, String fechAlta, ArrayList<ProductoLista> productosLista) {
         this.id = id;
         this.nombreLista = nombreLista;
         this.fechAlta = fechAlta;
@@ -47,11 +47,11 @@ public class ListaPrecio implements Serializable {
         this.nombreLista = nombreLista;
     }
 
-    public Date getFechAlta() {
+    public String getFechAlta() {
         return fechAlta;
     }
 
-    public void setFechAlta(Date fechAlta) {
+    public void setFechAlta(String fechAlta) {
         this.fechAlta = fechAlta;
     }
 

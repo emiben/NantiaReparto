@@ -12,12 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.adapters.ClienteListaAdapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE;
 
 /**
  *
@@ -26,6 +29,7 @@ public class ClienteListaFragment extends Fragment implements ClienteListaAdapte
         ClienteListaView {
     private ProgressBar progressBar;
     private RecyclerView clientesRV;
+
     private SearchView buscarSV;
     private ArrayList<Cliente> clientes;
     private ClienteListaAdapter clienteListaAdapter;
@@ -63,7 +67,7 @@ public class ClienteListaFragment extends Fragment implements ClienteListaAdapte
 
     private void navigateToClienteFragment(Cliente cliente) {
         Bundle b = new Bundle();
-        b.putSerializable("cliente", cliente);
+        b.putSerializable(KEY_CLIENTE, cliente);
         ClienteFragment clienteFragmentf = new ClienteFragment();
         clienteFragmentf.setArguments(b);
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -134,6 +138,6 @@ public class ClienteListaFragment extends Fragment implements ClienteListaAdapte
 
     @Override
     public void showError(String error) {
-
+        Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
     }
 }

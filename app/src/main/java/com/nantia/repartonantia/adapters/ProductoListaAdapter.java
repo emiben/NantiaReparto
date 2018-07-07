@@ -45,9 +45,12 @@ public class ProductoListaAdapter extends RecyclerView.Adapter<ProductoListaAdap
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         ProductoLista productoLista = mData.get(position);
-        holder.nombre.setText(productoLista.getProducto().getNombre());
-        holder.presentacion.setText(productoLista.getProducto().getPresentacion());
-        holder.actualizado.setText("Actualizdo:" + productoLista.getActualizado().toString());
+        if(productoLista.getProducto().getNombre() != null)
+            holder.nombre.setText(productoLista.getProducto().getNombre());
+        if(productoLista.getProducto().getPresentacion() != null)
+            holder.presentacion.setText(productoLista.getProducto().getPresentacion());
+        if(productoLista.getActualizado() != null)
+            holder.actualizado.setText("Actualizdo:" + productoLista.getActualizado().toString());
         holder.precio.setText(String.valueOf(productoLista.getPrecio()));
     }
 

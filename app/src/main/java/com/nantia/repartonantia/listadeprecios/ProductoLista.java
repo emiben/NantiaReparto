@@ -12,19 +12,32 @@ import java.util.Date;
 
 public class ProductoLista implements Serializable {
 
-    @SerializedName("producto")
+    @SerializedName("id")
+    private long id;
+
+    @SerializedName("productos")
     private Producto producto;
 
     @SerializedName("precio")
     private float precio;
 
     @SerializedName("actualizado")
-    private Date actualizado;
+    private String actualizado;
 
-    public ProductoLista(Producto producto, float precio, Date actualizado) {
+
+    public ProductoLista(long id, Producto producto, float precio, String actualizado) {
+        this.id = id;
         this.producto = producto;
         this.precio = precio;
         this.actualizado = actualizado;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Producto getProducto() {
@@ -43,11 +56,11 @@ public class ProductoLista implements Serializable {
         this.precio = precio;
     }
 
-    public Date getActualizado() {
+    public String getActualizado() {
         return actualizado;
     }
 
-    public void setActualizado(Date actualizado) {
+    public void setActualizado(String actualizado) {
         this.actualizado = actualizado;
     }
 }

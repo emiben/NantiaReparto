@@ -13,4 +13,7 @@ public class Constantes {
     public static final int LISTA_DE_PRECIOS = 3;
     public static final int MAPA = 4;
 
+    public static final String KEY_CLIENTE = "cliente";
+    public static final String KEY_LISTA_DE_PRECIOS = "listaDePrecios";
+
 }

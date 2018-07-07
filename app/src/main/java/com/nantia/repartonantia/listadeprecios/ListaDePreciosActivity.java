@@ -14,8 +14,9 @@ public class ListaDePreciosActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lista_de_precios);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        ListaDePrecioFragment listaDePrecioFragment = new ListaDePrecioFragment();
-        fragmentTransaction.add(R.id.lista_precios_layout, listaDePrecioFragment).commit();
+        ListaDeListasDePrecioFragment listaDeListaDePrecioFragment = new ListaDeListasDePrecioFragment();
+        fragmentTransaction.add(R.id.lista_precios_layout, listaDeListaDePrecioFragment)
+                .commit();
 
     }
 }

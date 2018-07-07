@@ -21,21 +21,26 @@ public class Usuario {
     private String apellido;
 
     @SerializedName("rol")
-    private int rol;
+    private Rol rol;
 
     @SerializedName("contrasenia")
     private String contrasenia;
 
-    public Usuario() {
-    }
+    @SerializedName("esVendedor")
+    private boolean esVendedor;
 
-    public Usuario(long id, String usuario, String nombre, String apellido, int rol, String contrasenia) {
+    @SerializedName("saldoCaja")
+    private float saldoCaja;
+
+    public Usuario(long id, String usuario, String nombre, String apellido, Rol rol, String contrasenia, boolean esVendedor, float saldoCaja) {
         this.id = id;
         this.usuario = usuario;
         this.nombre = nombre;
         this.apellido = apellido;
         this.rol = rol;
         this.contrasenia = contrasenia;
+        this.esVendedor = esVendedor;
+        this.saldoCaja = saldoCaja;
     }
 
     public long getId() {
@@ -70,11 +75,11 @@ public class Usuario {
         this.apellido = apellido;
     }
 
-    public int getRol() {
+    public Rol getRol() {
         return rol;
     }
 
-    public void setRol(int rol) {
+    public void setRol(Rol rol) {
         this.rol = rol;
     }
 
@@ -84,5 +89,21 @@ public class Usuario {
 
     public void setContrasenia(String contrasenia) {
         this.contrasenia = contrasenia;
+    }
+
+    public boolean isEsVendedor() {
+        return esVendedor;
+    }
+
+    public void setEsVendedor(boolean esVendedor) {
+        this.esVendedor = esVendedor;
+    }
+
+    public float getSaldoCaja() {
+        return saldoCaja;
+    }
+
+    public void setSaldoCaja(float saldoCaja) {
+        this.saldoCaja = saldoCaja;
     }
 }
