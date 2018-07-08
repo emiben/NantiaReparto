@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 
+import com.google.gson.Gson;
 import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.producto.Envase;
@@ -67,10 +68,6 @@ public class ClienteNuevoPresenter {
         call.enqueue(new Callback<Cliente>() {
             @Override
             public void onResponse(Call<Cliente> call, Response<Cliente> response) {
-                //TODO revisar se el contains se maneja por el id
-                if(DataHolder.getClientes().contains(response.body())){
-                    DataHolder.getClientes().remove(response.body());
-                }
                 DataHolder.getClientes().add(response.body());
                 view.onSetProgressBarVisibility(View.GONE);
                 view.navigateToClienteFragment(response.body());
@@ -85,17 +82,14 @@ public class ClienteNuevoPresenter {
         });
     }
 
-    public void updateCliente(final Cliente cliente){
+    public void updateCliente(final Cliente cliente, final Cliente clienteToRemove){
         view.onSetProgressBarVisibility(View.VISIBLE);
         ClienteService clienteService = RetrofitClientInstance.getRetrofitInstance().create(ClienteService.class);
         Call<Cliente> call = clienteService.updateCliente(cliente.getId(), cliente);
         call.enqueue(new Callback<Cliente>() {
             @Override
             public void onResponse(Call<Cliente> call, Response<Cliente> response) {
-                //TODO revisar se el contains se maneja por el id
-                if(DataHolder.getClientes().contains(response.body())){
-                    DataHolder.getClientes().remove(response.body());
-                }
+                DataHolder.getClientes().remove(clienteToRemove);
                 DataHolder.getClientes().add(response.body());
                 view.onSetProgressBarVisibility(View.GONE);
                 view.navigateToClienteFragment(response.body());
@@ -108,5 +102,15 @@ public class ClienteNuevoPresenter {
                 view.showError(t.getMessage());
             }
         });
+    }
+
+    public long getIdIfUpdateDeEnvase(ArrayList<EnvaseEnPrestamo> envasesEnPrestamo, EnvaseEnPrestamo envaseEnPrestamo){
+        long id = 0;
+        for (int i = 0; i < envasesEnPrestamo.size() && id == 0; i++){
+            if(envasesEnPrestamo.get(i).getEnvase().getId() == envaseEnPrestamo.getEnvase().getId()){
+                id = envasesEnPrestamo.get(i).getId();
+            }
+        }
+        return id;
     }
 }

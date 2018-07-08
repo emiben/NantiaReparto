@@ -13,4 +13,5 @@ public interface ListaDeListaDePreciosView {
     void setListasDePrecioInfo(ArrayList<ListaDePrecio> listasDePrecios);
     void addListeners();
     void showError(String error);
+    void showError(int resourceId);
 }

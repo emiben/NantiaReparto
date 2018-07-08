@@ -3,6 +3,7 @@ package com.nantia.repartonantia.listadeprecios;
 import android.util.Log;
 import android.view.View;
 
+import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.utils.RetrofitClientInstance;
 
@@ -26,7 +27,7 @@ public class ListaDeListasDePrecioPresenter {
 
     public void getListasDePrecios(){
         view.onSetProgressBarVisibility(View.VISIBLE);
-        if(DataHolder.getListasDePrecios() != null || DataHolder.getListasDePrecios().size() == 0){
+        if(DataHolder.getListasDePrecios() != null && DataHolder.getListasDePrecios().size() > 0){
             view.setListasDePrecioInfo(DataHolder.getListasDePrecios());
             view.addListeners();
             view.onSetProgressBarVisibility(View.GONE);
@@ -37,9 +38,13 @@ public class ListaDeListasDePrecioPresenter {
             call.enqueue(new Callback<ArrayList<ListaDePrecio>>() {
                 @Override
                 public void onResponse(Call<ArrayList<ListaDePrecio>> call, Response<ArrayList<ListaDePrecio>> response) {
-                    DataHolder.setListasDePrecios(response.body());
-                    view.setListasDePrecioInfo(response.body());
-                    view.addListeners();
+                    if(response.code() < 300 && response.body() != null){
+                        DataHolder.setListasDePrecios(response.body());
+                        view.setListasDePrecioInfo(response.body());
+                        view.addListeners();
+                    }else{
+                        view.showError(R.string.lista_precios_no_lista);
+                    }
                     view.onSetProgressBarVisibility(View.GONE);
                 }
 

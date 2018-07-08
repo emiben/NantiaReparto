@@ -53,7 +53,7 @@ public class ClienteFragment extends Fragment implements ClienteView {
         }
         clientePresenter = new ClientePresenter(this, getActivity());
         initializeViewObjects(view);
-        clientePresenter.cargarInfo();
+        if(cliente != null) clientePresenter.cargarInfo();
 
         editFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +72,7 @@ public class ClienteFragment extends Fragment implements ClienteView {
         clienteNuevoFragment.setArguments(b);
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.cliente_lista_layout, clienteNuevoFragment, "clienteNuevoFragment")
+                .addToBackStack(null)
                 .commit();
     }
 

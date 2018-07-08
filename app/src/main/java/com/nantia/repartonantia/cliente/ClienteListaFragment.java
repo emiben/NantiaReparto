@@ -72,6 +72,7 @@ public class ClienteListaFragment extends Fragment implements ClienteListaAdapte
         clienteFragmentf.setArguments(b);
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.cliente_lista_layout, clienteFragmentf)
+                .addToBackStack(null)
                 .commit();
     }
 
@@ -79,6 +80,7 @@ public class ClienteListaFragment extends Fragment implements ClienteListaAdapte
         ClienteNuevoFragment clienteNuevoFragment = new ClienteNuevoFragment();
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.cliente_lista_layout, clienteNuevoFragment, "clienteNuevoFragment")
+                .addToBackStack(null)
                 .commit();
     }
 

@@ -47,6 +47,9 @@
     <string name="cliente_eliminar_env_prestamo">Eliminar envase a prestamo</string>
     <string name="cliente_eliminar_env_prestamo_desc">Confirme que desea eliminar envase a prestamo</string>
 
+    <!-- Strings related to cliente -->
+    <string name="lista_precios_no_lista">No se encontraron listas de precios activas.</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

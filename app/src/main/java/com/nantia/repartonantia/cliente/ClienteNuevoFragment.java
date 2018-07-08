@@ -45,6 +45,7 @@ import java.util.Locale;
 public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private ClienteNuevoPresenter presenter;
     private Cliente cliente;
+    private Cliente clienteOriginal;
     private TextView nombre1;
     private TextView nombre2;
     private TextView nroDeDoc;
@@ -57,7 +58,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     private TextView ciudad;
     private TextView departamento;
     private TextView codigoPostal;
-    private TextView comentarios;
+    private TextView observaciones;
     private ArrayList<Spinner> envAPrestamoSPs = new ArrayList<>();
     private ArrayList<TextView> envAPrestamoCantETs = new ArrayList<>();
     private LinearLayout envAPrestamoLO;
@@ -69,6 +70,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     private DatePickerDialog.OnDateSetListener date;
     private Calendar calendar = Calendar.getInstance();
     private ArrayList<EnvaseEnPrestamo> envasesEnPrestamo;
+    private ArrayList<EnvaseEnPrestamo> envasesEnPrestamoOrig;
     private ArrayList<Envase> envases;
     private ArrayList<Dia> dias;
     private RadioButton domingo;
@@ -107,6 +109,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
 
         dias = new ArrayList<>();
         envasesEnPrestamo = new ArrayList<>();
+        envasesEnPrestamoOrig = new ArrayList<>();
         if(getArguments() != null){
             if(getArguments().getDouble("lat") != 0.0){
                 posicionMapa = new LatLng(getArguments().getDouble("lat"), getArguments().getDouble("lng"));
@@ -114,6 +117,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
             if(getArguments().getSerializable("cliente") != null){
                 updateCliente = true;
                 cliente = (Cliente) getArguments().getSerializable("cliente");
+                clienteOriginal = (Cliente) getArguments().getSerializable("cliente");
                 if(posicionMapa != null){
                     cliente.getDireccion().setCoordLat(String.valueOf(posicionMapa.latitude));
                     cliente.getDireccion().setCoordLon(String.valueOf(posicionMapa.longitude));
@@ -158,8 +162,11 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         Direccion direccion = new Direccion(0, this.direccion.getText().toString(),
                 coordLat, coordLng, this.telefono2.getText().toString(), this.ciudad.getText().toString(),
                 this.departamento.getText().toString(), this.codigoPostal.getText().toString());
+        if(updateCliente){
+            direccion.setId(cliente.getDireccion().getId());
+        }
         cliente.setDireccion(direccion);
-        cliente.setObservaciones(comentarios.getText().toString());
+        cliente.setObservaciones(observaciones.getText().toString());
         cliente.setDias(dias);
         envasesEnPrestamo.clear();
         for (int i = 0; i < envAPrestamoSPs.size(); i++){
@@ -168,13 +175,17 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
                 //TODO manejar los que ya existian
                 EnvaseEnPrestamo envaseEnPrestamo =
                         new EnvaseEnPrestamo(0, envase, Integer.valueOf(envAPrestamoCantETs.get(i).getText().toString()));
+                long updateId = presenter.getIdIfUpdateDeEnvase(envasesEnPrestamoOrig, envaseEnPrestamo);
+                if(updateId > 0){
+                    envaseEnPrestamo.setId(updateId);
+                }
                 envasesEnPrestamo.add(envaseEnPrestamo);
             }
         }
         cliente.setEnvasesEnPrestamo(envasesEnPrestamo);
 
         if(updateCliente){
-            presenter.updateCliente(cliente);
+            presenter.updateCliente(cliente, clienteOriginal);
         }else {
             presenter.saveCliente(cliente);
         }
@@ -273,7 +284,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         fab = view.findViewById(R.id.cliente_nuevo_fab);
         envAPrestamoLO = view.findViewById(R.id.env_prestamo_lo);
         agregarEnvPrestamo = view.findViewById(R.id.agreagr_env_prestamo);
-        comentarios = view.findViewById(R.id.comentario_et);
+        observaciones = view.findViewById(R.id.comentario_et);
         domingo = view.findViewById(R.id.domingo_rb);
         lunes = view.findViewById(R.id.lunes_rb);
         martes = view.findViewById(R.id.martes_rb);
@@ -370,6 +381,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         }
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.cliente_lista_layout, clienteMapaFragment)
+                .addToBackStack(null)
                 .commit();
     }
 
@@ -459,23 +471,25 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     }
 
     private void loadClienteData(Cliente cliente) {
-        nombre1.setText(cliente.getNombre1());
-        nombre2.setText(cliente.getNombre2());
-        nroDeDoc.setText(cliente.getNroDocumento());
+        if(cliente.getNombre1() != null) nombre1.setText(cliente.getNombre1());
+        if(cliente.getNombre2() != null) nombre2.setText(cliente.getNombre2());
+        if(cliente.getNroDocumento() != null) nroDeDoc.setText(cliente.getNroDocumento());
         if(cliente.getTipoDocumento() == TipoDocumento.RUT){
             tipoDeDoc.setSelection(1);
             usuarioImage.setImageResource(R.drawable.factory_2);
             casaImage.setImageResource(R.drawable.factory_2);
         }
-        fecDeNac.setText(cliente.getFechaNacimiento().toString());
-        telefono1.setText(String.valueOf(cliente.getCelular()));
-        telefono2.setText(String.valueOf(cliente.getDireccion().getTelefono()));
-        email.setText(cliente.getMail());
-        direccion.setText(cliente.getDireccion().getDireccion());
-        ciudad.setText(cliente.getDireccion().getCiudad());
-        departamento.setText(cliente.getDireccion().getDepartamento());
-        codigoPostal.setText(cliente.getDireccion().getCodPostal());
+        if(cliente.getFechaNacimiento() != null) fecDeNac.setText(cliente.getFechaNacimiento());
+        if(cliente.getCelular() != null) telefono1.setText(cliente.getCelular());
+        if(cliente.getDireccion().getTelefono() != null) telefono2.setText(cliente.getDireccion().getTelefono());
+        if(cliente.getMail() != null) email.setText(cliente.getMail());
+        if(cliente.getDireccion().getDireccion() != null) direccion.setText(cliente.getDireccion().getDireccion());
+        if(cliente.getDireccion().getCiudad() != null) ciudad.setText(cliente.getDireccion().getCiudad());
+        if(cliente.getDireccion().getDepartamento() != null) departamento.setText(cliente.getDireccion().getDepartamento());
+        if(cliente.getDireccion().getCodPostal() != null) codigoPostal.setText(cliente.getDireccion().getCodPostal());
+        if(cliente.getObservaciones() != null) observaciones.setText(cliente.getObservaciones());
         envasesEnPrestamo = cliente.getEnvasesEnPrestamo();
+        envasesEnPrestamoOrig = cliente.getEnvasesEnPrestamo();
 
         for(int i = 0; i < envasesEnPrestamo.size(); i++){
             addEditTexts(envasesEnPrestamo.get(i));
@@ -485,9 +499,9 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
             selectDias(diasTemp.get(i));
         }
         if(cliente.getDireccion().getCoordLat() != null &&
-                cliente.getDireccion().getCoordLat().isEmpty()){
-            posicionMapa = new LatLng(Float.valueOf(cliente.getDireccion().getCoordLat()),
-                    Float.valueOf(cliente.getDireccion().getCoordLon()));
+                !cliente.getDireccion().getCoordLat().isEmpty()){
+            posicionMapa = new LatLng(Double.valueOf(cliente.getDireccion().getCoordLat()),
+                    Double.valueOf(cliente.getDireccion().getCoordLon()));
         }
     }
 

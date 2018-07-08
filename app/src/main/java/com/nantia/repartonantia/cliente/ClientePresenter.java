@@ -25,7 +25,9 @@ public class ClientePresenter {
         Cliente cliente = clienteView.getCliente();
         ArrayList<ClienteInfoPOJO> clienteInfo = new ArrayList<>();
 
-        String clienteNombre = cliente.getNombre1() + " " + cliente.getNombre2();
+        String clienteNombre = "";
+        if(cliente.getNombre1() != null) clienteNombre = cliente.getNombre1();
+        if(cliente.getNombre2() != null) clienteNombre = clienteNombre + " " + cliente.getNombre2();
 
         ClienteInfoPOJO clienteInfoPOJOSaldo = new ClienteInfoPOJO(context, R.drawable.peso,
                 String.valueOf(cliente.getSaldo()), R.string.cliente_saldo);

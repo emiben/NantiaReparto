@@ -90,6 +90,11 @@ public class ListaDeListasDePrecioFragment extends Fragment
     }
 
     @Override
+    public void showError(int resourceId) {
+        Toast.makeText(getContext(), getString(resourceId), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
     public void onItemClick(View view, int position) {
         navigateToListaDePrecio(listaDePreciosAdapter.getItem(position));
     }
