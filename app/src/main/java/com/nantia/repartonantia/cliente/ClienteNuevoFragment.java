@@ -134,6 +134,18 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        envasesEnPrestamo = cliente.getEnvasesEnPrestamo();
+        envasesEnPrestamoOrig = cliente.getEnvasesEnPrestamo();
+        if(envasesEnPrestamo != null){
+            for(int i = 0; i < envasesEnPrestamo.size(); i++){
+                addEditTexts(envasesEnPrestamo.get(i));
+            }
+        }
+    }
+
+    @Override
     public void saveCliente() {
         if(cliente == null){
             cliente = new Cliente();
@@ -491,9 +503,9 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         envasesEnPrestamo = cliente.getEnvasesEnPrestamo();
         envasesEnPrestamoOrig = cliente.getEnvasesEnPrestamo();
 
-        for(int i = 0; i < envasesEnPrestamo.size(); i++){
-            addEditTexts(envasesEnPrestamo.get(i));
-        }
+//        for(int i = 0; i < envasesEnPrestamo.size(); i++){
+//            addEditTexts(envasesEnPrestamo.get(i));
+//        }
         ArrayList<Dia> diasTemp = cliente.getDias();
         for(int i  =0; i < diasTemp.size(); i++){
             selectDias(diasTemp.get(i));

@@ -43,7 +43,7 @@ public class Cliente implements Serializable {
     private String celular;
 
     @SerializedName("idLista")
-    private String idLista;
+    private long idLista;
 
     @SerializedName("observaciones")
     private String observaciones;
@@ -66,7 +66,7 @@ public class Cliente implements Serializable {
 
     public Cliente(long id, String nroDocumento, TipoDocumento tipoDocumento,
                    String nombre1, String nombre2, float saldo, String fechaNacimiento,
-                   String fechaAlta, String mail, String celular, String idLista, String observaciones,
+                   String fechaAlta, String mail, String celular, long idLista, String observaciones,
                    boolean activo, Direccion direccion, ArrayList<EnvaseEnPrestamo> envasesEnPrestamo,
                    ArrayList<Dia> dias) {
         this.id = id;
@@ -183,11 +183,11 @@ public class Cliente implements Serializable {
         this.mail = mail;
     }
 
-    public String getIdLista() {
+    public long getIdLista() {
         return idLista;
     }
 
-    public void setIdLista(String idLista) {
+    public void setIdLista(long idLista) {
         this.idLista = idLista;
     }
 
