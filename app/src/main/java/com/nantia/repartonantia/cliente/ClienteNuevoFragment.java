@@ -136,13 +136,16 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     @Override
     public void onResume() {
         super.onResume();
-        envasesEnPrestamo = cliente.getEnvasesEnPrestamo();
-        envasesEnPrestamoOrig = cliente.getEnvasesEnPrestamo();
-        if(envasesEnPrestamo != null){
-            for(int i = 0; i < envasesEnPrestamo.size(); i++){
-                addEditTexts(envasesEnPrestamo.get(i));
+        if(cliente != null){
+            envasesEnPrestamo = cliente.getEnvasesEnPrestamo();
+            envasesEnPrestamoOrig = cliente.getEnvasesEnPrestamo();
+            if(envasesEnPrestamo != null){
+                for(int i = 0; i < envasesEnPrestamo.size(); i++){
+                    addEditTexts(envasesEnPrestamo.get(i));
+                }
             }
         }
+
     }
 
     @Override
