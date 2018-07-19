@@ -45,6 +45,7 @@ public class ClienteMapaFragment extends Fragment implements OnMapReadyCallback,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_cliente_mapa, container, false);
+        MapsInitializer.initialize(getContext());
         return view;
     }
 
@@ -76,8 +77,6 @@ public class ClienteMapaFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        MapsInitializer.initialize(getContext());
-
         this.googleMap = googleMap;
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         CameraPosition fabrica = CameraPosition.builder()
@@ -118,7 +117,6 @@ public class ClienteMapaFragment extends Fragment implements OnMapReadyCallback,
         }
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.cliente_lista_layout, clienteNuevoFragment)
-                .addToBackStack(null)
                 .commit();
     }
 }

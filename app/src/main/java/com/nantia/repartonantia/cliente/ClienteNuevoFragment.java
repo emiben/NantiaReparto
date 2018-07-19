@@ -1,41 +1,55 @@
 package com.nantia.repartonantia.cliente;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
 import com.nantia.repartonantia.R;
+import com.nantia.repartonantia.adapters.EnvaseSpinnerAdapter;
+import com.nantia.repartonantia.adapters.ListaDePreciosSpinAdapter;
+import com.nantia.repartonantia.data.DataHolder;
+import com.nantia.repartonantia.listadeprecios.ListaDePrecio;
 import com.nantia.repartonantia.map.ClienteMapaFragment;
 import com.nantia.repartonantia.producto.Envase;
-import com.nantia.repartonantia.utils.CustomEditText;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  *
  */
-public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, View.OnClickListener {
+public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private ClienteNuevoPresenter presenter;
+    private Cliente cliente;
+    private Cliente clienteOriginal;
     private TextView nombre1;
     private TextView nombre2;
     private TextView nroDeDoc;
@@ -48,7 +62,8 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     private TextView ciudad;
     private TextView departamento;
     private TextView codigoPostal;
-    private ArrayList<CustomEditText> envAPrestamoETs = new ArrayList<>();
+    private TextView observaciones;
+    private ArrayList<Spinner> envAPrestamoSPs = new ArrayList<>();
     private ArrayList<TextView> envAPrestamoCantETs = new ArrayList<>();
     private LinearLayout envAPrestamoLO;
     private ImageView usuarioImage;
@@ -56,9 +71,25 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     private FloatingActionButton fab;
     private LatLng posicionMapa;
     private ImageView agregarEnvPrestamo;
-
+    private DatePickerDialog.OnDateSetListener date;
+    private Calendar calendar = Calendar.getInstance();
+    private Spinner listaDePreciosSP;
+    private ArrayList<ListaDePrecio> listasDePrecio;
     private ArrayList<EnvaseEnPrestamo> envasesEnPrestamo;
+    private ArrayList<EnvaseEnPrestamo> envasesEnPrestamoOrig;
     private ArrayList<Envase> envases;
+    private ArrayList<Dia> dias;
+    private RadioButton domingo;
+    private RadioButton lunes;
+    private RadioButton martes;
+    private RadioButton miercoles;
+    private RadioButton jueves;
+    private RadioButton viernes;
+    private RadioButton sabado;
+    private Button guardar;
+    private ProgressBar progressBar;
+    private String fechaDeNacimiento;
+    private boolean updateCliente = false;
 
 
     public ClienteNuevoFragment() {
@@ -78,16 +109,186 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         initializeViewObjects(view);
         setOnClickListeners();
-        loadSpinner();
-        addEditTexts();
 
+        presenter.getEnvases();
+
+        dias = new ArrayList<>();
+        envasesEnPrestamo = new ArrayList<>();
+        envasesEnPrestamoOrig = new ArrayList<>();
         if(getArguments() != null){
             if(getArguments().getDouble("lat") != 0.0){
                 posicionMapa = new LatLng(getArguments().getDouble("lat"), getArguments().getDouble("lng"));
             }
+            if(getArguments().getSerializable("cliente") != null){
+                updateCliente = true;
+                cliente = (Cliente) getArguments().getSerializable("cliente");
+                clienteOriginal = (Cliente) getArguments().getSerializable("cliente");
+                if(posicionMapa != null){
+                    cliente.getDireccion().setCoordLat(String.valueOf(posicionMapa.latitude));
+                    cliente.getDireccion().setCoordLon(String.valueOf(posicionMapa.longitude));
+                }
+                loadClienteData(cliente);
+            }
+        }
+
+        loadSpinners();
+
+        if(!updateCliente){
+            addEditTexts(null);
         }
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(cliente != null){
+            envasesEnPrestamo = cliente.getEnvasesEnPrestamo();
+            envasesEnPrestamoOrig = cliente.getEnvasesEnPrestamo();
+            if(envasesEnPrestamo != null){
+                for(int i = 0; i < envasesEnPrestamo.size(); i++){
+                    addEditTexts(envasesEnPrestamo.get(i));
+                }
+            }
+        }
+
+    }
+
+    @Override
+    public void saveCliente() {
+        if(cliente == null){
+            cliente = new Cliente();
+        }
+        cliente.setNombre1(nombre1.getText().toString());
+        cliente.setNombre2(nombre2.getText().toString());
+        cliente.setNroDocumento(nroDeDoc.getText().toString());
+        if(tipoDeDoc.getSelectedItem().equals(TipoDocumento.CI.name())){
+            cliente.setTipoDocumento(TipoDocumento.CI);
+        }else if (tipoDeDoc.getSelectedItem().equals(TipoDocumento.RUT.name())){
+            cliente.setTipoDocumento(TipoDocumento.RUT);
+        }else {
+            cliente.setTipoDocumento(TipoDocumento.NA);
+        }
+        cliente.setFechaNacimiento(fechaDeNacimiento);
+        //TODO cambiar a fecha de creado
+        cliente.setFechaAlta(fechaDeNacimiento);
+        cliente.setCelular(telefono1.getText().toString());
+        cliente.setMail(email.getText().toString());
+        String coordLat = "";
+        String coordLng = "";
+        if(this.posicionMapa != null){
+            coordLat = String.valueOf(this.posicionMapa.longitude);
+            coordLng = String.valueOf(this.posicionMapa.latitude);
+        }
+        Direccion direccion = new Direccion(0, this.direccion.getText().toString(),
+                coordLat, coordLng, this.telefono2.getText().toString(), this.ciudad.getText().toString(),
+                this.departamento.getText().toString(), this.codigoPostal.getText().toString());
+        if(updateCliente){
+            direccion.setId(cliente.getDireccion().getId());
+        }
+        cliente.setDireccion(direccion);
+        cliente.setObservaciones(observaciones.getText().toString());
+        cliente.setDias(dias);
+        envasesEnPrestamo.clear();
+        if(((ListaDePrecio)listaDePreciosSP.getSelectedItem()).getId() != 0){
+            cliente.setIdLista(((ListaDePrecio)listaDePreciosSP.getSelectedItem()).getId());
+        }
+        for (int i = 0; i < envAPrestamoSPs.size(); i++){
+            Envase envase = (Envase) envAPrestamoSPs.get(i).getSelectedItem();
+            if(envase.getId() != 0){
+                //TODO manejar los que ya existian
+                EnvaseEnPrestamo envaseEnPrestamo =
+                        new EnvaseEnPrestamo(0, envase, Integer.valueOf(envAPrestamoCantETs.get(i).getText().toString()));
+                long updateId = presenter.getIdIfUpdateDeEnvase(envasesEnPrestamoOrig, envaseEnPrestamo);
+                if(updateId > 0){
+                    envaseEnPrestamo.setId(updateId);
+                }
+                envasesEnPrestamo.add(envaseEnPrestamo);
+            }
+        }
+        cliente.setEnvasesEnPrestamo(envasesEnPrestamo);
+
+        if(updateCliente){
+            presenter.updateCliente(cliente, clienteOriginal);
+        }else {
+            presenter.saveCliente(cliente);
+        }
+    }
+
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.cliente_nuevo_fab:
+                navigateToClienteNuevoMapaFragment();
+                break;
+            case R.id.agreagr_env_prestamo:
+                addEditTexts(null);
+                break;
+            case R.id.boton_guardar:
+                saveCliente();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void setEnvases(ArrayList<Envase> envases) {
+        envases.add(0, new Envase(0, "Nuevo envase a prestamo..."));
+        this.envases = envases;
+    }
+
+    @Override
+    public void onSetProgressBarVisibility(int visibility) {
+        progressBar.setVisibility(visibility);
+    }
+
+    @Override
+    public void showError(String error) {
+        Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()){
+            case R.id.domingo_rb:
+                addRemoveDia(isChecked, Dia.DOMINGO);
+                break;
+            case R.id.lunes_rb:
+                addRemoveDia(isChecked, Dia.LUNES);
+                break;
+            case R.id.martes_rb:
+                addRemoveDia(isChecked, Dia.MARTES);
+                break;
+            case R.id.miercoles_rb:
+                addRemoveDia(isChecked, Dia.MIERCOLES);
+                break;
+            case R.id.jueves_rb:
+                addRemoveDia(isChecked, Dia.JUEVES);
+                break;
+            case R.id.viernes_rb:
+                addRemoveDia(isChecked, Dia.VIERNES);
+                break;
+            case R.id.sabado_rb:
+                addRemoveDia(isChecked, Dia.SABADO);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void navigateToClienteFragment(Cliente cliente) {
+        Bundle b = new Bundle();
+        b.putSerializable("cliente", cliente);
+        ClienteFragment clienteFragmentf = new ClienteFragment();
+        clienteFragmentf.setArguments(b);
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.cliente_lista_layout, clienteFragmentf)
+                .commit();
     }
 
     private void initializeViewObjects(View view){
@@ -106,13 +307,25 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         usuarioImage = view.findViewById(R.id.user_image);
         casaImage = view.findViewById(R.id.home_image);
         fab = view.findViewById(R.id.cliente_nuevo_fab);
+        listaDePreciosSP = view.findViewById(R.id.lista_precio_spin);
         envAPrestamoLO = view.findViewById(R.id.env_prestamo_lo);
         agregarEnvPrestamo = view.findViewById(R.id.agreagr_env_prestamo);
+        observaciones = view.findViewById(R.id.comentario_et);
+        domingo = view.findViewById(R.id.domingo_rb);
+        lunes = view.findViewById(R.id.lunes_rb);
+        martes = view.findViewById(R.id.martes_rb);
+        miercoles = view.findViewById(R.id.miercoles_rb);
+        jueves = view.findViewById(R.id.jueves_rb);
+        viernes = view.findViewById(R.id.viernes_rb);
+        sabado = view.findViewById(R.id.sabado_rb);
+        guardar = view.findViewById(R.id.boton_guardar);
+        progressBar = view.findViewById(R.id.cliente_nuevo_progress);
     }
 
     private void setOnClickListeners(){
         fab.setOnClickListener(this);
         agregarEnvPrestamo.setOnClickListener(this);
+        guardar.setOnClickListener(this);
         tipoDeDoc.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -124,15 +337,69 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
 
             }
         });
+
+        date = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                // TODO Auto-generated method stub
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, monthOfYear);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel();
+            }
+
+        };
+
+        fecDeNac.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                new DatePickerDialog(getContext(), date, calendar
+                        .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+        domingo.setOnCheckedChangeListener(this);
+        lunes.setOnCheckedChangeListener(this);
+        martes.setOnCheckedChangeListener(this);
+        miercoles.setOnCheckedChangeListener(this);
+        jueves.setOnCheckedChangeListener(this);
+        viernes.setOnCheckedChangeListener(this);
+        sabado.setOnCheckedChangeListener(this);
     }
 
-    private void loadSpinner(){
+    private void loadSpinners(){
         List<String> list = new ArrayList<>();
         list.add(TipoDocumento.CI.name());
         list.add(TipoDocumento.RUT.name());
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         tipoDeDoc.setAdapter(adapter);
+
+        if(DataHolder.getListasDePrecios() != null && DataHolder.getListasDePrecios().size() > 0){
+            this.listasDePrecio = DataHolder.getListasDePrecios();
+            this.listasDePrecio.add(0, new ListaDePrecio(0, "Elija una lista de precios...", "", null));
+            ListaDePreciosSpinAdapter adapterListaPrecios =
+                    new ListaDePreciosSpinAdapter(getActivity(),this.listasDePrecio);
+            listaDePreciosSP.setAdapter(adapterListaPrecios);
+            if(cliente != null && cliente.getIdLista() > 0){
+                boolean encontre = false;
+                ListaDePrecio listaCliente = null;
+                for (int i = 0; i < this.listasDePrecio.size() && !encontre; i++){
+                    if(this.listasDePrecio.get(i).getId() == cliente.getIdLista()){
+                        encontre = true;
+                        listaCliente = this.listasDePrecio.get(i);
+                    }
+                }
+                if(listaCliente != null){
+                    listaDePreciosSP.setSelection(adapterListaPrecios.getPosition(listaCliente));
+                }
+            }
+        }
     }
 
     private void updateUiRutoCI(int pos){
@@ -152,20 +419,6 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     }
 
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.cliente_nuevo_fab:
-                navigateToClienteNuevoMapaFragment();
-                break;
-            case R.id.agreagr_env_prestamo:
-                addEditTexts();
-                break;
-            default:
-                break;
-        }
-    }
-
     private void navigateToClienteNuevoMapaFragment() {
         ClienteMapaFragment clienteMapaFragment = new ClienteMapaFragment();
         if(posicionMapa != null){
@@ -177,35 +430,6 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         fragmentTransaction.replace(R.id.cliente_lista_layout, clienteMapaFragment)
                 .addToBackStack(null)
                 .commit();
-    }
-
-    private void singleChoiceWithRadioButton(final int viewId) {
-        //TODO: Traer los envases originales
-        final CharSequence[] envNombre = new CharSequence[50];
-        envases = new ArrayList<>();
-        for(int i=0; i < 50; i++){
-            envases.add(new Envase(i, "Envase " + i));
-            envNombre[i] = "Envase " + i;
-        }
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(getString(R.string.envases));
-        builder.setSingleChoiceItems(envNombre, -1,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ((TextView)getActivity().findViewById(viewId)).setText(envNombre[which]);
-                        dialog.dismiss();
-                    }
-                });
-        builder.setNegativeButton("Cancelar",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
     }
 
     private void removeEditTextsDialog(final int viewId){
@@ -229,22 +453,21 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         alert.show();
     }
 
-    private void addEditTexts(){
-        CustomEditText envaseET = new CustomEditText(getActivity());
-        envaseET.setId(Integer.parseInt("1"+envAPrestamoETs.size() + 1));
-        envaseET.setLayoutParams(
-                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        envaseET.setHint(getString(R.string.cliente_envase_prestamo));
-        envaseET.setFocusable(false);
-        envaseET.setClickable(true);
-        envaseET.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                singleChoiceWithRadioButton(v.getId());
-            }
-        });
+    private void addEditTexts(EnvaseEnPrestamo envaseEnPrestamo){
+        EnvaseSpinnerAdapter envaseSpinnerAdapter = null;
 
-        envaseET.setOnLongClickListener(new View.OnLongClickListener() {
+        if(envaseEnPrestamo != null){
+            ArrayList<Envase> envase = new ArrayList<>();
+            envase.add(envaseEnPrestamo.getEnvase());
+            envaseSpinnerAdapter = new EnvaseSpinnerAdapter(getActivity(), envase);
+        }else{
+            envaseSpinnerAdapter = new EnvaseSpinnerAdapter(getActivity(), envases);
+        }
+
+        Spinner envaseSp = new Spinner(getActivity());
+        envaseSp.setAdapter(envaseSpinnerAdapter);
+        envaseSp.setId(Integer.parseInt("1"+envAPrestamoSPs.size() + 1));
+        envaseSp.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 removeEditTextsDialog(v.getId());
@@ -259,17 +482,124 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         envaseCantET.setHint(R.string.cliente_cantidad);
 
-        envAPrestamoETs.add(envaseET);
+        if(envaseEnPrestamo != null){
+            envaseCantET.setText(String.valueOf(envaseEnPrestamo.getCantidad()));
+        }
+
+        envAPrestamoSPs.add(envaseSp);
         envAPrestamoCantETs.add(envaseCantET);
-        envAPrestamoLO.addView(envaseET, 0);
+        envAPrestamoLO.addView(envaseSp, 0);
         envAPrestamoLO.addView(envaseCantET, 1);
     }
 
     private void removeEditTexts(int viewId){
-        //TODO: remove from arrayLists
-        envAPrestamoLO.removeView(getActivity().findViewById(viewId));
         String cantId = Integer.toString(viewId);
         cantId = cantId.substring(1);
+        boolean encontre = false;
+        int i = 0;
+        while (!encontre && i < envAPrestamoSPs.size()){
+            if(envAPrestamoSPs.get(i).getId() == viewId){
+                envAPrestamoSPs.remove(i);
+                encontre = true;
+            }
+            i++;
+        }
+        encontre = false;
+        i = 0;
+        while (!encontre && i < envAPrestamoCantETs.size()){
+            if(envAPrestamoCantETs.get(i).getId() == Integer.parseInt("2"+cantId)){
+                envAPrestamoCantETs.remove(i);
+                encontre = true;
+            }
+            i++;
+        }
+        envAPrestamoLO.removeView(getActivity().findViewById(viewId));
         envAPrestamoLO.removeView(getActivity().findViewById(Integer.parseInt("2"+cantId)));
+    }
+
+    private void loadClienteData(Cliente cliente) {
+        if(cliente.getNombre1() != null) nombre1.setText(cliente.getNombre1());
+        if(cliente.getNombre2() != null) nombre2.setText(cliente.getNombre2());
+        if(cliente.getNroDocumento() != null) nroDeDoc.setText(cliente.getNroDocumento());
+        if(cliente.getTipoDocumento() == TipoDocumento.RUT){
+            tipoDeDoc.setSelection(1);
+            usuarioImage.setImageResource(R.drawable.factory_2);
+            casaImage.setImageResource(R.drawable.factory_2);
+        }
+        if(cliente.getFechaNacimiento() != null){
+            fechaDeNacimiento = cliente.getFechaNacimiento();
+            String[] fecha = cliente.getFechaNacimiento().split("-");
+            fecDeNac.setText(fecha[2]+"/"+fecha[1]+"/"+fecha[0]);
+        }
+        if(cliente.getCelular() != null) telefono1.setText(cliente.getCelular());
+        if(cliente.getDireccion().getTelefono() != null) telefono2.setText(cliente.getDireccion().getTelefono());
+        if(cliente.getMail() != null) email.setText(cliente.getMail());
+        if(cliente.getDireccion().getDireccion() != null) direccion.setText(cliente.getDireccion().getDireccion());
+        if(cliente.getDireccion().getCiudad() != null) ciudad.setText(cliente.getDireccion().getCiudad());
+        if(cliente.getDireccion().getDepartamento() != null) departamento.setText(cliente.getDireccion().getDepartamento());
+        if(cliente.getDireccion().getCodPostal() != null) codigoPostal.setText(cliente.getDireccion().getCodPostal());
+        if(cliente.getObservaciones() != null) observaciones.setText(cliente.getObservaciones());
+        envasesEnPrestamo = cliente.getEnvasesEnPrestamo();
+        envasesEnPrestamoOrig = cliente.getEnvasesEnPrestamo();
+
+//        for(int i = 0; i < envasesEnPrestamo.size(); i++){
+//            addEditTexts(envasesEnPrestamo.get(i));
+//        }
+        ArrayList<Dia> diasTemp = cliente.getDias();
+        for(int i  =0; i < diasTemp.size(); i++){
+            selectDias(diasTemp.get(i));
+        }
+        if(cliente.getDireccion().getCoordLat() != null &&
+                !cliente.getDireccion().getCoordLat().isEmpty()){
+            posicionMapa = new LatLng(Double.valueOf(cliente.getDireccion().getCoordLat()),
+                    Double.valueOf(cliente.getDireccion().getCoordLon()));
+        }
+    }
+
+
+    private void selectDias(Dia dia){
+        switch (dia){
+            case DOMINGO:
+                domingo.setChecked(true);
+                break;
+            case LUNES:
+                lunes.setChecked(true);
+                break;
+            case MARTES:
+                martes.setChecked(true);
+                break;
+            case MIERCOLES:
+                miercoles.setChecked(true);
+                break;
+            case JUEVES:
+                jueves.setChecked(true);
+                break;
+            case VIERNES:
+                viernes.setChecked(true);
+                break;
+            case SABADO:
+                sabado.setChecked(true);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void updateLabel() {
+        String myFormat = "dd/MM/yyyy";
+        String myFormat2 = "yyyy-MM-dd";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        SimpleDateFormat sdf2 = new SimpleDateFormat(myFormat2, Locale.US);
+        fechaDeNacimiento = sdf2.format(calendar.getTime());
+        fecDeNac.setText(sdf.format(calendar.getTime()));
+    }
+
+
+    private void addRemoveDia(boolean add, Dia dia){
+        if(add){
+            dias.add(dia);
+        }else{
+            dias.remove(dia);
+        }
     }
 }

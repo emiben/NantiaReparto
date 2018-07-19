@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 public class Producto implements Serializable {
 
-    @SerializedName("id")
+    @SerializedName("productoId")
     private long id;
 
     @SerializedName("nombre")

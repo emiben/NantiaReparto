@@ -46,8 +46,8 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, View
         progressBar = (ProgressBar) findViewById(R.id.login_progress);
 
         //TODO: Remove this
-        nombreUsuario.setText("UsuarioAdmin");
-        contrasenia.setText("pass1234");
+        nombreUsuario.setText("usuario1");
+        contrasenia.setText("usuario1");
     }
 
 

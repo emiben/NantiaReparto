@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.nantia.repartonantia.listadeprecios.ListaDePreciosActivity;
 import com.nantia.repartonantia.producto.ProductoActivity;
 import com.nantia.repartonantia.adapters.CustomGridViewAdapter;
 import com.nantia.repartonantia.cliente.ClienteActivity;
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(ProductoActivity.class);
                 break;
             case LISTA_DE_PRECIOS:
-                Toast.makeText(MainActivity.this, "GridView Item: " + menuTitles[+position], Toast.LENGTH_LONG).show();
+                startActivity(ListaDePreciosActivity.class);
                 break;
             case MAPA:
                 Toast.makeText(MainActivity.this, "GridView Item: " + menuTitles[+position], Toast.LENGTH_LONG).show();

@@ -11,15 +11,27 @@ import java.io.Serializable;
 
 public class EnvaseEnPrestamo implements Serializable {
 
-    @SerializedName("envase")
+    @SerializedName("id")
+    private long id;
+
+    @SerializedName("envasetipos")
     private Envase envase;
 
     @SerializedName("cantidad")
     private int cantidad;
 
-    public EnvaseEnPrestamo(Envase envase, int cantidad) {
+    public EnvaseEnPrestamo(long id, Envase envase, int cantidad) {
+        this.id = id;
         this.envase = envase;
         this.cantidad = cantidad;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Envase getEnvase() {

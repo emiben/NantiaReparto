@@ -21,12 +21,15 @@
     <string name="cliente_RUT">RUT</string>
     <string name="cliente_telefono">Tel.</string>
     <string name="cliente_celular">Móvil</string>
+    <string name="cliente_dias_visita">Días de visita</string>
     <string name="cliente_direccion">Dirección</string>
     <string name="cliente_saldo">Saldo</string>
     <string name="cliente_envases_prestamo">Envases a prestamo</string>
     <string name="cliente_envase_prestamo">Envase a prestamo</string>
     <string name="cliente_cantidad">Cantidad</string>
     <string name="cliente_mail">Mail</string>
+    <string name="cliente_lista_precios">Lista de Precios</string>
+    <string name="cliente_lista_precios_actual">Lista de Precios Actual:</string>
     <string name="cliente_observaciones">Observaciones</string>
     <string name="cliente_nombre">Nombre</string>
     <string name="cliente_apellido">Apellido</string>
@@ -36,14 +39,19 @@
     <string name="cliente_tel_1">Telefono 1</string>
     <string name="cliente_tel_2">Telefono 2</string>
     <string name="cliente_dir_mail">Dirección de correo electronico</string>
+    <string name="cliente_comentarios">Comentarios...</string>
     <string name="cliente_ciudad">Ciudad</string>
     <string name="cliente_departamento">Departamento</string>
     <string name="cliente_cp">Código Postal</string>
+    <string name="cliente_dias">Días</string>
     <string name="cliente_empresa_nombre_fantasia">Nombre fantasía</string>
     <string name="cliente_empresa_nombre_legal">Nombre Legal</string>
     <string name="cliente_nuevo">Cliente Nuevo</string>
     <string name="cliente_eliminar_env_prestamo">Eliminar envase a prestamo</string>
     <string name="cliente_eliminar_env_prestamo_desc">Confirme que desea eliminar envase a prestamo</string>
+
+    <!-- Strings related to cliente -->
+    <string name="lista_precios_no_lista">No se encontraron listas de precios activas.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -1,5 +1,6 @@
 package com.nantia.repartonantia.cliente;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -11,11 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.adapters.ClienteListaAdapter;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+
+import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE;
 
 /**
  *
@@ -24,6 +29,7 @@ public class ClienteListaFragment extends Fragment implements ClienteListaAdapte
         ClienteListaView {
     private ProgressBar progressBar;
     private RecyclerView clientesRV;
+
     private SearchView buscarSV;
     private ArrayList<Cliente> clientes;
     private ClienteListaAdapter clienteListaAdapter;
@@ -61,7 +67,7 @@ public class ClienteListaFragment extends Fragment implements ClienteListaAdapte
 
     private void navigateToClienteFragment(Cliente cliente) {
         Bundle b = new Bundle();
-        b.putSerializable("cliente", cliente);
+        b.putSerializable(KEY_CLIENTE, cliente);
         ClienteFragment clienteFragmentf = new ClienteFragment();
         clienteFragmentf.setArguments(b);
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -91,29 +97,32 @@ public class ClienteListaFragment extends Fragment implements ClienteListaAdapte
 
     @Override
     public void setClienteInfo(ArrayList<Cliente> clientes) {
-        this.clientes = clientes;
-        clientesRV.setLayoutManager(new LinearLayoutManager(getActivity()));
-        clienteListaAdapter = new ClienteListaAdapter(getActivity(), clientes);
-        clienteListaAdapter.setClickListener(this);
-        clientesRV.setAdapter(clienteListaAdapter);
-
+        if (clientes != null){
+            this.clientes = clientes;
+            clientesRV.setLayoutManager(new LinearLayoutManager(getActivity()));
+            clienteListaAdapter = new ClienteListaAdapter(getActivity(), clientes);
+            clienteListaAdapter.setClickListener(this);
+            clientesRV.setAdapter(clienteListaAdapter);
+        }
     }
 
     @Override
     public void addListeners() {
-        buscarSV.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                clienteListaAdapter.getFilter().filter(s);
-                return false;
-            }
+        if (clienteListaAdapter != null){
+            buscarSV.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String s) {
+                    clienteListaAdapter.getFilter().filter(s);
+                    return false;
+                }
 
-            @Override
-            public boolean onQueryTextChange(String s) {
-                clienteListaAdapter.getFilter().filter(s);
-                return false;
-            }
-        });
+                @Override
+                public boolean onQueryTextChange(String s) {
+                    clienteListaAdapter.getFilter().filter(s);
+                    return false;
+                }
+            });
+        }
 
         clientesFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,6 +140,6 @@ public class ClienteListaFragment extends Fragment implements ClienteListaAdapte
 
     @Override
     public void showError(String error) {
-
+        Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
     }
 }
