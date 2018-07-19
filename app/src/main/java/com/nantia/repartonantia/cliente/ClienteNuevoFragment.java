@@ -3,6 +3,7 @@ package com.nantia.repartonantia.cliente;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -30,6 +31,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.adapters.EnvaseSpinnerAdapter;
+import com.nantia.repartonantia.adapters.ListaDePreciosSpinAdapter;
+import com.nantia.repartonantia.data.DataHolder;
+import com.nantia.repartonantia.listadeprecios.ListaDePrecio;
 import com.nantia.repartonantia.map.ClienteMapaFragment;
 import com.nantia.repartonantia.producto.Envase;
 
@@ -69,6 +73,8 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     private ImageView agregarEnvPrestamo;
     private DatePickerDialog.OnDateSetListener date;
     private Calendar calendar = Calendar.getInstance();
+    private Spinner listaDePreciosSP;
+    private ArrayList<ListaDePrecio> listasDePrecio;
     private ArrayList<EnvaseEnPrestamo> envasesEnPrestamo;
     private ArrayList<EnvaseEnPrestamo> envasesEnPrestamoOrig;
     private ArrayList<Envase> envases;
@@ -103,7 +109,6 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         initializeViewObjects(view);
         setOnClickListeners();
-        loadSpinner();
 
         presenter.getEnvases();
 
@@ -125,6 +130,8 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
                 loadClienteData(cliente);
             }
         }
+
+        loadSpinners();
 
         if(!updateCliente){
             addEditTexts(null);
@@ -184,6 +191,9 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         cliente.setObservaciones(observaciones.getText().toString());
         cliente.setDias(dias);
         envasesEnPrestamo.clear();
+        if(((ListaDePrecio)listaDePreciosSP.getSelectedItem()).getId() != 0){
+            cliente.setIdLista(((ListaDePrecio)listaDePreciosSP.getSelectedItem()).getId());
+        }
         for (int i = 0; i < envAPrestamoSPs.size(); i++){
             Envase envase = (Envase) envAPrestamoSPs.get(i).getSelectedItem();
             if(envase.getId() != 0){
@@ -297,6 +307,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         usuarioImage = view.findViewById(R.id.user_image);
         casaImage = view.findViewById(R.id.home_image);
         fab = view.findViewById(R.id.cliente_nuevo_fab);
+        listaDePreciosSP = view.findViewById(R.id.lista_precio_spin);
         envAPrestamoLO = view.findViewById(R.id.env_prestamo_lo);
         agregarEnvPrestamo = view.findViewById(R.id.agreagr_env_prestamo);
         observaciones = view.findViewById(R.id.comentario_et);
@@ -361,13 +372,34 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         sabado.setOnCheckedChangeListener(this);
     }
 
-    private void loadSpinner(){
+    private void loadSpinners(){
         List<String> list = new ArrayList<>();
         list.add(TipoDocumento.CI.name());
         list.add(TipoDocumento.RUT.name());
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         tipoDeDoc.setAdapter(adapter);
+
+        if(DataHolder.getListasDePrecios() != null && DataHolder.getListasDePrecios().size() > 0){
+            this.listasDePrecio = DataHolder.getListasDePrecios();
+            this.listasDePrecio.add(0, new ListaDePrecio(0, "Elija una lista de precios...", "", null));
+            ListaDePreciosSpinAdapter adapterListaPrecios =
+                    new ListaDePreciosSpinAdapter(getActivity(),this.listasDePrecio);
+            listaDePreciosSP.setAdapter(adapterListaPrecios);
+            if(cliente != null && cliente.getIdLista() > 0){
+                boolean encontre = false;
+                ListaDePrecio listaCliente = null;
+                for (int i = 0; i < this.listasDePrecio.size() && !encontre; i++){
+                    if(this.listasDePrecio.get(i).getId() == cliente.getIdLista()){
+                        encontre = true;
+                        listaCliente = this.listasDePrecio.get(i);
+                    }
+                }
+                if(listaCliente != null){
+                    listaDePreciosSP.setSelection(adapterListaPrecios.getPosition(listaCliente));
+                }
+            }
+        }
     }
 
     private void updateUiRutoCI(int pos){
@@ -494,7 +526,11 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
             usuarioImage.setImageResource(R.drawable.factory_2);
             casaImage.setImageResource(R.drawable.factory_2);
         }
-        if(cliente.getFechaNacimiento() != null) fecDeNac.setText(cliente.getFechaNacimiento());
+        if(cliente.getFechaNacimiento() != null){
+            fechaDeNacimiento = cliente.getFechaNacimiento();
+            String[] fecha = cliente.getFechaNacimiento().split("-");
+            fecDeNac.setText(fecha[2]+"/"+fecha[1]+"/"+fecha[0]);
+        }
         if(cliente.getCelular() != null) telefono1.setText(cliente.getCelular());
         if(cliente.getDireccion().getTelefono() != null) telefono2.setText(cliente.getDireccion().getTelefono());
         if(cliente.getMail() != null) email.setText(cliente.getMail());
