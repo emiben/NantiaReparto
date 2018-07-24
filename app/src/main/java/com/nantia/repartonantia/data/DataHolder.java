@@ -4,6 +4,7 @@ import com.nantia.repartonantia.cliente.Cliente;
 import com.nantia.repartonantia.listadeprecios.ListaDePrecio;
 import com.nantia.repartonantia.producto.Envase;
 import com.nantia.repartonantia.producto.Producto;
+import com.nantia.repartonantia.stock.Stock;
 import com.nantia.repartonantia.usuario.Usuario;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class DataHolder {
     private static ArrayList<Producto> productos;
     private static ArrayList<Cliente> clientes;
     private static ArrayList<ListaDePrecio> listasDePrecios;
+    private static Stock stock;
 
     public static Usuario getUsuario() {
         return usuario;
@@ -57,5 +59,13 @@ public class DataHolder {
 
     public static void setListasDePrecios(ArrayList<ListaDePrecio> listasDePrecios) {
         DataHolder.listasDePrecios = listasDePrecios;
+    }
+
+    public static Stock getStock() {
+        return stock;
+    }
+
+    public static void setStock(Stock stock) {
+        DataHolder.stock = stock;
     }
 }

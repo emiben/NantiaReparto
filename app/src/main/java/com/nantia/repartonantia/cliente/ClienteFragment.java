@@ -98,7 +98,6 @@ public class ClienteFragment extends Fragment implements ClienteView {
         nombre = view.findViewById(R.id.cliente_info_nombre_tv);
         clienteInfo = view.findViewById(R.id.cliente_info_rv);
         editFAB = view.findViewById(R.id.cliente_info_fab);
-
     }
 
 }

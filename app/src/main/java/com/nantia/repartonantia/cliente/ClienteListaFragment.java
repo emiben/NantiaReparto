@@ -36,7 +36,6 @@ public class ClienteListaFragment extends Fragment implements ClienteListaAdapte
     private ClienteListaPresenter clienteListaPresenter;
     private FloatingActionButton clientesFAB;
 
-
     public ClienteListaFragment() {
         // Required empty public constructor
     }

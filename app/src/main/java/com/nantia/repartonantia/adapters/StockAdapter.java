@@ -9,34 +9,35 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nantia.repartonantia.R;
+import com.nantia.repartonantia.stock.Stock;
 
 import java.util.ArrayList;
 
 /**
- * Created by Emi on 28/5/2018.
+ * Created by Emi on 23/7/2018.
  */
 
-public class ClienteAdapter extends RecyclerView.Adapter<ClienteAdapter.ViewHolder> {
-    private ArrayList<ClienteInfoPOJO> mData;
+public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder>{
+    private ArrayList<StockInfoPOJO> mData;
     private LayoutInflater mInflater;
 
-    public ClienteAdapter(Context context, ArrayList<ClienteInfoPOJO> mData) {
+    public StockAdapter(Context context, ArrayList<StockInfoPOJO> mData) {
         this.mData = mData;
         this.mInflater = LayoutInflater.from(context);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.cliente_row, parent, false);
+        View view = mInflater.inflate(R.layout.stock_row, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ClienteInfoPOJO clienteInfoPOJO = mData.get(position);
-        holder.icono.setImageDrawable(clienteInfoPOJO.getImage());
-        holder.primario.setText(clienteInfoPOJO.getPrimario());
-        holder.secundario.setText(clienteInfoPOJO.getSecundario());
+        StockInfoPOJO stockInfoPOJO = mData.get(position);
+        holder.primario.setText(stockInfoPOJO.getPrimario());
+        holder.cantidad.setText(String.valueOf(stockInfoPOJO.getCantidad()));
+        holder.secundario.setText(stockInfoPOJO.getSecudario());
     }
 
     @Override
@@ -45,14 +46,14 @@ public class ClienteAdapter extends RecyclerView.Adapter<ClienteAdapter.ViewHold
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView icono;
         TextView primario;
+        TextView cantidad;
         TextView secundario;
 
         ViewHolder(View itemView) {
             super(itemView);
-            icono = itemView.findViewById(R.id.cliente_icono);
             primario = itemView.findViewById(R.id.primarioTV);
+            cantidad = itemView.findViewById(R.id.cantidadTV);
             secundario = itemView.findViewById(R.id.secundaroioTV);
         }
     }
