@@ -10,4 +10,7 @@ import java.util.ArrayList;
 
 public interface StockView {
     void setStockInfo(ArrayList<StockInfoPOJO> stock);
+    void addListeners();
+    void onSetProgressBarVisibility(int visibility);
+    void showError(String error);
 }

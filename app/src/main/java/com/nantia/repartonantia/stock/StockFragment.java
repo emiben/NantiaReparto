@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 
+import android.widget.Toast;
 import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.adapters.StockAdapter;
 import com.nantia.repartonantia.adapters.StockInfoPOJO;
@@ -18,9 +19,7 @@ import com.nantia.repartonantia.adapters.StockInfoPOJO;
 import java.util.ArrayList;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link StockFragment#newInstance} factory method to
- * create an instance of this fragment.
+ *
  */
 public class StockFragment extends Fragment implements StockView{
     private ProgressBar progressBar;
@@ -34,14 +33,6 @@ public class StockFragment extends Fragment implements StockView{
         // Required empty public constructor
     }
 
-    /**
-     */
-    // TODO: Rename and change types and number of parameters
-    public static StockFragment newInstance(String param1, String param2) {
-        StockFragment fragment = new StockFragment();
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,8 +41,12 @@ public class StockFragment extends Fragment implements StockView{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_stock, container, false);
+        View view = inflater.inflate(R.layout.fragment_stock, container, false);
+        stockPresenter = new StockPresenter(this);
+        initializeViewObjects(view);
+        stockPresenter.getStock();
+
+        return view;
     }
 
     @Override
@@ -59,5 +54,37 @@ public class StockFragment extends Fragment implements StockView{
         stockRV.setLayoutManager(new LinearLayoutManager(getActivity()));
         stockAdapter = new StockAdapter(getActivity(), stock);
         stockRV.setAdapter(stockAdapter);
+    }
+
+    @Override public void addListeners() {
+        if(stockAdapter != null){
+            buscarSV.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String s) {
+                    stockAdapter.getFilter().filter(s);
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String s) {
+                    stockAdapter.getFilter().filter(s);
+                    return false;
+                }
+            });
+        }
+    }
+
+    @Override public void onSetProgressBarVisibility(int visibility) {
+        progressBar.setVisibility(visibility);
+    }
+
+    @Override public void showError(String error) {
+        Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
+    }
+
+    private void initializeViewObjects(View view){
+        progressBar = view.findViewById(R.id.stock_progress);
+        stockRV = view.findViewById(R.id.stock_lista_rv);
+        buscarSV = view.findViewById(R.id.stock_buscar_sv);
     }
 }

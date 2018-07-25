@@ -54,20 +54,5 @@ public class ClienteListaPresenter {
             clienteListaView.onSetProgressBarVisibility(View.GONE);
         }
 
-//        ArrayList<Cliente> clientes = new ArrayList<>();
-//        ArrayList<EnvaseEnPrestamo> envasesEnPrestamo = new ArrayList<>();
-//        envasesEnPrestamo.add(new EnvaseEnPrestamo(new Envase(1, "Sifon"), 4));
-//        envasesEnPrestamo.add(new EnvaseEnPrestamo(new Envase(2, "Damajuana"), 2));
-//        envasesEnPrestamo.add(new EnvaseEnPrestamo(new Envase(3, "Bidon 20L"), 3));
-//        for(int i=0; i < 50; i++){
-//            Date date = Calendar.getInstance().getTime();
-//            Direccion dir = new Direccion(i, "Dir"+i,i,i,i,"Dir"+i,"Dir"+i,"Dir"+i, true, true);
-//            Cliente cli = new Cliente(i,dir, TipoDocumento.CI, String.valueOf(i),"Cli"+i, "Cli"+i,i,
-//                    envasesEnPrestamo, date, date,i, "Cli"+i, i, "Cli"+i, true);
-//            clientes.add(cli);
-//        }
-//        clienteListaView.setListasDePrecioInfo(clientes);
-//        clienteListaView.addListeners();
-//        clienteListaView.onSetProgressBarVisibility(View.GONE);
     }
 }
