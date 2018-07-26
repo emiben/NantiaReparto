@@ -37,3 +37,17 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:11.0.4'
     testCompile 'junit:junit:4.12'
 }
+
+apply plugin: "org.sonarqube"
+
+sonarqube {
+    properties {
+        property "sonar.projectName", "NantiaReparto"
+        property "sonar.projectKey", "com.nantia.repartonantia"
+        property "sonar.host.url", "http://localhost:9000"
+        property "sonar.language", "java"
+        property "sonar.sources", "src/main/"
+        property "sonar.login", "admin"
+        property "sonar.password", "admin"
+    }
+}
