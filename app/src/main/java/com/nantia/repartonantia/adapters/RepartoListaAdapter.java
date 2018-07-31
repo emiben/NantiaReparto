@@ -22,6 +22,7 @@ public class RepartoListaAdapter extends RecyclerView.Adapter<RepartoListaAdapte
     private ArrayList<RepartoInfoPOJO> mData;
     private LayoutInflater mInflater;
     private ArrayList<RepartoInfoPOJO> mDataOrigianl;
+    private ItemClickListener mClickListener;
     ValueFilter valueFilter;
 
     public RepartoListaAdapter(Context context, ArrayList<RepartoInfoPOJO> mData) {
@@ -58,7 +59,19 @@ public class RepartoListaAdapter extends RecyclerView.Adapter<RepartoListaAdapte
         return valueFilter;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    public RepartoInfoPOJO getItem(int position) {
+        return mData.get(position);
+    }
+
+    public void setClickListener(ItemClickListener itemClickListener) {
+        this.mClickListener = itemClickListener;
+    }
+
+    public interface ItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView descripcion;
         TextView vehiculo;
         TextView dia;
@@ -68,6 +81,11 @@ public class RepartoListaAdapter extends RecyclerView.Adapter<RepartoListaAdapte
             descripcion = itemView.findViewById(R.id.reparto_lista_desc_tv);
             vehiculo = itemView.findViewById(R.id.reparto_lista_vehiculo_tv);
             dia = itemView.findViewById(R.id.reparto_lista_dia_tv);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 
