@@ -8,59 +8,47 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+
 import com.nantia.repartonantia.R;
+import com.nantia.repartonantia.reparto.Reparto;
+
 import java.util.ArrayList;
 
 /**
- * Created by Emi on 23/7/2018.
+ * Created by Emi on 29/7/2018.
  */
 
-public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> implements Filterable {
-    private ArrayList<StockInfoPOJO> mData;
+public class RepartoListaAdapter extends RecyclerView.Adapter<RepartoListaAdapter.ViewHolder> implements Filterable{
+    private ArrayList<RepartoInfoPOJO> mData;
     private LayoutInflater mInflater;
-    private ArrayList<StockInfoPOJO> mDataOrigianl;
+    private ArrayList<RepartoInfoPOJO> mDataOrigianl;
     ValueFilter valueFilter;
 
-
-    public StockAdapter(Context context, ArrayList<StockInfoPOJO> mData) {
+    public RepartoListaAdapter(Context context, ArrayList<RepartoInfoPOJO> mData) {
         this.mData = mData;
         this.mInflater = LayoutInflater.from(context);
         mDataOrigianl = new ArrayList<>();
-        mDataOrigianl.addAll((ArrayList<StockInfoPOJO>)mData.clone());
+        mDataOrigianl.addAll((ArrayList<RepartoInfoPOJO>)mData.clone());
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.stock_row, parent, false);
+        View view = mInflater.inflate(R.layout.lista_reparto_row, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        StockInfoPOJO stockInfoPOJO = mData.get(position);
-        holder.primario.setText(stockInfoPOJO.getPrimario());
-        holder.cantidad.setText(String.valueOf(stockInfoPOJO.getCantidad()));
-        holder.secundario.setText(stockInfoPOJO.getSecudario());
+        RepartoInfoPOJO repartoInfoPOJO = mData.get(position);
+        holder.descripcion.setText(repartoInfoPOJO.getDescripcion());
+        holder.vehiculo.setText(repartoInfoPOJO.getVehiculo());
+        holder.dia.setText(repartoInfoPOJO.getDia());
     }
 
     @Override
     public int getItemCount() {
         return mData.size();
     }
-
-    class ViewHolder extends RecyclerView.ViewHolder {
-        TextView primario;
-        TextView cantidad;
-        TextView secundario;
-
-        ViewHolder(View itemView) {
-            super(itemView);
-            primario = itemView.findViewById(R.id.primarioTV);
-            cantidad = itemView.findViewById(R.id.cantidadTV);
-            secundario = itemView.findViewById(R.id.secundaroioTV);
-        }
-    }
-
 
     @Override
     public Filter getFilter() {
@@ -70,6 +58,18 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
         return valueFilter;
     }
 
+    class ViewHolder extends RecyclerView.ViewHolder {
+        TextView descripcion;
+        TextView vehiculo;
+        TextView dia;
+
+        ViewHolder(View itemView) {
+            super(itemView);
+            descripcion = itemView.findViewById(R.id.reparto_lista_desc_tv);
+            vehiculo = itemView.findViewById(R.id.reparto_lista_vehiculo_tv);
+            dia = itemView.findViewById(R.id.reparto_lista_dia_tv);
+        }
+    }
 
     private class ValueFilter extends Filter {
 
@@ -77,9 +77,11 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults filterResults = new FilterResults();
             if (constraint != null && constraint.length() > 0){
-                ArrayList<StockInfoPOJO> filterList = new ArrayList<>();
+                ArrayList<RepartoInfoPOJO> filterList = new ArrayList<>();
                 for (int i = 0; i < mDataOrigianl.size(); i++) {
-                    if((mDataOrigianl.get(i).getPrimario().toUpperCase()).contains(constraint.toString().toUpperCase())){
+                    if((mDataOrigianl.get(i).getDescripcion().toUpperCase()).contains(constraint.toString().toUpperCase()) ||
+                            (mDataOrigianl.get(i).getVehiculo().toUpperCase()).contains(constraint.toString().toUpperCase()) ||
+                            (mDataOrigianl.get(i).getDia().toUpperCase()).contains(constraint.toString().toUpperCase())){
                         filterList.add(mDataOrigianl.get(i));
                     }
                 }
@@ -95,7 +97,7 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             mData.clear();
-            mData.addAll((ArrayList<StockInfoPOJO>) results.values);
+            mData.addAll((ArrayList<RepartoInfoPOJO>) results.values);
             notifyDataSetChanged();
         }
     }

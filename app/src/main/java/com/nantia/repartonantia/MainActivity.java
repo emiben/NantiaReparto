@@ -13,20 +13,22 @@ import com.nantia.repartonantia.listadeprecios.ListaDePreciosActivity;
 import com.nantia.repartonantia.producto.ProductoActivity;
 import com.nantia.repartonantia.adapters.CustomGridViewAdapter;
 import com.nantia.repartonantia.cliente.ClienteActivity;
+import com.nantia.repartonantia.stock.StockActivity;
 
 import static com.nantia.repartonantia.utils.Constantes.CLIENTES;
 import static com.nantia.repartonantia.utils.Constantes.LISTA_DE_PRECIOS;
 import static com.nantia.repartonantia.utils.Constantes.MAPA;
 import static com.nantia.repartonantia.utils.Constantes.PRODUCTOS;
 import static com.nantia.repartonantia.utils.Constantes.REPARTO;
+import static com.nantia.repartonantia.utils.Constantes.STOCK;
 
 public class MainActivity extends AppCompatActivity {
 
     private GridView menuGridView;
 
-    String[] menuTitles = {"Clientes", "Reparto", "Productos", "Listas de Precio", "Mapa"};
+    String[] menuTitles = {"Clientes", "Reparto", "Productos", "Listas de Precio", "Stock", "Mapa"};
     int[] menuImagesIDs = {R.drawable.cliente_icono, R.drawable.camion_icono, R.drawable.producto_icono,
-                            R.drawable.lista_icono, R.drawable.mapa_icono};
+                            R.drawable.lista_icono, R.drawable.stock_icono, R.drawable.mapa_icono};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case LISTA_DE_PRECIOS:
                 startActivity(ListaDePreciosActivity.class);
+                break;
+            case STOCK:
+                startActivity(StockActivity.class);
                 break;
             case MAPA:
                 Toast.makeText(MainActivity.this, "GridView Item: " + menuTitles[+position], Toast.LENGTH_LONG).show();

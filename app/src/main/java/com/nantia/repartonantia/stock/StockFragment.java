@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 /**
  *
+
  */
 public class StockFragment extends Fragment implements StockView{
     private ProgressBar progressBar;

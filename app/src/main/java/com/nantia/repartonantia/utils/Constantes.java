@@ -11,7 +11,8 @@ public class Constantes {
     public static final int REPARTO = 1;
     public static final int PRODUCTOS = 2;
     public static final int LISTA_DE_PRECIOS = 3;
-    public static final int MAPA = 4;
+    public static final int STOCK = 4;
+    public static final int MAPA = 5;
 
     public static final String KEY_CLIENTE = "cliente";
     public static final String KEY_LISTA_DE_PRECIOS = "listaDePrecios";

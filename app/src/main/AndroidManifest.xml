@@ -40,7 +40,8 @@
             android:value="AIzaSyB0JTER-KGgPT5HjkLyLnbK4Utrijvb7_w" />
 
         <activity android:name=".listadeprecios.ListaDePreciosActivity" />
-        <activity android:name=".stock.StockActivity"></activity>
+        <activity android:name=".stock.StockActivity" />
+        <activity android:name=".reparto.RepartoActivity"></activity>
     </application>
 
 </manifest>
