@@ -53,6 +53,11 @@
     <!-- Strings related to cliente -->
     <string name="lista_precios_no_lista">No se encontraron listas de precios activas.</string>
 
+    <!-- Strings related to Reparto -->
+    <string name="reparto_no_cargado">No hay ningun reparto cargado!</string>
+
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

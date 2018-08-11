@@ -106,4 +106,8 @@ public class Usuario {
     public void setSaldoCaja(float saldoCaja) {
         this.saldoCaja = saldoCaja;
     }
+
+    public String getNombreCompleto(){
+        return nombre + " " + apellido;
+    }
 }

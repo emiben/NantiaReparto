@@ -3,6 +3,8 @@ package com.nantia.repartonantia.reparto;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,6 +19,8 @@ import com.nantia.repartonantia.adapters.RepartoInfoPOJO;
 import com.nantia.repartonantia.adapters.RepartoListaAdapter;
 
 import java.util.ArrayList;
+
+import static com.nantia.repartonantia.utils.Constantes.KEY_REPARTO;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -91,6 +95,18 @@ public class ListaRepartoFragment extends Fragment implements ListaRepartoView, 
     @Override
     public void showError(String error) {
         Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void navigateToReparto(Reparto reparto) {
+        Bundle b = new Bundle();
+        b.putSerializable(KEY_REPARTO, reparto);
+        RepartoFragment repartoFragment = new RepartoFragment();
+        repartoFragment.setArguments(b);
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.reparto_layout, repartoFragment).commit();
+
+
     }
 
     @Override

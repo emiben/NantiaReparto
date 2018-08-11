@@ -13,4 +13,5 @@ public interface ListaRepartoView {
     void setRepartosInfo(ArrayList<RepartoInfoPOJO> repartos);
     void addListeners();
     void showError(String error);
+    void navigateToReparto(Reparto reparto);
 }

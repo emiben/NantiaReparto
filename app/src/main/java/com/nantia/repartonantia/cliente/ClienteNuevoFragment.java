@@ -43,6 +43,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE;
+
 /**
  *
  */
@@ -283,7 +285,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     @Override
     public void navigateToClienteFragment(Cliente cliente) {
         Bundle b = new Bundle();
-        b.putSerializable("cliente", cliente);
+        b.putSerializable(KEY_CLIENTE, cliente);
         ClienteFragment clienteFragmentf = new ClienteFragment();
         clienteFragmentf.setArguments(b);
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
