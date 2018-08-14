@@ -1,5 +1,7 @@
 package com.nantia.repartonantia.utils;
 
+import java.io.Serializable;
+
 /**
  * Created by Emi on 20/5/2018.
  */
@@ -17,5 +19,6 @@ public class Constantes {
     public static final String KEY_CLIENTE = "cliente";
     public static final String KEY_LISTA_DE_PRECIOS = "listaDePrecios";
     public static final String KEY_REPARTO = "reparto";
+    public static final String KEY_DB_NOMBRE = "base_datos";
 
 }

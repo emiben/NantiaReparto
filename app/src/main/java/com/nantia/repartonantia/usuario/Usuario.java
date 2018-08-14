@@ -1,36 +1,51 @@
 package com.nantia.repartonantia.usuario;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
 import com.google.gson.annotations.SerializedName;
+import java.io.Serializable;
 
 /**
  * Created by Emi on 7/5/2018.
  */
 
-public class Usuario {
+@Entity
+public class Usuario implements Serializable {
 
+    @ColumnInfo(name = "id")
     @SerializedName("id")
     private long id;
 
+    @ColumnInfo(name = "usuario")
     @SerializedName("usuario")
     private String usuario;
 
+    @ColumnInfo(name = "nombre")
     @SerializedName("nombre")
     private String nombre;
 
+    @ColumnInfo(name = "apellido")
     @SerializedName("apellido")
     private String apellido;
 
+    @ColumnInfo(name = "rol")
     @SerializedName("rol")
     private Rol rol;
 
+    @ColumnInfo(name = "contrasenia")
     @SerializedName("contrasenia")
     private String contrasenia;
 
+    @ColumnInfo(name = "es_vendedor")
     @SerializedName("esVendedor")
     private boolean esVendedor;
 
+    @ColumnInfo(name = "saldo_caja")
     @SerializedName("saldoCaja")
     private float saldoCaja;
+
+    @ColumnInfo(name = "actualizado")
+    private transient boolean actualizado;
 
     public Usuario(long id, String usuario, String nombre, String apellido, Rol rol, String contrasenia, boolean esVendedor, float saldoCaja) {
         this.id = id;
@@ -109,5 +124,13 @@ public class Usuario {
 
     public String getNombreCompleto(){
         return nombre + " " + apellido;
+    }
+
+    public boolean isActualizado() {
+        return actualizado;
+    }
+
+    public void setActualizado(boolean actualizado) {
+        this.actualizado = actualizado;
     }
 }

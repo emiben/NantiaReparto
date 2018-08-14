@@ -1,5 +1,6 @@
 package com.nantia.repartonantia.login;
 
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.Toast;
 import com.nantia.repartonantia.cliente.Cliente;
 import com.nantia.repartonantia.cliente.ClienteService;
 import com.nantia.repartonantia.cliente.TipoDocumento;
+import com.nantia.repartonantia.data.AppDatabase;
 import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.listadeprecios.ListaDePrecio;
 import com.nantia.repartonantia.listadeprecios.ListaDePreciosService;
@@ -33,9 +35,11 @@ import retrofit2.Response;
 public class LoginPresenterImpl implements ILoginPresenter{
     private final String TAG = LoginPresenterImpl.class.getName();
     ILoginView iLoginView;
+    AppDatabase db;
 
-    public LoginPresenterImpl(ILoginView iLoginView) {
+    public LoginPresenterImpl(ILoginView iLoginView, AppDatabase db) {
         this.iLoginView = iLoginView;
+        this.db = db;
     }
 
     @Override
@@ -56,6 +60,7 @@ public class LoginPresenterImpl implements ILoginPresenter{
             public void onResponse(Call<Usuario> call, Response<Usuario> response) {
                 iLoginView.onSetProgressBarVisibility(View.INVISIBLE);
                 if(response.code() == 200){
+                    db.usuarioDao().insertAll(response.body());
                     getData();
                     iLoginView.navigteToMainActivity();
                 }else if(response.code() == 401){

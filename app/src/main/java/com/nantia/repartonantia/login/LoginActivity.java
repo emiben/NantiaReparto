@@ -1,6 +1,7 @@
 
 package com.nantia.repartonantia.login;
 
+import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +12,9 @@ import android.widget.TextView;
 
 import com.nantia.repartonantia.MainActivity;
 import com.nantia.repartonantia.R;
+import com.nantia.repartonantia.data.AppDatabase;
 
+import static com.nantia.repartonantia.utils.Constantes.KEY_DB_NOMBRE;
 
 /**
  * A login screen that offers login via email/password.
@@ -34,7 +37,9 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, View
 
         btnIngresar.setOnClickListener(this);
 
-        loginPresenter = new LoginPresenterImpl(this);
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+            AppDatabase.class, KEY_DB_NOMBRE).build();
+        loginPresenter = new LoginPresenterImpl(this, db);
         loginPresenter.setProgressBarVisiblity(View.INVISIBLE);
 
     }
