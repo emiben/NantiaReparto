@@ -2,6 +2,7 @@ package com.nantia.repartonantia.login;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -23,6 +24,8 @@ import com.nantia.repartonantia.utils.RetrofitClientInstance;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,7 +63,10 @@ public class LoginPresenterImpl implements ILoginPresenter{
             public void onResponse(Call<Usuario> call, Response<Usuario> response) {
                 iLoginView.onSetProgressBarVisibility(View.INVISIBLE);
                 if(response.code() == 200){
-                    db.usuarioDao().insertAll(response.body());
+                    Usuario usr = response.body();
+                    usr.setActualizado(true);
+                    DataHolder.setUsuario(usr);
+                    guardarUsuraio(usr);
                     getData();
                     iLoginView.navigteToMainActivity();
                 }else if(response.code() == 401){
@@ -93,6 +99,16 @@ public class LoginPresenterImpl implements ILoginPresenter{
         getProductos();
         getClientes();
         getListasDePrecios();
+    }
+
+    private void guardarUsuraio(final Usuario usuario){
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                db.usuarioDao().insertAll(usuario);
+                Log.i("TEST", "TEST");
+            }
+        });
     }
 
     private void getEnvases(){

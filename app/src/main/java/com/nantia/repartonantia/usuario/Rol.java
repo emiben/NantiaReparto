@@ -1,5 +1,7 @@
 package com.nantia.repartonantia.usuario;
 
+import android.arch.persistence.room.ColumnInfo;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -10,9 +12,11 @@ import java.io.Serializable;
 
 public class Rol implements Serializable {
 
+    @ColumnInfo(name = "rol_id")
     @SerializedName("id")
     private long id;
 
+    @ColumnInfo(name = "nombre_rol")
     @SerializedName("nombreRol")
     private String nombreRol;
 

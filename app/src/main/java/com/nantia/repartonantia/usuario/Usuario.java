@@ -1,7 +1,10 @@
 package com.nantia.repartonantia.usuario;
 
 import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
@@ -12,6 +15,7 @@ import java.io.Serializable;
 @Entity
 public class Usuario implements Serializable {
 
+    @PrimaryKey
     @ColumnInfo(name = "id")
     @SerializedName("id")
     private long id;
@@ -28,7 +32,7 @@ public class Usuario implements Serializable {
     @SerializedName("apellido")
     private String apellido;
 
-    @ColumnInfo(name = "rol")
+    @Embedded
     @SerializedName("rol")
     private Rol rol;
 
