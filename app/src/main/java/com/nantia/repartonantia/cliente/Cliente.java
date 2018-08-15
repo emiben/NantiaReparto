@@ -1,5 +1,11 @@
 package com.nantia.repartonantia.cliente;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Embedded;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverter;
+import android.arch.persistence.room.TypeConverters;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -10,55 +16,76 @@ import java.util.Date;
  * Created by Emi on 23/5/2018.
  */
 
+@Entity
 public class Cliente implements Serializable {
 
+    @PrimaryKey
+    @ColumnInfo(name = "id")
     @SerializedName("id")
     private long id;
 
+    @ColumnInfo(name = "nro_documento")
     @SerializedName("nroDocumento")
     private String nroDocumento;
 
+    @ColumnInfo(name = "tipo_documento")
     @SerializedName("tipoDocumento")
     private TipoDocumento tipoDocumento;
 
+    @ColumnInfo(name = "nombre_1")
     @SerializedName("nombre1")
     private String nombre1;
 
+    @ColumnInfo(name = "nombre_2")
     @SerializedName("nombre2")
     private String nombre2;
 
+    @ColumnInfo(name = "saldo")
     @SerializedName("saldo")
     private float saldo;
 
+    @ColumnInfo(name = "fecha_nacimiento")
     @SerializedName("fechaNacimiento")
     private String fechaNacimiento;
 
+    @ColumnInfo(name = "fecha_alta")
     @SerializedName("fechaAlta")
     private String fechaAlta;
 
+    @ColumnInfo(name = "mail")
     @SerializedName("mail")
     private String mail;
 
+    @ColumnInfo(name = "celular")
     @SerializedName("celular")
     private String celular;
 
+    @ColumnInfo(name = "id_lista")
     @SerializedName("idLista")
     private long idLista;
 
+    @ColumnInfo(name = "observaciones")
     @SerializedName("observaciones")
     private String observaciones;
 
+    @ColumnInfo(name = "activo")
     @SerializedName("activo")
     private boolean activo;
 
+    @Embedded
     @SerializedName("direccion")
     private Direccion direccion;
 
+    @TypeConverters(ClienteTypeConverter.class)
     @SerializedName("setEnvasesEnPrestamo")
     private ArrayList<EnvaseEnPrestamo> envasesEnPrestamo;
 
+    @TypeConverters(DiaTypeConverter.class)
     @SerializedName("dias")
     private ArrayList<Dia> dias;
+
+    @ColumnInfo(name = "actualizado")
+    private transient boolean actualizado;
 
     public Cliente(){
 

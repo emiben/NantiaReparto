@@ -1,5 +1,7 @@
 package com.nantia.repartonantia.cliente;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -10,27 +12,35 @@ import java.io.Serializable;
 
 public class Direccion implements Serializable {
 
+    @ColumnInfo(name = "id")
     @SerializedName("id")
     private int id;
 
+    @ColumnInfo(name = "direccion")
     @SerializedName("direccion")
     private String direccion;
 
+    @ColumnInfo(name = "coord_lon")
     @SerializedName("coordLon")
     private String coordLon;
 
+    @ColumnInfo(name = "coord_lat")
     @SerializedName("coordLat")
     private String coordLat;
 
+    @ColumnInfo(name = "telefono")
     @SerializedName("telefono")
     private String telefono;
 
+    @ColumnInfo(name = "ciudad")
     @SerializedName("ciudad")
     private String ciudad;
 
+    @ColumnInfo(name = "departamento")
     @SerializedName("departamento")
     private String departamento;
 
+    @ColumnInfo(name = "cod_postal")
     @SerializedName("codPostal")
     private String codPostal;
 
