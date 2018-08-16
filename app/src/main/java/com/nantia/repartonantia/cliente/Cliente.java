@@ -3,14 +3,14 @@ package com.nantia.repartonantia.cliente;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.TypeConverter;
 import android.arch.persistence.room.TypeConverters;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Emi on 23/5/2018.
@@ -19,7 +19,10 @@ import java.util.Date;
 @Entity
 public class Cliente implements Serializable {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "local_pk")
+    private transient long localPK;
+
     @ColumnInfo(name = "id")
     @SerializedName("id")
     private long id;
@@ -28,8 +31,8 @@ public class Cliente implements Serializable {
     @SerializedName("nroDocumento")
     private String nroDocumento;
 
-    @ColumnInfo(name = "tipo_documento")
     @SerializedName("tipoDocumento")
+    @TypeConverters(TipoDeDocTypeConverter.class)
     private TipoDocumento tipoDocumento;
 
     @ColumnInfo(name = "nombre_1")
@@ -76,13 +79,13 @@ public class Cliente implements Serializable {
     @SerializedName("direccion")
     private Direccion direccion;
 
-    @TypeConverters(ClienteTypeConverter.class)
     @SerializedName("setEnvasesEnPrestamo")
-    private ArrayList<EnvaseEnPrestamo> envasesEnPrestamo;
+    @TypeConverters(EnvaseEnPrestamoTypeConverter.class)
+    private List<EnvaseEnPrestamo> envasesEnPrestamo;
 
-    @TypeConverters(DiaTypeConverter.class)
     @SerializedName("dias")
-    private ArrayList<Dia> dias;
+    @TypeConverters(DiaTypeConverter.class)
+    private List<Dia> dias;
 
     @ColumnInfo(name = "actualizado")
     private transient boolean actualizado;
@@ -91,11 +94,12 @@ public class Cliente implements Serializable {
 
     }
 
+    @Ignore
     public Cliente(long id, String nroDocumento, TipoDocumento tipoDocumento,
                    String nombre1, String nombre2, float saldo, String fechaNacimiento,
                    String fechaAlta, String mail, String celular, long idLista, String observaciones,
-                   boolean activo, Direccion direccion, ArrayList<EnvaseEnPrestamo> envasesEnPrestamo,
-                   ArrayList<Dia> dias) {
+                   boolean activo, Direccion direccion, List<EnvaseEnPrestamo> envasesEnPrestamo,
+                   List<Dia> dias) {
         this.id = id;
         this.nroDocumento = nroDocumento;
         this.tipoDocumento = tipoDocumento;
@@ -112,6 +116,14 @@ public class Cliente implements Serializable {
         this.direccion = direccion;
         this.envasesEnPrestamo = envasesEnPrestamo;
         this.dias = dias;
+    }
+
+    public long getLocalPK() {
+        return localPK;
+    }
+
+    public void setLocalPK(long localPK) {
+        this.localPK = localPK;
     }
 
     public long getId() {
@@ -170,11 +182,11 @@ public class Cliente implements Serializable {
         this.saldo = saldo;
     }
 
-    public ArrayList<EnvaseEnPrestamo> getEnvasesEnPrestamo() {
+    public List<EnvaseEnPrestamo> getEnvasesEnPrestamo() {
         return envasesEnPrestamo;
     }
 
-    public void setEnvasesEnPrestamo(ArrayList<EnvaseEnPrestamo> envasesEnPrestamo) {
+    public void setEnvasesEnPrestamo(List<EnvaseEnPrestamo> envasesEnPrestamo) {
         this.envasesEnPrestamo = envasesEnPrestamo;
     }
 
@@ -234,11 +246,19 @@ public class Cliente implements Serializable {
         this.activo = activo;
     }
 
-    public ArrayList<Dia> getDias() {
+    public List<Dia> getDias() {
         return dias;
     }
 
-    public void setDias(ArrayList<Dia> dias) {
+    public void setDias(List<Dia> dias) {
         this.dias = dias;
+    }
+
+    public boolean isActualizado() {
+        return actualizado;
+    }
+
+    public void setActualizado(boolean actualizado) {
+        this.actualizado = actualizado;
     }
 }

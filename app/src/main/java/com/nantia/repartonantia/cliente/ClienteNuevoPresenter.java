@@ -1,13 +1,8 @@
 package com.nantia.repartonantia.cliente;
 
-import android.opengl.Visibility;
-import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 
-import com.google.gson.Gson;
-import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.producto.Envase;
 import com.nantia.repartonantia.producto.EnvaseService;
@@ -15,6 +10,7 @@ import com.nantia.repartonantia.utils.RetrofitClientInstance;
 
 import java.util.ArrayList;
 
+import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -104,7 +100,7 @@ public class ClienteNuevoPresenter {
         });
     }
 
-    public long getIdIfUpdateDeEnvase(ArrayList<EnvaseEnPrestamo> envasesEnPrestamo, EnvaseEnPrestamo envaseEnPrestamo){
+    public long getIdIfUpdateDeEnvase(List<EnvaseEnPrestamo> envasesEnPrestamo, EnvaseEnPrestamo envaseEnPrestamo){
         long id = 0;
         for (int i = 0; i < envasesEnPrestamo.size() && id == 0; i++){
             if(envasesEnPrestamo.get(i).getEnvase().getId() == envaseEnPrestamo.getEnvase().getId()){

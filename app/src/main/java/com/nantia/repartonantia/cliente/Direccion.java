@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 public class Direccion implements Serializable {
 
-    @ColumnInfo(name = "id")
+    @ColumnInfo(name = "id_dir")
     @SerializedName("id")
     private int id;
 

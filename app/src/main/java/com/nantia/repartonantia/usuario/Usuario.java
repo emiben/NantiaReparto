@@ -15,7 +15,10 @@ import java.io.Serializable;
 @Entity
 public class Usuario implements Serializable {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "local_pk")
+    private transient long localPK;
+
     @ColumnInfo(name = "id")
     @SerializedName("id")
     private long id;
@@ -60,6 +63,14 @@ public class Usuario implements Serializable {
         this.contrasenia = contrasenia;
         this.esVendedor = esVendedor;
         this.saldoCaja = saldoCaja;
+    }
+
+    public long getLocalPK() {
+        return localPK;
+    }
+
+    public void setLocalPK(long localPK) {
+        this.localPK = localPK;
     }
 
     public long getId() {

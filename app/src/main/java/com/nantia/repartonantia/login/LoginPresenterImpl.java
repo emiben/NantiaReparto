@@ -24,6 +24,7 @@ import com.nantia.repartonantia.utils.RetrofitClientInstance;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
@@ -150,11 +151,26 @@ public class LoginPresenterImpl implements ILoginPresenter{
             @Override
             public void onResponse(Call<ArrayList<Cliente>> call, Response<ArrayList<Cliente>> response) {
                 DataHolder.setClientes(response.body());
+                guardarClientes(response.body());
             }
 
             @Override
             public void onFailure(Call<ArrayList<Cliente>> call, Throwable t) {
                 Log.e(TAG, t.getMessage());
+            }
+        });
+    }
+
+    private void guardarClientes(final List<Cliente> clientes){
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < clientes.size(); i++){
+                    clientes.get(i).setActualizado(true);
+                    db.clienteDao().insertAll(clientes.get(i));
+                }
+                db.clienteDao().getAll();
+                Log.i("TEST", "TEST");
             }
         });
     }

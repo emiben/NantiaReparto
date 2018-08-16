@@ -7,24 +7,24 @@ import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
 
-public class ClienteTypeConverter {
+public class EnvaseEnPrestamoTypeConverter {
 
   private static Gson gson = new Gson();
 
   @TypeConverter
-  public static List<Cliente> stringToClienteList(String data) {
+  public static List<EnvaseEnPrestamo> stringToClienteList(String data) {
     if (data == null) {
       return Collections.emptyList();
     }
 
-    Type listType = new TypeToken<List<Cliente>>() {}.getType();
+    Type listType = new TypeToken<List<EnvaseEnPrestamo>>() {}.getType();
 
     return gson.fromJson(data, listType);
   }
 
   @TypeConverter
-  public static String clienteListToString(List<Cliente> clientes){
-    return gson.toJson(clientes);
+  public static String clienteListToString(List<EnvaseEnPrestamo> envasesEnPrestamo){
+    return gson.toJson(envasesEnPrestamo);
   }
 
 }

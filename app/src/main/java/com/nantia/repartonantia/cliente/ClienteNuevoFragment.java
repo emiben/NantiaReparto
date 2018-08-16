@@ -3,7 +3,6 @@ package com.nantia.repartonantia.cliente;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -28,7 +27,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.gson.Gson;
 import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.adapters.EnvaseSpinnerAdapter;
 import com.nantia.repartonantia.adapters.ListaDePreciosSpinAdapter;
@@ -77,10 +75,10 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     private Calendar calendar = Calendar.getInstance();
     private Spinner listaDePreciosSP;
     private ArrayList<ListaDePrecio> listasDePrecio;
-    private ArrayList<EnvaseEnPrestamo> envasesEnPrestamo;
-    private ArrayList<EnvaseEnPrestamo> envasesEnPrestamoOrig;
+    private List<EnvaseEnPrestamo> envasesEnPrestamo;
+    private List<EnvaseEnPrestamo> envasesEnPrestamoOrig;
     private ArrayList<Envase> envases;
-    private ArrayList<Dia> dias;
+    private List<Dia> dias;
     private RadioButton domingo;
     private RadioButton lunes;
     private RadioButton martes;
@@ -547,7 +545,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
 //        for(int i = 0; i < envasesEnPrestamo.size(); i++){
 //            addEditTexts(envasesEnPrestamo.get(i));
 //        }
-        ArrayList<Dia> diasTemp = cliente.getDias();
+        List<Dia> diasTemp = cliente.getDias();
         for(int i  =0; i < diasTemp.size(); i++){
             selectDias(diasTemp.get(i));
         }
