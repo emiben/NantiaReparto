@@ -1,16 +1,12 @@
 package com.nantia.repartonantia.login;
 
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
-
 import com.nantia.repartonantia.cliente.Cliente;
 import com.nantia.repartonantia.cliente.ClienteService;
-import com.nantia.repartonantia.cliente.TipoDocumento;
 import com.nantia.repartonantia.data.AppDatabase;
 import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.listadeprecios.ListaDePrecio;
@@ -21,13 +17,8 @@ import com.nantia.repartonantia.producto.Producto;
 import com.nantia.repartonantia.producto.ProductoService;
 import com.nantia.repartonantia.usuario.Usuario;
 import com.nantia.repartonantia.utils.RetrofitClientInstance;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -119,6 +110,7 @@ public class LoginPresenterImpl implements ILoginPresenter{
             @Override
             public void onResponse(Call<ArrayList<Envase>> call, Response<ArrayList<Envase>> response) {
                 DataHolder.setEnvases(response.body());
+                guardarEnvases(response.body());
             }
 
             @Override
@@ -135,6 +127,7 @@ public class LoginPresenterImpl implements ILoginPresenter{
             @Override
             public void onResponse(Call<ArrayList<Producto>> call, Response<ArrayList<Producto>> response) {
                 DataHolder.setProductos(response.body());
+                guardarProductos(response.body());
             }
 
             @Override
@@ -170,7 +163,30 @@ public class LoginPresenterImpl implements ILoginPresenter{
                     db.clienteDao().insertAll(clientes.get(i));
                 }
                 db.clienteDao().getAll();
-                Log.i("TEST", "TEST");
+            }
+        });
+    }
+
+    private void guardarEnvases(final List<Envase> envases){
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < envases.size(); i++){
+                    db.envaseDao().insertAll(envases.get(i));
+                }
+                db.envaseDao().getAll();
+            }
+        });
+    }
+
+    private void guardarProductos(final List<Producto> productos){
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < productos.size(); i++){
+                    db.productoDao().insertAll(productos.get(i));
+                }
+                db.productoDao().getAll();
             }
         });
     }

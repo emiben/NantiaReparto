@@ -164,11 +164,11 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         cliente.setNombre2(nombre2.getText().toString());
         cliente.setNroDocumento(nroDeDoc.getText().toString());
         if(tipoDeDoc.getSelectedItem().equals(TipoDocumento.CI.name())){
-            cliente.setTipoDocumento(TipoDocumento.CI);
+            cliente.setTipoDocumento(TipoDocumento.CI.name());
         }else if (tipoDeDoc.getSelectedItem().equals(TipoDocumento.RUT.name())){
-            cliente.setTipoDocumento(TipoDocumento.RUT);
+            cliente.setTipoDocumento(TipoDocumento.RUT.name());
         }else {
-            cliente.setTipoDocumento(TipoDocumento.NA);
+            cliente.setTipoDocumento(TipoDocumento.NA.name());
         }
         cliente.setFechaNacimiento(fechaDeNacimiento);
         //TODO cambiar a fecha de creado
@@ -521,7 +521,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         if(cliente.getNombre1() != null) nombre1.setText(cliente.getNombre1());
         if(cliente.getNombre2() != null) nombre2.setText(cliente.getNombre2());
         if(cliente.getNroDocumento() != null) nroDeDoc.setText(cliente.getNroDocumento());
-        if(cliente.getTipoDocumento() == TipoDocumento.RUT){
+        if(cliente.getTipoDocumento().equals(TipoDocumento.RUT)){
             tipoDeDoc.setSelection(1);
             usuarioImage.setImageResource(R.drawable.factory_2);
             casaImage.setImageResource(R.drawable.factory_2);

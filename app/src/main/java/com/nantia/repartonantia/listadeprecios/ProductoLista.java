@@ -1,5 +1,6 @@
 package com.nantia.repartonantia.listadeprecios;
 
+import android.arch.persistence.room.ColumnInfo;
 import com.google.gson.annotations.SerializedName;
 import com.nantia.repartonantia.producto.Producto;
 
@@ -12,15 +13,19 @@ import java.util.Date;
 
 public class ProductoLista implements Serializable {
 
+    @ColumnInfo(name = "prod_lista_id")
     @SerializedName("id")
     private long id;
 
+    @ColumnInfo(name = "producto")
     @SerializedName("productos")
     private Producto producto;
 
+    @ColumnInfo(name = "precio")
     @SerializedName("precio")
     private float precio;
 
+    @ColumnInfo(name = "actualizado")
     @SerializedName("actualizado")
     private String actualizado;
 

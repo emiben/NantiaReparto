@@ -9,7 +9,6 @@ import android.arch.persistence.room.TypeConverters;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,9 +30,9 @@ public class Cliente implements Serializable {
     @SerializedName("nroDocumento")
     private String nroDocumento;
 
+    @ColumnInfo(name = "tipo_documento")
     @SerializedName("tipoDocumento")
-    @TypeConverters(TipoDeDocTypeConverter.class)
-    private TipoDocumento tipoDocumento;
+    private String tipoDocumento;
 
     @ColumnInfo(name = "nombre_1")
     @SerializedName("nombre1")
@@ -95,7 +94,7 @@ public class Cliente implements Serializable {
     }
 
     @Ignore
-    public Cliente(long id, String nroDocumento, TipoDocumento tipoDocumento,
+    public Cliente(long id, String nroDocumento, String tipoDocumento,
                    String nombre1, String nombre2, float saldo, String fechaNacimiento,
                    String fechaAlta, String mail, String celular, long idLista, String observaciones,
                    boolean activo, Direccion direccion, List<EnvaseEnPrestamo> envasesEnPrestamo,
@@ -142,11 +141,11 @@ public class Cliente implements Serializable {
         this.direccion = direccion;
     }
 
-    public TipoDocumento getTipoDocumento() {
+    public String getTipoDocumento() {
         return tipoDocumento;
     }
 
-    public void setTipoDocumento(TipoDocumento tipoDocumento) {
+    public void setTipoDocumento(String tipoDocumento) {
         this.tipoDocumento = tipoDocumento;
     }
 

@@ -1,5 +1,7 @@
 package com.nantia.repartonantia.listadeprecios;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.TypeConverters;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -12,16 +14,20 @@ import java.util.Date;
 
 public class ListaDePrecio implements Serializable {
 
+    @ColumnInfo(name = "lista_precios_id")
     @SerializedName("id")
     private long id;
 
+    @ColumnInfo(name = "nombre_lista")
     @SerializedName("nombreLista")
     private String nombreLista;
 
+    @ColumnInfo(name = "fecha_alta")
     @SerializedName("fechAlta")
     private String fechAlta;
 
     @SerializedName("setProductoLista")
+    @TypeConverters(ProductoListaTypeConverter.class)
     private ArrayList<ProductoLista> productosLista;
 
     public ListaDePrecio(long id, String nombreLista, String fechAlta, ArrayList<ProductoLista> productosLista) {

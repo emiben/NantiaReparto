@@ -1,5 +1,7 @@
 package com.nantia.repartonantia.producto;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -8,20 +10,26 @@ import java.io.Serializable;
  * Created by Emi on 19/5/2018.
  */
 
+@Entity
 public class Producto implements Serializable {
 
+    @ColumnInfo(name = "producto_id")
     @SerializedName("productoId")
     private long id;
 
+    @ColumnInfo(name = "nombre")
     @SerializedName("nombre")
     private String nombre;
 
+    @ColumnInfo(name = "presentacion")
     @SerializedName("presentacion")
     private String presentacion;
 
+    @ColumnInfo(name = "descripcion")
     @SerializedName("descripcion")
     private String descripcion;
 
+    @ColumnInfo(name = "retornable")
     @SerializedName("retornable")
     private boolean retornable;
 

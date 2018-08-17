@@ -34,11 +34,11 @@ public class ClientePresenter {
                 String.valueOf(cliente.getSaldo()), R.string.cliente_saldo);
         clienteInfo.add(clienteInfoPOJOSaldo);
 
-        if(cliente.getTipoDocumento() == TipoDocumento.CI){
+        if(cliente.getTipoDocumento().equals(TipoDocumento.CI.name())){
             ClienteInfoPOJO clienteInfoPOJO = new ClienteInfoPOJO(context, R.drawable.cliente_icono_gris,
                     cliente.getNroDocumento(), R.string.cliente_CI);
             clienteInfo.add(clienteInfoPOJO);
-        }else if (cliente.getTipoDocumento() == TipoDocumento.RUT){
+        }else if (cliente.getTipoDocumento().equals(TipoDocumento.RUT.name())){
             ClienteInfoPOJO clienteInfoPOJO = new ClienteInfoPOJO(context, R.drawable.factory,
                     cliente.getNroDocumento(), R.string.cliente_RUT);
             clienteInfo.add(clienteInfoPOJO);
