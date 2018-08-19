@@ -1,5 +1,7 @@
 package com.nantia.repartonantia.stock;
 
+import android.arch.persistence.room.ColumnInfo;
+
 import com.google.gson.annotations.SerializedName;
 import com.nantia.repartonantia.producto.Producto;
 
@@ -11,15 +13,19 @@ import java.io.Serializable;
 
 public class ProductoStock implements Serializable {
 
+    @ColumnInfo(name = "producto_stock_id")
     @SerializedName("id")
     private long id;
 
+    @ColumnInfo(name = "cantidad_prod_stk")
     @SerializedName("cantidad")
     private float cantidad;
 
+    @ColumnInfo(name = "fecha_prod_stk")
     @SerializedName("fecha")
     private String fecha;
 
+    @ColumnInfo(name = "producto")
     @SerializedName("producto")
     private Producto producto;
 

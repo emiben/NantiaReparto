@@ -1,6 +1,7 @@
 package com.nantia.repartonantia.listadeprecios;
 
 import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.TypeConverters;
 import com.google.gson.annotations.SerializedName;
 
@@ -12,6 +13,7 @@ import java.util.Date;
  * Created by Emi on 11/6/2018.
  */
 
+@Entity
 public class ListaDePrecio implements Serializable {
 
     @ColumnInfo(name = "lista_precios_id")
