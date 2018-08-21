@@ -1,5 +1,10 @@
 package com.nantia.repartonantia.reparto;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 import com.nantia.repartonantia.stock.Stock;
 
@@ -10,26 +15,35 @@ import java.io.StringReader;
  * Created by Emi on 28/7/2018.
  */
 
+@Entity
 public class Vehiculo implements Serializable{
 
+    @PrimaryKey
+    @ColumnInfo(name = "vehiculo_id")
     @SerializedName("id")
     private long id;
 
+    @ColumnInfo(name = "matricula")
     @SerializedName("matricula")
     private String matricula;
 
+    @ColumnInfo(name = "marca")
     @SerializedName("marca")
     private String marca;
 
+    @ColumnInfo(name = "modelo")
     @SerializedName("modelo")
     private String modelo;
 
+    @ColumnInfo(name = "descripcion")
     @SerializedName("descripcion")
     private String descripcion;
 
+    @ColumnInfo(name = "activo")
     @SerializedName("activo")
     private boolean activo;
 
+    @Ignore
     @SerializedName("stock")
     private Stock stock;
 
