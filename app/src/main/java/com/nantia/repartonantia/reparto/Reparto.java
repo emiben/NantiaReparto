@@ -19,7 +19,7 @@ import java.io.Serializable;
 public class Reparto implements Serializable {
 
     @PrimaryKey
-    @ColumnInfo(name = "stock_id")
+    @ColumnInfo(name = "reparto_id")
     @SerializedName("id")
     private long id;
 

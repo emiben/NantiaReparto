@@ -1,8 +1,10 @@
 package com.nantia.repartonantia.reparto;
 
+import android.os.AsyncTask;
 import android.view.View;
 
 import com.nantia.repartonantia.adapters.RepartoInfoPOJO;
+import com.nantia.repartonantia.data.AppDatabase;
 import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.utils.RetrofitClientInstance;
 
@@ -20,9 +22,11 @@ import retrofit2.Response;
 public class ListaRepartoPresenter {
     private final String TAG = ListaRepartoPresenter.class.getName();
     private ListaRepartoView view;
+    private AppDatabase db;
 
-    ListaRepartoPresenter(ListaRepartoView view) {
+    ListaRepartoPresenter(ListaRepartoView view, AppDatabase db) {
         this.view = view;
+        this.db = db;
     }
 
     void getRepartosInfo(){
@@ -60,7 +64,9 @@ public class ListaRepartoPresenter {
             public void onResponse(Call<Reparto> call, Response<Reparto> response) {
                 if(response.body() != null){
                     view.onSetProgressBarVisibility(View.GONE);
+                    response.body().getVehiculo().getStock().setActualizado(true);
                     DataHolder.setReparto(response.body());
+                    guardarReparto(response.body());
                     view.navigateToReparto(response.body());
                 }
                 else {
@@ -74,6 +80,17 @@ public class ListaRepartoPresenter {
             public void onFailure(Call<Reparto> call, Throwable t) {
                 view.onSetProgressBarVisibility(View.GONE);
                 view.showError(t.getMessage());
+            }
+        });
+    }
+
+    private void guardarReparto(final Reparto reparto){
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                db.repartoDao().insertAll(reparto);
+                db.vehiculoDao().insertAll(reparto.getVehiculo());
+                db.stockDao().insertAll(reparto.getVehiculo().getStock());
             }
         });
     }

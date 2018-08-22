@@ -75,4 +75,12 @@ public class Stock implements Serializable{
     public void setProductosStock(ArrayList<ProductoStock> productosStock) {
         this.productosStock = productosStock;
     }
+
+    public boolean isActualizado() {
+        return actualizado;
+    }
+
+    public void setActualizado(boolean actualizado) {
+        this.actualizado = actualizado;
+    }
 }

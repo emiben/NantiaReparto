@@ -1,6 +1,7 @@
 package com.nantia.repartonantia.reparto;
 
 
+import android.arch.persistence.room.Room;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -17,9 +18,11 @@ import android.widget.Toast;
 import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.adapters.RepartoInfoPOJO;
 import com.nantia.repartonantia.adapters.RepartoListaAdapter;
+import com.nantia.repartonantia.data.AppDatabase;
 
 import java.util.ArrayList;
 
+import static com.nantia.repartonantia.utils.Constantes.KEY_DB_NOMBRE;
 import static com.nantia.repartonantia.utils.Constantes.KEY_REPARTO;
 
 /**
@@ -43,8 +46,11 @@ public class ListaRepartoFragment extends Fragment implements ListaRepartoView, 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lista_reparto, container, false);
-        presenter = new ListaRepartoPresenter(this);
+        AppDatabase db = Room.databaseBuilder(getActivity(),
+                AppDatabase.class, KEY_DB_NOMBRE).build();
+        presenter = new ListaRepartoPresenter(this, db);
         initializeViewObjects(view);
+        presenter.getRepartosInfo();
 
         return view;
     }
