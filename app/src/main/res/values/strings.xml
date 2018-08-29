@@ -56,6 +56,13 @@
     <!-- Strings related to Reparto -->
     <string name="reparto_no_cargado">No hay ningun reparto cargado!</string>
 
+    <!-- Strings related to Ventas -->
+    <string name="venta_articulos">Articulos</string>
+    <string name="venta_iva">I.V.A. $</string>
+    <string name="venta_total">Total $</string>
+    <string name="venta_descuento">Descuento $</string>
+    <string name="venta_entrega">Entrega $</string>
+    <string name="venta_saldo">Saldo $</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

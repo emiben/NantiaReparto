@@ -41,7 +41,8 @@
 
         <activity android:name=".listadeprecios.ListaDePreciosActivity" />
         <activity android:name=".stock.StockActivity" />
-        <activity android:name=".reparto.RepartoActivity"></activity>
+        <activity android:name=".reparto.RepartoActivity" />
+        <activity android:name=".venta.VentaActivity"></activity>
     </application>
 
 </manifest>
