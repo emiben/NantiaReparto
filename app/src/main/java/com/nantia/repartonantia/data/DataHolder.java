@@ -78,4 +78,13 @@ public class DataHolder {
     public static void setReparto(Reparto reparto) {
         DataHolder.reparto = reparto;
     }
+
+    public static ListaDePrecio getListaDePrecioById(long id){
+        for (ListaDePrecio listaDePrecio : listasDePrecios){
+            if(listaDePrecio.getId() == id){
+                return listaDePrecio;
+            }
+        }
+        return null;
+    }
 }

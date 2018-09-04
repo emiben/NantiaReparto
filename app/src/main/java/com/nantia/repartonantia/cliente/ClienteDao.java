@@ -13,14 +13,14 @@ public interface ClienteDao {
   @Query("SELECT * FROM cliente")
   List<Cliente> getAll();
 
-  @Query("SELECT * FROM cliente WHERE id IN (:ids)")
+  @Query("SELECT * FROM cliente WHERE cliente_id IN (:ids)")
   List<Cliente> loadAllByIds(int[] ids);
 
   @Query("SELECT * FROM cliente WHERE nombre_1 LIKE :nombre AND "
       + "nombre_2 LIKE :apellido LIMIT 1")
   Cliente findByName(String nombre, String apellido);
 
-  @Query("SELECT * FROM cliente WHERE actualizado = 0")
+  @Query("SELECT * FROM cliente WHERE actualizado_cliente = 0")
   List<Cliente> getClienteNoActualizado();
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)

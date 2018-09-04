@@ -16,16 +16,16 @@ import java.io.Serializable;
 public class Usuario implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "local_pk")
+    @ColumnInfo(name = "usuario_pk")
     private transient long localPK;
 
-    @ColumnInfo(name = "id")
+    @ColumnInfo(name = "usuario_id")
     @SerializedName("id")
     private long id;
 
-    @ColumnInfo(name = "usuario")
+    @ColumnInfo(name = "nombre_usuario")
     @SerializedName("usuario")
-    private String usuario;
+    private String nombreUsuario;
 
     @ColumnInfo(name = "nombre")
     @SerializedName("nombre")
@@ -39,7 +39,7 @@ public class Usuario implements Serializable {
     @SerializedName("rol")
     private Rol rol;
 
-    @ColumnInfo(name = "contrasenia")
+    @ColumnInfo(name = "usuario_contrasenia")
     @SerializedName("contrasenia")
     private String contrasenia;
 
@@ -47,16 +47,16 @@ public class Usuario implements Serializable {
     @SerializedName("esVendedor")
     private boolean esVendedor;
 
-    @ColumnInfo(name = "saldo_caja")
+    @ColumnInfo(name = "usuario_saldo_caja")
     @SerializedName("saldoCaja")
     private float saldoCaja;
 
     @ColumnInfo(name = "actualizado")
     private transient boolean actualizado;
 
-    public Usuario(long id, String usuario, String nombre, String apellido, Rol rol, String contrasenia, boolean esVendedor, float saldoCaja) {
+    public Usuario(long id, String nombreUsuario, String nombre, String apellido, Rol rol, String contrasenia, boolean esVendedor, float saldoCaja) {
         this.id = id;
-        this.usuario = usuario;
+        this.nombreUsuario = nombreUsuario;
         this.nombre = nombre;
         this.apellido = apellido;
         this.rol = rol;
@@ -81,12 +81,12 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-    public String getUsuario() {
-        return usuario;
+    public String getNombreUsuario() {
+        return nombreUsuario;
     }
 
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
     }
 
     public String getNombre() {

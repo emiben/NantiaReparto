@@ -22,7 +22,7 @@ public class Cliente implements Serializable {
     @ColumnInfo(name = "local_pk")
     private transient long localPK;
 
-    @ColumnInfo(name = "id")
+    @ColumnInfo(name = "cliente_id")
     @SerializedName("id")
     private long id;
 
@@ -86,14 +86,14 @@ public class Cliente implements Serializable {
     @TypeConverters(DiaTypeConverter.class)
     private List<Dia> dias;
 
-    @ColumnInfo(name = "actualizado")
+    @ColumnInfo(name = "actualizado_cliente")
     private transient boolean actualizado;
 
     public Cliente(){
 
     }
 
-    @Ignore
+    //@Ignore
     public Cliente(long id, String nroDocumento, String tipoDocumento,
                    String nombre1, String nombre2, float saldo, String fechaNacimiento,
                    String fechaAlta, String mail, String celular, long idLista, String observaciones,

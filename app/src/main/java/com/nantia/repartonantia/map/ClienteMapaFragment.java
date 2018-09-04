@@ -79,6 +79,7 @@ public class ClienteMapaFragment extends Fragment implements OnMapReadyCallback,
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        //Setea el mapa en Sta Lucia
         CameraPosition fabrica = CameraPosition.builder()
                 .target(new LatLng(-34.455691, -56.387059))
                 .zoom(15)

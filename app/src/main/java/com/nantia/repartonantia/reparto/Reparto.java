@@ -18,7 +18,10 @@ import java.io.Serializable;
 @Entity
 public class Reparto implements Serializable {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "reparto_pk")
+    private transient long repartoPK;
+
     @ColumnInfo(name = "reparto_id")
     @SerializedName("id")
     private long id;
@@ -27,11 +30,11 @@ public class Reparto implements Serializable {
     @SerializedName("descripcion")
     private String descripcion;
 
-    @Embedded
+    @Ignore
     @SerializedName("vendedor1")
     private Usuario vendedor1;
 
-    @Embedded
+    @Ignore
     @SerializedName("vendedor2")
     private Usuario vendedor2;
 
@@ -51,6 +54,8 @@ public class Reparto implements Serializable {
     @SerializedName("estado")
     private String estado;
 
+    public Reparto(){};
+
     public Reparto(long id, String descripcion, Usuario vendedor1,
                    Usuario vendedor2, Vehiculo vehiculo, String fecha, Ruta ruta, String estado) {
         this.id = id;
@@ -61,6 +66,14 @@ public class Reparto implements Serializable {
         this.fecha = fecha;
         this.ruta = ruta;
         this.estado = estado;
+    }
+
+    public long getRepartoPK() {
+        return repartoPK;
+    }
+
+    public void setRepartoPK(long repartoPK) {
+        this.repartoPK = repartoPK;
     }
 
     public long getId() {

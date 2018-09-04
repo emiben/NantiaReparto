@@ -20,5 +20,6 @@ public class Constantes {
     public static final String KEY_LISTA_DE_PRECIOS = "listaDePrecios";
     public static final String KEY_REPARTO = "reparto";
     public static final String KEY_DB_NOMBRE = "base_datos";
+    public static final String KEY_VENTA = "venta";
 
 }

@@ -2,6 +2,8 @@ package com.nantia.repartonantia.producto;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -12,6 +14,10 @@ import java.io.Serializable;
 
 @Entity
 public class Producto implements Serializable {
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "producto_pk")
+    private transient long productoPK;
 
     @ColumnInfo(name = "producto_id")
     @SerializedName("productoId")
@@ -43,6 +49,15 @@ public class Producto implements Serializable {
         this.presentacion = presentacion;
         this.descripcion = descripcion;
         this.retornable = retornable;
+    }
+
+
+    public long getProductoPK() {
+        return productoPK;
+    }
+
+    public void setProductoPK(long productoPK) {
+        this.productoPK = productoPK;
     }
 
     public long getId() {

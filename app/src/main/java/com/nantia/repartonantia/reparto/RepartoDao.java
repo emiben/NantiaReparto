@@ -17,9 +17,6 @@ public interface RepartoDao {
     @Query("SELECT * FROM reparto WHERE reparto_id IN (:ids)")
     List<Reparto> loadAllByIds(int[] ids);
 
-    @Query("SELECT * FROM reparto WHERE actualizado = 0")
-    List<Reparto> getRepartoNoActualizado();
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(Reparto... repartos);
 

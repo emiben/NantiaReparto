@@ -10,17 +10,12 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.nantia.repartonantia.R;
-import com.nantia.repartonantia.cliente.Cliente;
 import com.nantia.repartonantia.listadeprecios.ProductoLista;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Emi on 11/6/2018.
- */
-
-public class ProductoListaAdapter extends RecyclerView.Adapter<ProductoListaAdapter.ViewHolder> implements Filterable {
+public class ListaProdVentaAdapter extends RecyclerView.Adapter<ListaProdVentaAdapter.ViewHolder> implements Filterable {
 
     private List<ProductoLista> mData;
     private LayoutInflater mInflater;
@@ -28,9 +23,7 @@ public class ProductoListaAdapter extends RecyclerView.Adapter<ProductoListaAdap
     private List<ProductoLista> mDataOrigianl;
     ValueFilter valueFilter;
 
-
-
-    public ProductoListaAdapter(Context context, List<ProductoLista> mData) {
+    public ListaProdVentaAdapter(Context context, List<ProductoLista> mData) {
         this.mData = mData;
         this.mInflater = LayoutInflater.from(context);
         mDataOrigianl = new ArrayList<>();
@@ -39,7 +32,7 @@ public class ProductoListaAdapter extends RecyclerView.Adapter<ProductoListaAdap
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.lista_de_precio_row, parent, false);
+        View view = mInflater.inflate(R.layout.lista_prod_venta_row, parent, false);
         return new ViewHolder(view);
     }
 
@@ -50,9 +43,6 @@ public class ProductoListaAdapter extends RecyclerView.Adapter<ProductoListaAdap
             holder.nombre.setText(productoLista.getProducto().getNombre());
         if(productoLista.getProducto().getPresentacion() != null)
             holder.presentacion.setText(productoLista.getProducto().getPresentacion());
-        if(productoLista.getActualizado() != null)
-            holder.actualizado.setText("Actualizdo:" + productoLista.getActualizado().toString());
-        holder.precio.setText(String.valueOf(productoLista.getPrecio()));
     }
 
     @Override
@@ -66,23 +56,19 @@ public class ProductoListaAdapter extends RecyclerView.Adapter<ProductoListaAdap
             valueFilter = new ValueFilter();
         }
         return valueFilter;
+
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView nombre;
         TextView presentacion;
-        TextView actualizado;
-        TextView precio;
 
         ViewHolder(View itemView) {
             super(itemView);
-            nombre = itemView.findViewById(R.id.producto_lista_tv);
-            presentacion = itemView.findViewById(R.id.presentacion_lista_tv);
-            actualizado = itemView.findViewById(R.id.actualizado_lista_tv);
-            precio = itemView.findViewById(R.id.precio_lista_tv);
+            nombre = itemView.findViewById(R.id.prod_nombre);
+            presentacion = itemView.findViewById(R.id.prod_desc);
         }
     }
-
 
     public interface ItemClickListener {
         void onItemClick(View view, int position);
@@ -99,10 +85,6 @@ public class ProductoListaAdapter extends RecyclerView.Adapter<ProductoListaAdap
                     if((mDataOrigianl.get(i).getProducto().getNombre().toUpperCase())
                             .contains(constraint.toString().toUpperCase()) ||
                             (mDataOrigianl.get(i).getProducto().getPresentacion().toUpperCase())
-                                    .contains(constraint.toString().toUpperCase()) ||
-                            (mDataOrigianl.get(i).getProducto().getDescripcion().toUpperCase())
-                                    .contains(constraint.toString().toUpperCase()) ||
-                            String.valueOf(mDataOrigianl.get(i).getPrecio()).toUpperCase()
                                     .contains(constraint.toString().toUpperCase())){
                         filterList.add(mDataOrigianl.get(i));
                     }

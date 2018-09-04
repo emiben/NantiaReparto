@@ -2,12 +2,14 @@ package com.nantia.repartonantia.listadeprecios;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Emi on 11/6/2018.
@@ -15,6 +17,10 @@ import java.util.Date;
 
 @Entity
 public class ListaDePrecio implements Serializable {
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "lista_precios_pk")
+    private transient long listaPreciosPK;
 
     @ColumnInfo(name = "lista_precios_id")
     @SerializedName("id")
@@ -30,13 +36,21 @@ public class ListaDePrecio implements Serializable {
 
     @SerializedName("setProductoLista")
     @TypeConverters(ProductoListaTypeConverter.class)
-    private ArrayList<ProductoLista> productosLista;
+    private List<ProductoLista> productosLista;
 
-    public ListaDePrecio(long id, String nombreLista, String fechAlta, ArrayList<ProductoLista> productosLista) {
+    public ListaDePrecio(long id, String nombreLista, String fechAlta, List<ProductoLista> productosLista) {
         this.id = id;
         this.nombreLista = nombreLista;
         this.fechAlta = fechAlta;
         this.productosLista = productosLista;
+    }
+
+    public long getListaPreciosPK() {
+        return listaPreciosPK;
+    }
+
+    public void setListaPreciosPK(long listaPreciosPK) {
+        this.listaPreciosPK = listaPreciosPK;
     }
 
     public long getId() {
@@ -63,7 +77,7 @@ public class ListaDePrecio implements Serializable {
         this.fechAlta = fechAlta;
     }
 
-    public ArrayList<ProductoLista> getProductosLista() {
+    public List<ProductoLista> getProductosLista() {
         return productosLista;
     }
 

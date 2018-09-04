@@ -18,7 +18,10 @@ import java.io.StringReader;
 @Entity
 public class Vehiculo implements Serializable{
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "vehiculo_pk")
+    private transient long vehiculoPK;
+
     @ColumnInfo(name = "vehiculo_id")
     @SerializedName("id")
     private long id;
@@ -47,6 +50,8 @@ public class Vehiculo implements Serializable{
     @SerializedName("stock")
     private Stock stock;
 
+    public Vehiculo(){}
+
     public Vehiculo(long id, String matricula, String marca,
                     String modelo, String descripcion, boolean activo, Stock stock) {
         this.id = id;
@@ -56,6 +61,14 @@ public class Vehiculo implements Serializable{
         this.descripcion = descripcion;
         this.activo = activo;
         this.stock = stock;
+    }
+
+    public long getVehiculoPK() {
+        return vehiculoPK;
+    }
+
+    public void setVehiculoPK(long vehiculoPK) {
+        this.vehiculoPK = vehiculoPK;
     }
 
     public long getId() {

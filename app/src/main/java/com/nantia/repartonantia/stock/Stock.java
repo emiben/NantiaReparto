@@ -9,6 +9,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Emi on 19/7/2018.
@@ -28,16 +29,16 @@ public class Stock implements Serializable{
 
     @SerializedName("setEnvaseStock")
     @TypeConverters(EnvaseStockTypeConverter.class)
-    private ArrayList<EnvaseStock> envasesStock;
+    private List<EnvaseStock> envasesStock;
 
     @SerializedName("setProductoStock")
     @TypeConverters(ProductoStockTypeConverter.class)
-    private ArrayList<ProductoStock> productosStock;
+    private List<ProductoStock> productosStock;
 
     @ColumnInfo(name = "actualizado")
     private transient boolean actualizado;
 
-    public Stock(long id, String fecha, ArrayList<EnvaseStock> envasesStock, ArrayList<ProductoStock> productosStock) {
+    public Stock(long id, String fecha, List<EnvaseStock> envasesStock, List<ProductoStock> productosStock) {
         this.id = id;
         this.fecha = fecha;
         this.envasesStock = envasesStock;
@@ -60,7 +61,7 @@ public class Stock implements Serializable{
         this.fecha = fecha;
     }
 
-    public ArrayList<EnvaseStock> getEnvasesStock() {
+    public List<EnvaseStock> getEnvasesStock() {
         return envasesStock;
     }
 
@@ -68,7 +69,7 @@ public class Stock implements Serializable{
         this.envasesStock = envasesStock;
     }
 
-    public ArrayList<ProductoStock> getProductosStock() {
+    public List<ProductoStock> getProductosStock() {
         return productosStock;
     }
 
