@@ -33,6 +33,7 @@ public class ListaProductoVentaFragment extends Fragment {
 
     private Cliente cliente;
     private Venta venta;
+    private ListaDePrecio listaDePrecio;
 
 
     public ListaProductoVentaFragment() {
@@ -67,7 +68,7 @@ public class ListaProductoVentaFragment extends Fragment {
 
 
     private void loadData(){
-        ListaDePrecio listaDePrecio = DataHolder.getListaDePrecioById(cliente.getIdLista());
+        listaDePrecio = DataHolder.getListaDePrecioById(cliente.getIdLista());
         if(listaDePrecio != null){
             ListaProdVentaAdapter listaProdVentaAdapter = new ListaProdVentaAdapter(getActivity(), listaDePrecio.getProductosLista());
             prodsRV.setLayoutManager(new GridLayoutManager(getActivity(), 2));
