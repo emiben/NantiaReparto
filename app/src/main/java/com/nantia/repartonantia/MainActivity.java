@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.nantia.repartonantia.listadeprecios.ListaDePreciosActivity;
 import com.nantia.repartonantia.producto.ProductoActivity;
-import com.nantia.repartonantia.adapters.CustomGridViewAdapter;
 import com.nantia.repartonantia.cliente.ClienteActivity;
 import com.nantia.repartonantia.stock.StockActivity;
 
@@ -35,18 +34,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        CustomGridViewAdapter adapterViewAndroid = new CustomGridViewAdapter(MainActivity.this, menuTitles, menuImagesIDs);
-        menuGridView=(GridView)findViewById(R.id.menu_gridview);
-        menuGridView.setAdapter(adapterViewAndroid);
-        menuGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int i, long id) {
-//                Toast.makeText(MainActivity.this, "GridView Item: " + menuTitles[+i], Toast.LENGTH_LONG).show();
-                onClickNavigateTo(i);
-            }
-        });
+//        CustomGridViewAdapter adapterViewAndroid = new CustomGridViewAdapter(MainActivity.this, menuTitles, menuImagesIDs);
+//        menuGridView=(GridView)findViewById(R.id.menu_gridview);
+//        menuGridView.setAdapter(adapterViewAndroid);
+//        menuGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view,
+//                                    int i, long id) {
+////                Toast.makeText(MainActivity.this, "GridView Item: " + menuTitles[+i], Toast.LENGTH_LONG).show();
+//                onClickNavigateTo(i);
+//            }
+//        });
     }
 
     private void onClickNavigateTo(int position){
