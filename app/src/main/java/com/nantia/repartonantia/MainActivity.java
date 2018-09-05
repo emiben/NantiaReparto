@@ -13,6 +13,7 @@ import com.nantia.repartonantia.listadeprecios.ListaDePreciosActivity;
 import com.nantia.repartonantia.producto.ProductoActivity;
 import com.nantia.repartonantia.adapters.CustomGridViewAdapter;
 import com.nantia.repartonantia.cliente.ClienteActivity;
+import com.nantia.repartonantia.reparto.RepartoActivity;
 import com.nantia.repartonantia.stock.StockActivity;
 
 import static com.nantia.repartonantia.utils.Constantes.CLIENTES;
@@ -55,7 +56,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(ClienteActivity.class);
                 break;
             case REPARTO:
-                Toast.makeText(MainActivity.this, "GridView Item: " + menuTitles[+position], Toast.LENGTH_LONG).show();
+                startActivity(RepartoActivity.class);
+                //Toast.makeText(MainActivity.this, "GridView Item: " + menuTitles[+position], Toast.LENGTH_LONG).show();
                 break;
             case PRODUCTOS:
                 startActivity(ProductoActivity.class);
