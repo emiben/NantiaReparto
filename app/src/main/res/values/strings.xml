@@ -72,6 +72,7 @@
 
     <!-- Strings related to Lista Productos Ventas -->
     <string name="lista_prod_venta_articulos">Articulos en Carro:</string>
+    <string name="lista_prod_venta_cantidad">Cantidad:</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

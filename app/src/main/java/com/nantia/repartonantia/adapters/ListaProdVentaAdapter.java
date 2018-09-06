@@ -59,7 +59,16 @@ public class ListaProdVentaAdapter extends RecyclerView.Adapter<ListaProdVentaAd
 
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    public ProductoLista getItem(int position){
+        return mData.get(position);
+    }
+
+    public void setClickListener(ItemClickListener itemClickListener) {
+        this.mClickListener = itemClickListener;
+    }
+
+
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView nombre;
         TextView presentacion;
 
@@ -67,6 +76,10 @@ public class ListaProdVentaAdapter extends RecyclerView.Adapter<ListaProdVentaAd
             super(itemView);
             nombre = itemView.findViewById(R.id.prod_nombre);
             presentacion = itemView.findViewById(R.id.prod_desc);
+        }
+
+        @Override public void onClick(View view) {
+            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 
