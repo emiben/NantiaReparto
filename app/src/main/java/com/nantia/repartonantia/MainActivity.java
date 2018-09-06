@@ -2,71 +2,55 @@
 package com.nantia.repartonantia;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.Toast;
-
+import com.nantia.repartonantia.cliente.ClienteActivity;
 import com.nantia.repartonantia.listadeprecios.ListaDePreciosActivity;
 import com.nantia.repartonantia.producto.ProductoActivity;
-import com.nantia.repartonantia.cliente.ClienteActivity;
 import com.nantia.repartonantia.stock.StockActivity;
 
-import static com.nantia.repartonantia.utils.Constantes.CLIENTES;
-import static com.nantia.repartonantia.utils.Constantes.LISTA_DE_PRECIOS;
-import static com.nantia.repartonantia.utils.Constantes.MAPA;
-import static com.nantia.repartonantia.utils.Constantes.PRODUCTOS;
-import static com.nantia.repartonantia.utils.Constantes.REPARTO;
-import static com.nantia.repartonantia.utils.Constantes.STOCK;
 
-public class MainActivity extends AppCompatActivity {
-
-    private GridView menuGridView;
-
-    String[] menuTitles = {"Clientes", "Reparto", "Productos", "Listas de Precio", "Stock", "Mapa"};
-    int[] menuImagesIDs = {R.drawable.cliente_icono, R.drawable.camion_icono, R.drawable.producto_icono,
-                            R.drawable.lista_icono, R.drawable.stock_icono, R.drawable.mapa_icono};
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        CustomGridViewAdapter adapterViewAndroid = new CustomGridViewAdapter(MainActivity.this, menuTitles, menuImagesIDs);
-//        menuGridView=(GridView)findViewById(R.id.menu_gridview);
-//        menuGridView.setAdapter(adapterViewAndroid);
-//        menuGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view,
-//                                    int i, long id) {
-////                Toast.makeText(MainActivity.this, "GridView Item: " + menuTitles[+i], Toast.LENGTH_LONG).show();
-//                onClickNavigateTo(i);
-//            }
-//        });
+        addListeners();
     }
 
-    private void onClickNavigateTo(int position){
-        switch (position) {
-            case CLIENTES:
+
+    private void addListeners(){
+        findViewById(R.id.menu_clientes_cv).setOnClickListener(this);
+        findViewById(R.id.menu_reparto_cv).setOnClickListener(this);
+        findViewById(R.id.menu_productos_cv).setOnClickListener(this);
+        findViewById(R.id.menu_listas_de_precios_cv).setOnClickListener(this);
+        findViewById(R.id.menu_stock_cv).setOnClickListener(this);
+        findViewById(R.id.menu_mapa_cv).setOnClickListener(this);
+    }
+
+    @Override public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.menu_clientes_cv:
                 startActivity(ClienteActivity.class);
                 break;
-            case REPARTO:
-                Toast.makeText(MainActivity.this, "GridView Item: " + menuTitles[+position], Toast.LENGTH_LONG).show();
+            case R.id.menu_reparto_cv:
+                Toast.makeText(MainActivity.this, "GridView Item: Reparto", Toast.LENGTH_LONG).show();
                 break;
-            case PRODUCTOS:
+            case R.id.menu_productos_cv:
                 startActivity(ProductoActivity.class);
                 break;
-            case LISTA_DE_PRECIOS:
+            case R.id.menu_listas_de_precios_cv:
                 startActivity(ListaDePreciosActivity.class);
                 break;
-            case STOCK:
+            case R.id.menu_stock_cv:
                 startActivity(StockActivity.class);
                 break;
-            case MAPA:
-                Toast.makeText(MainActivity.this, "GridView Item: " + menuTitles[+position], Toast.LENGTH_LONG).show();
+            case R.id.menu_mapa_cv:
+                Toast.makeText(MainActivity.this, "GridView Item: Mapa", Toast.LENGTH_LONG).show();
                 break;
             default:
                 break;
@@ -77,4 +61,6 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(this, cls);
         startActivity(i);
     }
+
+
 }
