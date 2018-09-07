@@ -122,7 +122,7 @@ public class ListaProductoVentaFragment extends Fragment implements ListaProdVen
 
 
     private void addOrUpdateArticulo(ProductoLista productoLista, String cantidad){
-        //TODO: Hacer el manejo contra Stock!!
+        //TODO: Hacer el control contra Stock!!
         int cant = 0;
         if(!cantidad.isEmpty()) cant = Integer.valueOf(cantidad);
         ProductoVenta productoVenta = getProdEnLista(productoLista.getProducto().getId());
@@ -139,7 +139,7 @@ public class ListaProductoVentaFragment extends Fragment implements ListaProdVen
             }
             prodsVenta.add(productoVenta);
         }
-
+        cantProdCarroTV.setText(prodsVenta.size());
     }
 
     @Override public void onItemClick(View view, int position) {
