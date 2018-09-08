@@ -74,9 +74,9 @@ public class RepartoMapFragment extends Fragment implements OnMapReadyCallback {
         super.onAttach(context);
         controladorGeolocalizacion = new ControladorGeolocalizacion(context.getSystemService(Context.LOCATION_SERVICE),context);
         controladorGeolocalizacion.setListener(geolocalizacionListener);
-        if (controladorGeolocalizacion.GPSHabilitado()) {
-            controladorGeolocalizacion.obtenerLocalizacion();
-        }
+//        if (controladorGeolocalizacion.GPSHabilitado()) {
+//            controladorGeolocalizacion.obtenerLocalizacion();
+//        }
     }
 
     @Override
@@ -88,6 +88,9 @@ public class RepartoMapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        if (controladorGeolocalizacion.GPSHabilitado()) {
+            controladorGeolocalizacion.obtenerLocalizacion();
+        }
 
     }
 
@@ -95,12 +98,14 @@ public class RepartoMapFragment extends Fragment implements OnMapReadyCallback {
         @Override
         public void localizacionActualizada(double longitud, double latitud) {
             // hacer algo
-            LatLng currentLatLng = new LatLng(latitud,
-                    longitud);
-            //MapRouteHelper.crearRuta(currentLatLng, new LatLng(42.316976,-83.185978), googleMap);
-            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(currentLatLng,
-                    10);
-            googleMap.moveCamera(update);
+            if(googleMap != null){
+                LatLng currentLatLng = new LatLng(latitud,
+                        longitud);
+                MapRouteHelper.crearRuta(currentLatLng, new LatLng(42.316976,-83.185978), googleMap);
+                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(currentLatLng,
+                        15);
+                googleMap.moveCamera(update);
+            }
         }
     };
 

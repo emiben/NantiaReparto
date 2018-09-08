@@ -37,7 +37,7 @@
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyB0JTER-KGgPT5HjkLyLnbK4Utrijvb7_w" />
+            android:value="AIzaSyCYnfQSGANUiqHJoFRGKfjX5Gckrxv6GsI" />
 
         <activity android:name=".listadeprecios.ListaDePreciosActivity" />
         <activity android:name=".stock.StockActivity" />
