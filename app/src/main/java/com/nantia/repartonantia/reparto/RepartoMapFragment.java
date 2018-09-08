@@ -1,9 +1,12 @@
 package com.nantia.repartonantia.reparto;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -101,11 +104,18 @@ public class RepartoMapFragment extends Fragment implements OnMapReadyCallback {
             if(googleMap != null){
                 LatLng currentLatLng = new LatLng(latitud,
                         longitud);
-                MapRouteHelper.crearRuta(currentLatLng, new LatLng(42.316976,-83.185978), googleMap);
+                MapRouteHelper.crearRuta(currentLatLng, new LatLng(40.762810,-73.944066), googleMap);
                 CameraUpdate update = CameraUpdateFactory.newLatLngZoom(currentLatLng,
                         15);
                 googleMap.moveCamera(update);
+                if (ActivityCompat.checkSelfPermission(getActivity(),
+                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    googleMap.setMyLocationEnabled(true);
+                }
             }
+
         }
     };
 

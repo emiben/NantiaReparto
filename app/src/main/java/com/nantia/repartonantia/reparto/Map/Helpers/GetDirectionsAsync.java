@@ -33,6 +33,9 @@ class GetDirectionsAsync extends AsyncTask<LatLng, Void, List<Ruta>> {
         HashMap<String, String> points = new HashMap<>();
         points.put("origin", start.latitude + "," + start.longitude);
         points.put("destination", end.latitude + "," + end.longitude);
+//        points.put("key", "AIzaSyAFgLgcG3YA6vjIcxY296t3JNP1UU1z7wY");
+        points.put("sensor", "true");
+        points.put("mode", "driving");
 
         jsonParser = new JSONParser();
 

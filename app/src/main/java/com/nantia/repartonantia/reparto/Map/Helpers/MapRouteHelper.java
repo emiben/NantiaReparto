@@ -36,7 +36,7 @@ public class MapRouteHelper {
     }
 
     private static Polyline trazarRuta(Ruta ruta, GoogleMap map){
-        PolylineOptions options = new PolylineOptions().width(5).color(Color.MAGENTA).geodesic(true);
+        PolylineOptions options = new PolylineOptions().width(10).color(Color.BLUE).geodesic(true);
         for (int i = 0; i < ruta.getCamino().size(); i++) {
             LatLng point = ruta.getCamino().get(i);
             options.add(point);
