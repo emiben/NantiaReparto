@@ -4,7 +4,9 @@ package com.nantia.repartonantia.venta;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.adapters.ListaProdVentaAdapter;
@@ -27,26 +30,29 @@ import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.listadeprecios.ListaDePrecio;
 import com.nantia.repartonantia.listadeprecios.ProductoLista;
 import com.nantia.repartonantia.producto.Producto;
+import com.nantia.repartonantia.stock.ProductoStock;
+import com.nantia.repartonantia.stock.Stock;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE;
+import static com.nantia.repartonantia.utils.Constantes.KEY_VENTA;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ListaProductoVentaFragment extends Fragment implements ListaProdVentaAdapter.ItemClickListener {
+public class ListaProductoVentaFragment extends Fragment
+        implements ListaProductoVentaView, ListaProdVentaAdapter.ItemClickListener {
 
     private TextView cantProdCarroTV;
     private ProgressBar progressBar;
     private SearchView buscar;
     private RecyclerView prodsRV;
-
+    private ConstraintLayout articulosCarroLO;
     private ListaProdVentaAdapter listaProdVentaAdapter;
-    private Cliente cliente;
-    private Venta venta;
-    private List<ProductoVenta> prodsVenta;
-    private ListaDePrecio listaDePrecio;
+    private ListaProductoVentaPresenter presenter;
+
 
 
     public ListaProductoVentaFragment() {
@@ -61,16 +67,25 @@ public class ListaProductoVentaFragment extends Fragment implements ListaProdVen
         View view = inflater.inflate(R.layout.fragment_lista_producto_venta, container, false);
         initializeViewObjects(view);
 
-        venta = new Venta();
-        prodsVenta = new ArrayList<>();
+
 
         if(getArguments().getSerializable(KEY_CLIENTE) != null){
-            this.cliente = (Cliente) getArguments().getSerializable(KEY_CLIENTE);
-            loadData();
-            setListeners();
+            Cliente cliente = (Cliente) getArguments().getSerializable(KEY_CLIENTE);
+            presenter = new ListaProductoVentaPresenter(this, cliente);
+            presenter.getData();
         }
 
         return view;
+    }
+
+    @Override
+    public void onSetProgressBarVisibility(int visibility) {
+        progressBar.setVisibility(visibility);
+    }
+
+    @Override
+    public void showStockError(float cant) {
+        Toast.makeText(getContext(), R.string.lista_prod_error_stock + String.valueOf(cant), Toast.LENGTH_LONG).show();
     }
 
 
@@ -79,22 +94,47 @@ public class ListaProductoVentaFragment extends Fragment implements ListaProdVen
         progressBar = view.findViewById(R.id.lista_prod_venta_progress);
         buscar = view.findViewById(R.id.lista_prod_venta_buscar_sv);
         prodsRV = view.findViewById(R.id.lista_prod_venta_rv);
+        articulosCarroLO = view.findViewById(R.id.articulos_carro_lo);
     }
 
-    private void setListeners(){
+    @Override
+    public void setListeners(){
         if(listaProdVentaAdapter != null) listaProdVentaAdapter.setClickListener(this);
+        articulosCarroLO.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToVenta();
+            }
+        });
     }
 
 
-    private void loadData(){
-        listaDePrecio = DataHolder.getListaDePrecioById(cliente.getIdLista());
-        if(listaDePrecio != null){
-            listaProdVentaAdapter = new ListaProdVentaAdapter(getActivity(), listaDePrecio.getProductosLista());
-            prodsRV.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-            prodsRV.setAdapter(listaProdVentaAdapter);
-        }
+    @Override
+    public void updateCantidadCarro(int cant) {
+        cantProdCarroTV.setText(cant);
     }
 
+    @Override
+    public void loadData(List<ProductoLista> prodsLista){
+        listaProdVentaAdapter = new ListaProdVentaAdapter(getActivity(), prodsLista);
+        prodsRV.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        prodsRV.setAdapter(listaProdVentaAdapter);
+    }
+
+    @Override public void onItemClick(View view, int position) {
+        showDialog(listaProdVentaAdapter.getItem(position));
+    }
+
+    private void navigateToVenta() {
+        Bundle b = new Bundle();
+        b.putSerializable(KEY_VENTA, presenter.getVenta());
+        VentaFragment ventaFragment = new VentaFragment();
+        ventaFragment.setArguments(b);
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.venta_layout, ventaFragment)
+                .addToBackStack(null)
+                .commit();
+    }
 
     private void showDialog(final ProductoLista productoLista){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -106,7 +146,7 @@ public class ListaProductoVentaFragment extends Fragment implements ListaProdVen
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                addOrUpdateArticulo(productoLista, cantidad.getText().toString());
+                presenter.addOrUpdateArticulo(productoLista, cantidad.getText().toString());
             }
         });
 
@@ -120,38 +160,4 @@ public class ListaProductoVentaFragment extends Fragment implements ListaProdVen
         builder.show();
     }
 
-
-    private void addOrUpdateArticulo(ProductoLista productoLista, String cantidad){
-        //TODO: Hacer el control contra Stock!!
-        int cant = 0;
-        if(!cantidad.isEmpty()) cant = Integer.valueOf(cantidad);
-        ProductoVenta productoVenta = getProdEnLista(productoLista.getProducto().getId());
-        if(cant == 0){
-            if(productoVenta != null) prodsVenta.remove(productoVenta);
-        }else {
-            if(productoVenta == null){
-                productoVenta = new ProductoVenta(0, productoLista.getProducto(), cant,
-                    productoLista.getPrecio(), (cant * productoLista.getPrecio()));
-            }else {
-                prodsVenta.remove(productoVenta);
-                productoVenta.setCantidad(cant);
-                productoVenta.setProductoTotal((cant * productoLista.getPrecio()));
-            }
-            prodsVenta.add(productoVenta);
-        }
-        cantProdCarroTV.setText(prodsVenta.size());
-    }
-
-    @Override public void onItemClick(View view, int position) {
-        showDialog(listaProdVentaAdapter.getItem(position));
-    }
-
-    private ProductoVenta getProdEnLista(long prodId){
-        for (ProductoVenta productoVenta : prodsVenta){
-            if(productoVenta.getProducto().getId() == prodId){
-                return productoVenta;
-            }
-        }
-        return null;
-    }
 }

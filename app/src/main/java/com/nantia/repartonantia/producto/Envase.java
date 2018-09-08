@@ -23,7 +23,7 @@ public class Envase implements Serializable {
     @SerializedName("id")
     private long id;
 
-    @ColumnInfo(name = "descripcion")
+    @ColumnInfo(name = "envase_descripcion")
     @SerializedName("descripcion")
     private String descripcion;
 

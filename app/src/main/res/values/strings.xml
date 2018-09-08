@@ -73,6 +73,7 @@
     <!-- Strings related to Lista Productos Ventas -->
     <string name="lista_prod_venta_articulos">Articulos en Carro:</string>
     <string name="lista_prod_venta_cantidad">Cantidad:</string>
+    <string name="lista_prod_error_stock">Stock insuficiente. Cantidad max.: </string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

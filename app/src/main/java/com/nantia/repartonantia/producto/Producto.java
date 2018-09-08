@@ -1,6 +1,7 @@
 package com.nantia.repartonantia.producto;
 
 import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
@@ -38,6 +39,10 @@ public class Producto implements Serializable {
     @ColumnInfo(name = "retornable")
     @SerializedName("retornable")
     private boolean retornable;
+
+    @Embedded
+    @SerializedName("envaseTipo")
+    private Envase envase;
 
 
     public Producto() {
@@ -98,5 +103,13 @@ public class Producto implements Serializable {
 
     public void setRetornable(boolean retornable) {
         this.retornable = retornable;
+    }
+
+    public Envase getEnvase() {
+        return envase;
+    }
+
+    public void setEnvase(Envase envase) {
+        this.envase = envase;
     }
 }
