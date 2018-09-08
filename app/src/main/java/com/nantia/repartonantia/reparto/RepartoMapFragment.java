@@ -22,9 +22,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nantia.repartonantia.R;
-import com.nantia.repartonantia.reparto.Geolocalizacion.Helpers.ControladorGeolocalizacion;
-import com.nantia.repartonantia.reparto.Geolocalizacion.Helpers.GeolocalizacionListener;
-import com.nantia.repartonantia.reparto.Map.Helpers.MapRouteHelper;
+import com.nantia.repartonantia.geolocalizacion.Helpers.ControladorGeolocalizacion;
+import com.nantia.repartonantia.geolocalizacion.Helpers.GeolocalizacionListener;
+import com.nantia.repartonantia.map.helpers.MapRouteHelper;
 
 
 public class RepartoMapFragment extends Fragment implements OnMapReadyCallback {

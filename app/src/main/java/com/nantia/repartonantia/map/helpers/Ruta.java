@@ -1,4 +1,4 @@
-package com.nantia.repartonantia.reparto.Map.Helpers;
+package com.nantia.repartonantia.map.helpers;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.PolyUtil;

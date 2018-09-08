@@ -1,9 +1,8 @@
-package com.nantia.repartonantia.reparto.Map.Helpers;
+package com.nantia.repartonantia.map.helpers;
 
 import android.os.AsyncTask;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.maps.android.PolyUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;

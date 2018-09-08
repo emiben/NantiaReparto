@@ -1,4 +1,4 @@
-package com.nantia.repartonantia.reparto.Geolocalizacion.Helpers;
+package com.nantia.repartonantia.geolocalizacion.Helpers;
 
 import android.Manifest;
 import android.content.Context;
