@@ -1,4 +1,4 @@
-package com.nantia.repartonantia.reparto;
+package com.nantia.repartonantia.reparto.Geolocalizacion.Helpers;
 
 import android.Manifest;
 import android.content.Context;
@@ -43,19 +43,22 @@ public class ControladorGeolocalizacion {
         criteria.setCostAllowed(true);
         criteria.setPowerRequirement(Criteria.POWER_LOW);
         String provider = locationManager.getBestProvider(criteria, true);
+        if (provider == null) {
+            provider = locationManager.GPS_PROVIDER;
+        }
         if (provider != null) {
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-            locationManager.requestLocationUpdates(provider, 2 * 20 * 1000, 10, locationListenerBest);
+            locationManager.requestLocationUpdates(provider, 2 * 20 * 1000, 10, locationListener);
         }
     }
 
     public void detenerActualizacionesGPS() {
-        locationManager.removeUpdates(locationListenerBest);
+        locationManager.removeUpdates(locationListener);
     }
 
-    private final LocationListener locationListenerBest = new LocationListener() {
+    private final LocationListener locationListener = new LocationListener() {
         public void onLocationChanged(Location location) {
             longitud = location.getLongitude();
             latitud = location.getLatitude();

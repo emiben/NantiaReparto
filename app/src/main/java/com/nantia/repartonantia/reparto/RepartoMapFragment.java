@@ -1,6 +1,5 @@
 package com.nantia.repartonantia.reparto;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +19,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nantia.repartonantia.R;
+import com.nantia.repartonantia.reparto.Geolocalizacion.Helpers.ControladorGeolocalizacion;
+import com.nantia.repartonantia.reparto.Geolocalizacion.Helpers.GeolocalizacionListener;
+import com.nantia.repartonantia.reparto.Map.Helpers.MapRouteHelper;
 
 
 public class RepartoMapFragment extends Fragment implements OnMapReadyCallback {
@@ -95,6 +97,7 @@ public class RepartoMapFragment extends Fragment implements OnMapReadyCallback {
             // hacer algo
             LatLng currentLatLng = new LatLng(latitud,
                     longitud);
+            //MapRouteHelper.crearRuta(currentLatLng, new LatLng(42.316976,-83.185978), googleMap);
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(currentLatLng,
                     10);
             googleMap.moveCamera(update);

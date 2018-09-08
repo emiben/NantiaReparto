@@ -16,7 +16,6 @@ public class RepartoActivity extends AppCompatActivity {
         RepartoMapFragment clienteMapaFragment = new RepartoMapFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.reparto_layout, clienteMapaFragment)
-                .addToBackStack(null)
                 .commit();
     }
 }
