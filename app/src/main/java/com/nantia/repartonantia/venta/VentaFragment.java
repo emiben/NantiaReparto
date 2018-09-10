@@ -10,7 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.nantia.repartonantia.R;
@@ -21,8 +24,8 @@ import static com.nantia.repartonantia.utils.Constantes.KEY_VENTA;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class VentaFragment extends Fragment {
-
+public class VentaFragment  extends Fragment implements VentaView, View.OnClickListener {
+    private ProgressBar progressBar;
     private RecyclerView articulosRV;
     private TextView ivaTV;
     private TextView totalTV;
@@ -33,8 +36,8 @@ public class VentaFragment extends Fragment {
     private RadioButton vendedor2RB;
     private Button cancelarBtn;
     private Button finalizarBtn;
-
-    private Venta venta;
+    private VentaPresenter ventaPresenter;
+//    private Venta venta;
     private ProductoVentaAdapter productoVentaAdapter;
 
     public VentaFragment() {
@@ -51,8 +54,9 @@ public class VentaFragment extends Fragment {
         initializeViewObjects(view);
 
         if(getArguments().getSerializable(KEY_VENTA) != null){
-            this.venta = (Venta)getArguments().getSerializable(KEY_VENTA);
-            loadData();
+            Venta venta = (Venta)getArguments().getSerializable(KEY_VENTA);
+            ventaPresenter = new VentaPresenter(this, venta);
+            setListeners(view);
         }
 
         return view;
@@ -70,10 +74,17 @@ public class VentaFragment extends Fragment {
         vendedor2RB = view.findViewById(R.id.venta_vendedor_2_rb);
         cancelarBtn = view.findViewById(R.id.venta_cancelar_btn);
         finalizarBtn = view.findViewById(R.id.venta_finalizar_btn);
+        progressBar = view.findViewById(R.id.venta_pb);
     }
 
 
-    private void loadData(){
+    @Override
+    public void onSetProgressBarVisibility(int visibility) {
+        progressBar.setVisibility(visibility);
+    }
+
+    @Override
+    public void loadData(Venta venta) {
         productoVentaAdapter = new ProductoVentaAdapter(getActivity(), venta.getProductosVenta());
         articulosRV.setLayoutManager(new LinearLayoutManager(getActivity()));
         articulosRV.setAdapter(productoVentaAdapter);
@@ -84,4 +95,35 @@ public class VentaFragment extends Fragment {
         saldoTV.setText(String.valueOf(venta.calcularSaldo()));
     }
 
+    private void setListeners(View view){
+        descuentoET.setOnClickListener(this);
+        entregaET.setOnClickListener(this);
+
+        ((RadioGroup) view.findViewById(R.id.venta_rg)).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId){
+                    case R.id.venta_vendedor_1_rb:
+                        vendedor2RB.setChecked(false);
+                        break;
+                    case R.id.venta_vendedor_2_rb:
+                        vendedor1RB.setChecked(false);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.venta_descuento_et:
+                ventaPresenter.setData(descuentoET.getText().toString(), entregaET.getText().toString());
+                break;
+            case R.id.venta_entrega_et:
+                ventaPresenter.setData(descuentoET.getText().toString(), entregaET.getText().toString());
+                break;
+            default:
+                break;
+        }
+    }
 }

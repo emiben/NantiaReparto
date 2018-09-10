@@ -58,6 +58,7 @@ public class ListaDePrecioFragment extends Fragment {
 
     private void initializeViewObjects(View view){
         nombreDeLista = view.findViewById(R.id.nombre_lista_tv);
+
         progressBar = view.findViewById(R.id.lista_precio_progress);
         buscar = view.findViewById(R.id.lista_precio_buscar_sv);
         listaDepreciosRV = view.findViewById(R.id.lista_precio_rv);
