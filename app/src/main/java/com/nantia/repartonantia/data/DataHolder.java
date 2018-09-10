@@ -8,7 +8,9 @@ import com.nantia.repartonantia.reparto.Reparto;
 import com.nantia.repartonantia.stock.Stock;
 import com.nantia.repartonantia.usuario.Usuario;
 
+import com.nantia.repartonantia.venta.Venta;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Emi on 24/6/2018.
@@ -22,6 +24,7 @@ public class DataHolder {
     private static ArrayList<ListaDePrecio> listasDePrecios;
     private static Stock stock;
     private static Reparto reparto;
+    private static List<Venta> ventas;
 
     public static Usuario getUsuario() {
         return usuario;
@@ -77,6 +80,14 @@ public class DataHolder {
 
     public static void setReparto(Reparto reparto) {
         DataHolder.reparto = reparto;
+    }
+
+    public static List<Venta> getVentas() {
+        return ventas;
+    }
+
+    public static void setVentas(List<Venta> ventas) {
+        DataHolder.ventas = ventas;
     }
 
     public static ListaDePrecio getListaDePrecioById(long id){

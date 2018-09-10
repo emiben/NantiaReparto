@@ -16,6 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import android.widget.Toast;
 import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.adapters.ProductoVentaAdapter;
 
@@ -34,10 +35,7 @@ public class VentaFragment  extends Fragment implements VentaView, View.OnClickL
     private TextView saldoTV;
     private RadioButton vendedor1RB;
     private RadioButton vendedor2RB;
-    private Button cancelarBtn;
-    private Button finalizarBtn;
     private VentaPresenter ventaPresenter;
-//    private Venta venta;
     private ProductoVentaAdapter productoVentaAdapter;
 
     public VentaFragment() {
@@ -72,8 +70,6 @@ public class VentaFragment  extends Fragment implements VentaView, View.OnClickL
         saldoTV = view.findViewById(R.id.venta_saldo_tv);
         vendedor1RB = view.findViewById(R.id.venta_vendedor_1_rb);
         vendedor2RB = view.findViewById(R.id.venta_vendedor_2_rb);
-        cancelarBtn = view.findViewById(R.id.venta_cancelar_btn);
-        finalizarBtn = view.findViewById(R.id.venta_finalizar_btn);
         progressBar = view.findViewById(R.id.venta_pb);
     }
 
@@ -95,10 +91,15 @@ public class VentaFragment  extends Fragment implements VentaView, View.OnClickL
         saldoTV.setText(String.valueOf(venta.calcularSaldo()));
     }
 
+    @Override public boolean isVendedor1Checked() {
+        return vendedor1RB.isChecked();
+    }
+
     private void setListeners(View view){
         descuentoET.setOnClickListener(this);
         entregaET.setOnClickListener(this);
-
+        view.findViewById(R.id.venta_cancelar_btn).setOnClickListener(this);
+        view.findViewById(R.id.venta_finalizar_btn).setOnClickListener(this);
         ((RadioGroup) view.findViewById(R.id.venta_rg)).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -122,8 +123,27 @@ public class VentaFragment  extends Fragment implements VentaView, View.OnClickL
             case R.id.venta_entrega_et:
                 ventaPresenter.setData(descuentoET.getText().toString(), entregaET.getText().toString());
                 break;
+            case R.id.venta_finalizar_btn:
+                finalizarVenta();
+                break;
+            case R.id.venta_cancelar_btn:
+                getActivity().finish();
+                break;
             default:
                 break;
+        }
+    }
+
+    private void showError(String error){
+        Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
+
+    }
+
+    private void finalizarVenta(){
+        if(vendedor1RB.isChecked() || vendedor2RB.isChecked()){
+            ventaPresenter.finalizarVenta();
+        }else {
+            showError(getString(R.string.venta_error_vendedor_no_selec));
         }
     }
 }

@@ -68,6 +68,7 @@
     <string name="venta_saldo">Saldo $</string>
     <string name="venta_cancelar">Cancelar</string>
     <string name="venta_finalizar">Finalizar</string>
+    <string name="venta_error_vendedor_no_selec">Para finalizar una venta se debe seleccionar un vendedor!</string>
 
 
     <!-- Strings related to Lista Productos Ventas -->
