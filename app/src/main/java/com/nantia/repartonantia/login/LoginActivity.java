@@ -45,10 +45,10 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, View
     }
 
     private void getViewElements(){
-        nombreUsuario = (TextView) findViewById(R.id.nombre_usuario);
-        contrasenia = (TextView) findViewById(R.id.contrasenia);
-        btnIngresar = (Button) findViewById(R.id.boton_ingresar);
-        progressBar = (ProgressBar) findViewById(R.id.login_progress);
+        nombreUsuario = findViewById(R.id.nombre_usuario);
+        contrasenia = findViewById(R.id.contrasenia);
+        btnIngresar = findViewById(R.id.boton_ingresar);
+        progressBar = findViewById(R.id.login_progress);
 
         //TODO: Remove this
         nombreUsuario.setText("usuario1");

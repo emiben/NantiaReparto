@@ -17,6 +17,9 @@ public class Constantes {
     public static final int MAPA = 5;
     public static final int IVA = 23;
 
+    public static final int HTTP_OK = 200;
+    public static final int HTTP_CREATED = 201;
+
     public static final String KEY_CLIENTE = "cliente";
     public static final String KEY_LISTA_DE_PRECIOS = "listaDePrecios";
     public static final String KEY_REPARTO = "reparto";

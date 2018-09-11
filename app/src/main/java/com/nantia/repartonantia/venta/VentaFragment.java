@@ -1,6 +1,7 @@
 package com.nantia.repartonantia.venta;
 
 
+import android.arch.persistence.room.Room;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,7 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.adapters.ProductoVentaAdapter;
+import com.nantia.repartonantia.data.AppDatabase;
 
+import static com.nantia.repartonantia.utils.Constantes.KEY_DB_NOMBRE;
 import static com.nantia.repartonantia.utils.Constantes.KEY_VENTA;
 
 /**
@@ -53,7 +56,9 @@ public class VentaFragment  extends Fragment implements VentaView, View.OnClickL
 
         if(getArguments().getSerializable(KEY_VENTA) != null){
             Venta venta = (Venta)getArguments().getSerializable(KEY_VENTA);
-            ventaPresenter = new VentaPresenter(this, venta);
+            AppDatabase db = Room.databaseBuilder(getContext(),
+                    AppDatabase.class, KEY_DB_NOMBRE).build();
+            ventaPresenter = new VentaPresenter(this, venta, db);
             setListeners(view);
         }
 

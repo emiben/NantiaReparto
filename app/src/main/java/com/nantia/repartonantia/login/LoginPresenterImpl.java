@@ -98,7 +98,7 @@ public class LoginPresenterImpl implements ILoginPresenter{
             @Override
             public void run() {
                 db.usuarioDao().insertAll(usuario);
-                Log.i("TEST", "TEST");
+                Log.i(TAG, "Usuario Insertado");
             }
         });
     }

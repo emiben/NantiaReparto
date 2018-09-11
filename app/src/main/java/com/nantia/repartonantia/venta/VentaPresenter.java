@@ -1,24 +1,41 @@
 package com.nantia.repartonantia.venta;
 
+import android.os.AsyncTask;
+import android.util.Log;
+import android.view.View;
+
 import com.nantia.repartonantia.cliente.Cliente;
+import com.nantia.repartonantia.data.AppDatabase;
 import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.stock.EnvaseStock;
 import com.nantia.repartonantia.stock.ProductoStock;
+import com.nantia.repartonantia.stock.Stock;
+import com.nantia.repartonantia.stock.StockService;
 import com.nantia.repartonantia.usuario.Usuario;
 import com.nantia.repartonantia.utils.FechaHelper;
+import com.nantia.repartonantia.utils.RetrofitClientInstance;
+
 import java.util.Iterator;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.nantia.repartonantia.utils.Constantes.HTTP_CREATED;
+import static com.nantia.repartonantia.utils.Constantes.HTTP_OK;
 import static com.nantia.repartonantia.utils.Constantes.IVA;
 
 public class VentaPresenter {
     private String TAG = VentaPresenter.class.getName();
+    private AppDatabase db;
     private VentaView view;
     private Venta venta;
 
-    public VentaPresenter(VentaView view, Venta venta) {
+    public VentaPresenter(VentaView view, Venta venta, AppDatabase db) {
         this.view = view;
         this.venta = venta;
+        this.db = db;
     }
 
     public void setData(String descuentoStr, String entregaStr){
@@ -71,9 +88,8 @@ public class VentaPresenter {
         venta.setActualizado(false);
 
         updateStock(venta.getProductosVenta());
-        saveAndSendVenta(venta);
+        sendVenta(venta);
     }
-
 
 
     private void updateStock(List<ProductoVenta> prodsVenta){
@@ -103,12 +119,86 @@ public class VentaPresenter {
                 }
             }
         }
-        //TODO: guardar Stock en base de datos
+        DataHolder.getStock().setActualizado(false);
+        sendStock(DataHolder.getStock());
     }
 
 
-    private void saveAndSendVenta(Venta venta){
+    private void sendVenta(final Venta venta) {
+        view.onSetProgressBarVisibility(View.VISIBLE);
+        VentaService ventaService = RetrofitClientInstance.getRetrofitInstance().create(VentaService.class);
+        Call<Venta> call = ventaService.saveVenta(venta);
+        call.enqueue(new Callback<Venta>() {
+            @Override
+            public void onResponse(Call<Venta> call, Response<Venta> response) {
+                if(response.code() == HTTP_CREATED){
+                    response.body().setActualizado(true);
+                    saveVenta(response.body());
+                    view.onSetProgressBarVisibility(View.GONE);
+                    Log.i(TAG, "Venta Creada OK");
+                }else {
+                    saveVenta(venta);
+                    Log.e(TAG, "Venta Creada ERROR: " + response.message());
+                }
+            }
 
+            @Override
+            public void onFailure(Call<Venta> call, Throwable t) {
+                saveVenta(venta);
+                Log.e(TAG, "Venta Creada ERROR: " + t.getMessage());
+            }
+        });
+    }
+
+    private void saveVenta(final Venta venta){
+        DataHolder.getVentas().add(venta);
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                db.ventaDao().insertAll(venta);
+                Log.i(TAG, "Venta guardodo en base");
+            }
+        });
+    }
+
+    private void sendStock(final Stock stock) {
+        view.onSetProgressBarVisibility(View.VISIBLE);
+        StockService stockService = RetrofitClientInstance.getRetrofitInstance().create(StockService.class);
+        Call<Stock> call = stockService.updateStock(stock.getId(), stock);
+        call.enqueue(new Callback<Stock>() {
+            @Override
+            public void onResponse(Call<Stock> call, final Response<Stock> response) {
+                if(response.code() == HTTP_OK){
+                    response.body().setActualizado(true);
+                    saveStock(response.body());
+                    Log.i(TAG, "Stock update OK");
+                }else {
+                    stock.setActualizado(false);
+                    saveStock(stock);
+                    Log.e(TAG, "Stock update fallo:" + response.message());
+                }
+                view.onSetProgressBarVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(Call<Stock> call, Throwable t) {
+                stock.setActualizado(false);
+                saveStock(stock);
+                view.onSetProgressBarVisibility(View.GONE);
+                Log.e(TAG, "Stock update fallo:" + t.getMessage());
+            }
+        });
+    }
+
+    private void saveStock(final Stock stock){
+        DataHolder.setStock(stock);
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                db.stockDao().updateStock(stock);
+                Log.i(TAG, "Stock guardado en base");
+            }
+        });
     }
 
     private float getTotalVenta(){

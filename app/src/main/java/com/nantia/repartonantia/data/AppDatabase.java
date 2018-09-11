@@ -20,6 +20,7 @@ import com.nantia.repartonantia.stock.StockDao;
 import com.nantia.repartonantia.usuario.Usuario;
 import com.nantia.repartonantia.usuario.UsuarioDao;
 import com.nantia.repartonantia.venta.Venta;
+import com.nantia.repartonantia.venta.VentaDao;
 
 @Database(entities = {Usuario.class, Cliente.class,
           Envase.class, Producto.class, Stock.class,
@@ -43,6 +44,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract ListaDePrecioDao listaDePrecioDao();
 
+    public abstract VentaDao ventaDao();
 
 
 }

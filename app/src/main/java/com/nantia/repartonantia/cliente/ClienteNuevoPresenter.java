@@ -87,6 +87,7 @@ public class ClienteNuevoPresenter {
             public void onResponse(Call<Cliente> call, Response<Cliente> response) {
                 DataHolder.getClientes().remove(clienteToRemove);
                 DataHolder.getClientes().add(response.body());
+                //TODO: Guardar en base de datos
                 view.onSetProgressBarVisibility(View.GONE);
                 view.navigateToClienteFragment(response.body());
             }
