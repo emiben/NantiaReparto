@@ -119,10 +119,10 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
             if(getArguments().getDouble("lat") != 0.0){
                 posicionMapa = new LatLng(getArguments().getDouble("lat"), getArguments().getDouble("lng"));
             }
-            if(getArguments().getSerializable("cliente") != null){
+            if(getArguments().getSerializable(KEY_CLIENTE) != null){
                 updateCliente = true;
-                cliente = (Cliente) getArguments().getSerializable("cliente");
-                clienteOriginal = (Cliente) getArguments().getSerializable("cliente");
+                cliente = (Cliente) getArguments().getSerializable(KEY_CLIENTE);
+                clienteOriginal = (Cliente) getArguments().getSerializable(KEY_CLIENTE);
                 if(posicionMapa != null){
                     cliente.getDireccion().setCoordLat(String.valueOf(posicionMapa.latitude));
                     cliente.getDireccion().setCoordLon(String.valueOf(posicionMapa.longitude));
