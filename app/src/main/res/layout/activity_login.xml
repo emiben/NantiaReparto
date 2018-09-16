@@ -62,7 +62,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/login_contrasenia"
-                    android:imeActionId="@+id/login"
                     android:imeActionLabel="@string/login_contrasenia"
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"

@@ -27,9 +27,6 @@ public class ClienteNuevoPresenter {
         this.view = view;
     }
 
-    public void navigateToClienteMapa(){
-
-    }
 
     public void getEnvases(){
         view.onSetProgressBarVisibility(View.VISIBLE);

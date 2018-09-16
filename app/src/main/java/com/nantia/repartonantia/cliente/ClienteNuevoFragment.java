@@ -34,7 +34,9 @@ import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.listadeprecios.ListaDePrecio;
 import com.nantia.repartonantia.map.ClienteMapaFragment;
 import com.nantia.repartonantia.producto.Envase;
+import com.nantia.repartonantia.utils.FechaHelper;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -172,7 +174,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         }
         cliente.setFechaNacimiento(fechaDeNacimiento);
         //TODO cambiar a fecha de creado
-        cliente.setFechaAlta(fechaDeNacimiento);
+        cliente.setFechaAlta(FechaHelper.getStringDate());
         cliente.setCelular(telefono1.getText().toString());
         cliente.setMail(email.getText().toString());
         String coordLat = "";
@@ -528,8 +530,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         }
         if(cliente.getFechaNacimiento() != null){
             fechaDeNacimiento = cliente.getFechaNacimiento();
-            String[] fecha = cliente.getFechaNacimiento().split("-");
-            fecDeNac.setText(fecha[2]+"/"+fecha[1]+"/"+fecha[0]);
+            fecDeNac.setText(FechaHelper.getFechParaMostrar(cliente.getFechaNacimiento()));
         }
         if(cliente.getCelular() != null) telefono1.setText(cliente.getCelular());
         if(cliente.getDireccion().getTelefono() != null) telefono2.setText(cliente.getDireccion().getTelefono());
@@ -586,12 +587,8 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     }
 
     private void updateLabel() {
-        String myFormat = "dd/MM/yyyy";
-        String myFormat2 = "yyyy-MM-dd";
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        SimpleDateFormat sdf2 = new SimpleDateFormat(myFormat2, Locale.US);
-        fechaDeNacimiento = sdf2.format(calendar.getTime());
-        fecDeNac.setText(sdf.format(calendar.getTime()));
+        fechaDeNacimiento = FechaHelper.getFechaParaEnviar(calendar.getTime());
+        fecDeNac.setText(FechaHelper.getFechParaMostrar(calendar.getTime()));
     }
 
 

@@ -1,16 +1,20 @@
 package com.nantia.repartonantia.utils;
 
+import android.util.Log;
+
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class FechaHelper {
 
-
   public static String getStringDate(){
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.US);
     Date date = new Date();
-    return dateFormat.format(date);
+    String fecha = dateFormat.format(date);
+    return fecha.substring(0, fecha.length() - 5);
   }
 
   public static String getFechParaMostrar(String fecha){
@@ -20,6 +24,17 @@ public class FechaHelper {
     fechaFormateada = fechaParts[2]+"/"+fechaParts[1]+"/"+fechaParts[0]+" "+parts[1].substring(0, 5);
 
     return fechaFormateada;
+  }
+
+  public static String getFechParaMostrar(Date fecha){
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+    return dateFormat.format(fecha);
+  }
+
+  public static String getFechaParaEnviar(Date fecha){
+    DateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.US);
+    String fechaString = dateFormat2.format(fecha);
+    return fechaString.substring(0, fechaString.length() - 5);
   }
 
 }
