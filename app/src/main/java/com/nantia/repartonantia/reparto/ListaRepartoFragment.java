@@ -81,6 +81,7 @@ public class ListaRepartoFragment extends Fragment implements ListaRepartoView, 
     @Override
     public void addListeners() {
         if(repartoListaAdapter != null){
+            repartoListaAdapter.setClickListener(this);
             buscarSV.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String s) {

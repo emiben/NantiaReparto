@@ -67,8 +67,6 @@ public class ListaProductoVentaFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_lista_producto_venta, container, false);
         initializeViewObjects(view);
 
-
-
         if(getArguments().getSerializable(KEY_CLIENTE) != null){
             Cliente cliente = (Cliente) getArguments().getSerializable(KEY_CLIENTE);
             presenter = new ListaProductoVentaPresenter(this, cliente);
@@ -79,13 +77,29 @@ public class ListaProductoVentaFragment extends Fragment
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        updateCantidadCarro(presenter.getCantArticulos());
+    }
+
+    @Override
     public void onSetProgressBarVisibility(int visibility) {
         progressBar.setVisibility(visibility);
     }
 
     @Override
     public void showStockError(float cant) {
-        Toast.makeText(getContext(), R.string.lista_prod_error_stock + String.valueOf(cant), Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), getString(R.string.lista_prod_error_stock) + String.valueOf(cant), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showStockNoAsociadoError() {
+        Toast.makeText(getActivity(), R.string.lista_prod_error_stock_no_asociado, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void finishActivity(){
+        getActivity().finish();
     }
 
 
@@ -106,12 +120,25 @@ public class ListaProductoVentaFragment extends Fragment
                 navigateToVenta();
             }
         });
+        buscar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                listaProdVentaAdapter.getFilter().filter(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                listaProdVentaAdapter.getFilter().filter(s);
+                return false;
+            }
+        });
     }
 
 
     @Override
     public void updateCantidadCarro(int cant) {
-        cantProdCarroTV.setText(cant);
+        cantProdCarroTV.setText(String.valueOf(cant));
     }
 
     @Override
@@ -137,27 +164,34 @@ public class ListaProductoVentaFragment extends Fragment
     }
 
     private void showDialog(final ProductoLista productoLista){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(productoLista.getProducto().getNombre() + " " + productoLista.getProducto().getPresentacion());
-        builder.setMessage(getString(R.string.lista_prod_venta_cantidad));
-        final EditText cantidad = new EditText(getActivity());
-        cantidad.setInputType(InputType.TYPE_CLASS_NUMBER);
+        if(DataHolder.getReparto().getVehiculo().getStock() != null){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(productoLista.getProducto().getNombre() + " " + productoLista.getProducto().getPresentacion());
+            builder.setMessage(getString(R.string.lista_prod_venta_cantidad));
+            final EditText cantidad = new EditText(getActivity());
+            cantidad.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                presenter.addOrUpdateArticulo(productoLista, cantidad.getText().toString());
-            }
-        });
+            builder.setView(cantidad);
 
-        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    presenter.addOrUpdateArticulo(productoLista, cantidad.getText().toString());
+                }
+            });
 
-        builder.show();
+            builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            builder.show();
+        }else {
+            showStockNoAsociadoError();
+        }
+
     }
 
 }

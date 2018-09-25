@@ -83,6 +83,7 @@
     <string name="lista_prod_venta_articulos">Articulos en Carro:</string>
     <string name="lista_prod_venta_cantidad">Cantidad:</string>
     <string name="lista_prod_error_stock">Stock insuficiente. Cantidad max.: </string>
+    <string name="lista_prod_error_stock_no_asociado">Stock no asociado al camion.</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

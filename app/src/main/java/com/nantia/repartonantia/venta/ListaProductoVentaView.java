@@ -10,4 +10,6 @@ public interface ListaProductoVentaView {
     void loadData(List<ProductoLista> prodsLista);
     void setListeners();
     void updateCantidadCarro(int cant);
+    void showStockNoAsociadoError();
+    void finishActivity();
 }

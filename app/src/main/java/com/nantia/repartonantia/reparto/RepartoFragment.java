@@ -62,7 +62,7 @@ public class RepartoFragment extends Fragment {
                 vendedor1Tv.setText(reparto.getVendedor1().getNombreCompleto());
             if(reparto.getVendedor2().getNombreCompleto() != null &&
                     !reparto.getVendedor1().getNombreCompleto().isEmpty())
-                vendedor1Tv.setText(reparto.getVendedor2().getNombreCompleto());
+                vendedor2Tv.setText(reparto.getVendedor2().getNombreCompleto());
             if(reparto.getRuta().getNombre() != null && !reparto.getRuta().getNombre().isEmpty())
                 rutaTv.setText(reparto.getRuta().getNombre());
         }

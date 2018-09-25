@@ -40,7 +40,7 @@ public class VentaPresenter {
 
     public void setData(String descuentoStr, String entregaStr){
         float totalVenta = getTotalVenta();
-        float ivaTotal = (totalVenta * (IVA/100));
+        float ivaTotal = (totalVenta * ((float)IVA/100));
         float descuento = 0;
         float entrega = 0;
 
@@ -56,7 +56,7 @@ public class VentaPresenter {
         venta.setDescuento(descuento);
         venta.setPagoTotal(entrega);
 
-        view.loadData(venta);
+        view.updateData(venta);
     }
 
     public void finalizarVenta(){
@@ -93,25 +93,26 @@ public class VentaPresenter {
 
 
     private void updateStock(List<ProductoVenta> prodsVenta){
+        Stock stock = DataHolder.getReparto().getVehiculo().getStock();
         for(ProductoVenta productoVenta : prodsVenta){
             boolean encontreProd = false;
-            Iterator<ProductoStock> prodIterator = DataHolder.getStock().getProductosStock().iterator();
+            Iterator<ProductoStock> prodIterator = stock.getProductosStock().iterator();
             while (prodIterator.hasNext() && !encontreProd){
                 if(productoVenta.getProducto().getId() == ((ProductoStock)prodIterator).getProducto().getId()){
                     ProductoStock productoStock = (ProductoStock)prodIterator;
-                    DataHolder.getStock().getProductosStock().remove(productoStock);
+                    stock.getProductosStock().remove(productoStock);
                     productoStock.setCantidad(productoStock.getCantidad() - productoVenta.getCantidad());
-                    DataHolder.getStock().getProductosStock().add(productoStock);
+                    stock.getProductosStock().add(productoStock);
                     encontreProd = true;
                     if(productoVenta.getProducto().isRetornable()){
                         boolean encontreEnv = false;
-                        Iterator<EnvaseStock> envaseIterator = DataHolder.getStock().getEnvasesStock().iterator();
+                        Iterator<EnvaseStock> envaseIterator = stock.getEnvasesStock().iterator();
                         while (envaseIterator.hasNext() && !encontreEnv){
                             if(productoVenta.getProducto().getEnvase().getId() == ((EnvaseStock)envaseIterator).getEnvase().getId()){
                                 EnvaseStock envaseStock = (EnvaseStock)envaseIterator;
-                                DataHolder.getStock().getEnvasesStock().remove(envaseStock);
+                                stock.getEnvasesStock().remove(envaseStock);
                                 envaseStock.setCantidad(envaseStock.getCantidad() + productoVenta.getCantidad());
-                                DataHolder.getStock().getEnvasesStock().add(envaseStock);
+                                stock.getEnvasesStock().add(envaseStock);
                                 encontreEnv = true;
                             }
                         }
@@ -119,8 +120,9 @@ public class VentaPresenter {
                 }
             }
         }
-        DataHolder.getStock().setActualizado(false);
-        sendStock(DataHolder.getStock());
+        stock.setActualizado(false);
+        DataHolder.getReparto().getVehiculo().setStock(stock);
+        sendStock(stock);
     }
 
 
@@ -191,7 +193,7 @@ public class VentaPresenter {
     }
 
     private void saveStock(final Stock stock){
-        DataHolder.setStock(stock);
+        DataHolder.getReparto().getVehiculo().setStock(stock);
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {

@@ -9,6 +9,8 @@ import android.widget.Toast;
 import com.nantia.repartonantia.cliente.ClienteActivity;
 import com.nantia.repartonantia.listadeprecios.ListaDePreciosActivity;
 import com.nantia.repartonantia.producto.ProductoActivity;
+import com.nantia.repartonantia.reparto.Reparto;
+import com.nantia.repartonantia.reparto.RepartoActivity;
 import com.nantia.repartonantia.stock.StockActivity;
 
 
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(ClienteActivity.class);
                 break;
             case R.id.menu_reparto_cv:
-                Toast.makeText(MainActivity.this, "GridView Item: Reparto", Toast.LENGTH_LONG).show();
+                startActivity(RepartoActivity.class);
                 break;
             case R.id.menu_productos_cv:
                 startActivity(ProductoActivity.class);

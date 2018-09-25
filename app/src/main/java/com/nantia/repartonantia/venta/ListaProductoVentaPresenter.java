@@ -31,11 +31,16 @@ public class ListaProductoVentaPresenter {
 
     public void getData(){
         view.onSetProgressBarVisibility(View.VISIBLE);
-        stock = DataHolder.getStock();
+        if(DataHolder.getReparto() != null && DataHolder.getReparto().getVehiculo() != null){
+            stock = DataHolder.getReparto().getVehiculo().getStock();
+        }
         listaDePrecio = DataHolder.getListaDePrecioById(cliente.getIdLista());
-        if(listaDePrecio.getProductosLista() != null){
+        if(stock != null && listaDePrecio.getProductosLista() != null){
             view.loadData(listaDePrecio.getProductosLista());
             view.setListeners();
+        }else {
+            view.showStockNoAsociadoError();
+            view.finishActivity();
         }
         view.onSetProgressBarVisibility(View.GONE);
     }
@@ -54,7 +59,7 @@ public class ListaProductoVentaPresenter {
         if(cant == 0){
             if(productoVenta != null) prodsVenta.remove(productoVenta);
         }else {
-            if(cant < cantStock){
+            if(cant > cantStock){
                 view.showStockError(cantStock);
             }else {
                 if(productoVenta == null){
@@ -71,6 +76,13 @@ public class ListaProductoVentaPresenter {
         view.updateCantidadCarro(prodsVenta.size());
     }
 
+    public int getCantArticulos(){
+        if(prodsVenta != null){
+            return prodsVenta.size();
+        }else{
+            return 0;
+        }
+    }
 
     private ProductoVenta getProdEnLista(long prodId){
         for (ProductoVenta productoVenta : prodsVenta){

@@ -22,7 +22,7 @@ public class DataHolder {
     private static ArrayList<Producto> productos;
     private static ArrayList<Cliente> clientes;
     private static ArrayList<ListaDePrecio> listasDePrecios;
-    private static Stock stock;
+//    private static Stock stock;
     private static Reparto reparto;
     private static List<Venta> ventas;
 
@@ -66,13 +66,13 @@ public class DataHolder {
         DataHolder.listasDePrecios = listasDePrecios;
     }
 
-    public static Stock getStock() {
-        return stock;
-    }
+//    public static Stock getStock() {
+//        return stock;
+//    }
 
-    public static void setStock(Stock stock) {
-        DataHolder.stock = stock;
-    }
+//    public static void setStock(Stock stock) {
+//        DataHolder.stock = stock;
+//    }
 
     public static Reparto getReparto() {
         return reparto;

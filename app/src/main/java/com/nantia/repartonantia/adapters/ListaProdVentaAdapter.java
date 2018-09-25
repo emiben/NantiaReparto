@@ -76,6 +76,7 @@ public class ListaProdVentaAdapter extends RecyclerView.Adapter<ListaProdVentaAd
             super(itemView);
             nombre = itemView.findViewById(R.id.prod_nombre);
             presentacion = itemView.findViewById(R.id.prod_desc);
+            itemView.setOnClickListener(this);
         }
 
         @Override public void onClick(View view) {

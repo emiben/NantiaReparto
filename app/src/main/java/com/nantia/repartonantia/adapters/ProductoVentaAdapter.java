@@ -63,7 +63,7 @@ public class ProductoVentaAdapter extends RecyclerView.Adapter<ProductoVentaAdap
             producto = itemView.findViewById(R.id.venta_articulo_tv);
             precioUnitario = itemView.findViewById(R.id.venta_pu_tv);
             cantidad = itemView.findViewById(R.id.venta_cantidad_tv);
-            total = itemView.findViewById(R.id.venta_total_tv);
+            total = itemView.findViewById(R.id.venta_total_articulo_tv);
         }
 
         @Override public void onClick(View view) {

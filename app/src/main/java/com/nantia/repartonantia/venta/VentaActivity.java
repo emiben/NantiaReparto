@@ -16,7 +16,7 @@ public class VentaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_venta);
 
-        Cliente cliente = (Cliente) this.getIntent().getExtras().getSerializable(KEY_CLIENTE);
+        Cliente cliente = (Cliente) this.getIntent().getBundleExtra(KEY_CLIENTE).getSerializable(KEY_CLIENTE);
         Bundle b = new Bundle();
         b.putSerializable(KEY_CLIENTE, cliente);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();

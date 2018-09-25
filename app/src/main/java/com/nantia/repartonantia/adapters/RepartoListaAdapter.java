@@ -81,6 +81,7 @@ public class RepartoListaAdapter extends RecyclerView.Adapter<RepartoListaAdapte
             descripcion = itemView.findViewById(R.id.reparto_lista_desc_tv);
             vehiculo = itemView.findViewById(R.id.reparto_lista_vehiculo_tv);
             dia = itemView.findViewById(R.id.reparto_lista_dia_tv);
+            itemView.setOnClickListener(this);
         }
 
         @Override
