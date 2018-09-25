@@ -7,6 +7,7 @@ import android.view.View;
 import com.nantia.repartonantia.cliente.Cliente;
 import com.nantia.repartonantia.data.AppDatabase;
 import com.nantia.repartonantia.data.DataHolder;
+import com.nantia.repartonantia.producto.Envase;
 import com.nantia.repartonantia.stock.EnvaseStock;
 import com.nantia.repartonantia.stock.ProductoStock;
 import com.nantia.repartonantia.stock.Stock;
@@ -98,8 +99,8 @@ public class VentaPresenter {
             boolean encontreProd = false;
             Iterator<ProductoStock> prodIterator = stock.getProductosStock().iterator();
             while (prodIterator.hasNext() && !encontreProd){
-                if(productoVenta.getProducto().getId() == ((ProductoStock)prodIterator).getProducto().getId()){
-                    ProductoStock productoStock = (ProductoStock)prodIterator;
+                ProductoStock productoStock = prodIterator.next();
+                if(productoVenta.getProducto().getId() == productoStock.getProducto().getId()){
                     stock.getProductosStock().remove(productoStock);
                     productoStock.setCantidad(productoStock.getCantidad() - productoVenta.getCantidad());
                     stock.getProductosStock().add(productoStock);
@@ -108,8 +109,8 @@ public class VentaPresenter {
                         boolean encontreEnv = false;
                         Iterator<EnvaseStock> envaseIterator = stock.getEnvasesStock().iterator();
                         while (envaseIterator.hasNext() && !encontreEnv){
-                            if(productoVenta.getProducto().getEnvase().getId() == ((EnvaseStock)envaseIterator).getEnvase().getId()){
-                                EnvaseStock envaseStock = (EnvaseStock)envaseIterator;
+                            EnvaseStock envaseStock = envaseIterator.next();
+                            if(productoVenta.getProducto().getEnvase().getId() == envaseStock.getEnvase().getId()){
                                 stock.getEnvasesStock().remove(envaseStock);
                                 envaseStock.setCantidad(envaseStock.getCantidad() + productoVenta.getCantidad());
                                 stock.getEnvasesStock().add(envaseStock);

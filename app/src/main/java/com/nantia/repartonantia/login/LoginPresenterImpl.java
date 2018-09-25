@@ -162,6 +162,7 @@ public class LoginPresenterImpl implements ILoginPresenter{
                     clientes.get(i).setActualizado(true);
                     db.clienteDao().insertAll(clientes.get(i));
                 }
+                //TODO: Limpiar la base de datos cuando inicio y este get
                 db.clienteDao().getAll();
             }
         });

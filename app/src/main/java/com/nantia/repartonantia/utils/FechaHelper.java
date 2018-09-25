@@ -13,7 +13,7 @@ public class FechaHelper {
     DateFormat dateFormat = new SimpleDateFormat(fechaPattern, Locale.US);
     Date date = new Date();
     String fecha = dateFormat.format(date);
-    return fecha.substring(0, fecha.length() - 5);
+    return fecha.substring(0, fecha.length());
   }
 
   public static String getFechParaMostrar(String fecha){
@@ -31,9 +31,9 @@ public class FechaHelper {
   }
 
   public static String getFechaParaEnviar(Date fecha){
-    DateFormat dateFormat2 = new SimpleDateFormat(fechaPattern, Locale.US);
-    String fechaString = dateFormat2.format(fecha);
-    return fechaString.substring(0, fechaString.length() - 5);
+    DateFormat dateFormat = new SimpleDateFormat(fechaPattern, Locale.US);
+    String fechaString = dateFormat.format(fecha);
+    return fechaString.substring(0, fechaString.length());
   }
 
 }

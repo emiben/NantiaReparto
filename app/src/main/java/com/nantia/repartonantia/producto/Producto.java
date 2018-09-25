@@ -41,7 +41,7 @@ public class Producto implements Serializable {
     private boolean retornable;
 
     @Embedded
-    @SerializedName("envaseTipo")
+    @SerializedName("envasesTipos")
     private Envase envase;
 
 

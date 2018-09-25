@@ -61,9 +61,15 @@ public class ClienteNuevoPresenter {
         call.enqueue(new Callback<Cliente>() {
             @Override
             public void onResponse(Call<Cliente> call, Response<Cliente> response) {
-                DataHolder.getClientes().add(response.body());
-                view.onSetProgressBarVisibility(View.GONE);
-                view.navigateToClienteFragment(response.body());
+                if (response.code() < 400){
+                    DataHolder.getClientes().add(response.body());
+                    view.onSetProgressBarVisibility(View.GONE);
+                    view.navigateToClienteFragment(response.body());
+                }else {
+                    Log.e(TAG, "Error : " + response.code() + " " + response.message());
+                    view.onSetProgressBarVisibility(View.GONE);
+                    view.showError("Error : " + response.code() + " " + response.message());
+                }
             }
 
             @Override
