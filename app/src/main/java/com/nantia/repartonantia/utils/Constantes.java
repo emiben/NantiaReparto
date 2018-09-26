@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 public class Constantes {
 
-    public static final int IVA = 23;
+    public static final int IVA = 22;
     public static final int HTTP_OK = 200;
     public static final int HTTP_CREATED = 201;
     public static final String KEY_CLIENTE = "cliente";
