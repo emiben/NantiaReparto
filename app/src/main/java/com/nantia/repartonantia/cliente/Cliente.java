@@ -46,6 +46,10 @@ public class Cliente implements Serializable {
     @SerializedName("saldo")
     private float saldo;
 
+    @ColumnInfo(name = "dif_saldo")
+    @SerializedName("difSaldo")
+    private float difSaldo;
+
     @ColumnInfo(name = "fecha_nacimiento")
     @SerializedName("fechaNacimiento")
     private String fechaNacimiento;
@@ -95,7 +99,7 @@ public class Cliente implements Serializable {
 
     //@Ignore
     public Cliente(long id, String nroDocumento, String tipoDocumento,
-                   String nombre1, String nombre2, float saldo, String fechaNacimiento,
+                   String nombre1, String nombre2, float saldo, float difSaldo, String fechaNacimiento,
                    String fechaAlta, String mail, String celular, long idLista, String observaciones,
                    boolean activo, Direccion direccion, List<EnvaseEnPrestamo> envasesEnPrestamo,
                    List<Dia> dias) {
@@ -105,6 +109,7 @@ public class Cliente implements Serializable {
         this.nombre1 = nombre1;
         this.nombre2 = nombre2;
         this.saldo = saldo;
+        this.difSaldo = difSaldo;
         this.fechaNacimiento = fechaNacimiento;
         this.fechaAlta = fechaAlta;
         this.mail = mail;
@@ -179,6 +184,14 @@ public class Cliente implements Serializable {
 
     public void setSaldo(float saldo) {
         this.saldo = saldo;
+    }
+
+    public float getDifSaldo() {
+        return difSaldo;
+    }
+
+    public void setDifSaldo(float difSaldo) {
+        this.difSaldo = difSaldo;
     }
 
     public List<EnvaseEnPrestamo> getEnvasesEnPrestamo() {

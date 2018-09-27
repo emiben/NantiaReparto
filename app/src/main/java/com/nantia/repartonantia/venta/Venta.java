@@ -63,9 +63,15 @@ public class Venta implements Serializable {
     @ColumnInfo(name = "actualizado_venta")
     private transient boolean actualizado;
 
-    public Venta(){};
+    @Embedded
+    @SerializedName("pago")
+    private Pago pago;
 
-    public Venta(long localPK, long id, String fecha, Usuario usuario, Cliente cliente, List<ProductoVenta> productosVenta, float descuento, float totalVenta, float ivaTotal, float pagoTotal, long reaprtoID, boolean actualizado) {
+    public Venta(){}
+
+    public Venta(long localPK, long id, String fecha, Usuario usuario, Cliente cliente,
+                 List<ProductoVenta> productosVenta, float descuento, float totalVenta,
+                 float ivaTotal, float pagoTotal, long reaprtoID, boolean actualizado, Pago pago) {
         this.localPK = localPK;
         this.id = id;
         this.fecha = fecha;
@@ -78,6 +84,7 @@ public class Venta implements Serializable {
         this.pagoTotal = pagoTotal;
         this.reaprtoID = reaprtoID;
         this.actualizado = actualizado;
+        this.pago = pago;
     }
 
     public long getLocalPK() {
@@ -178,5 +185,13 @@ public class Venta implements Serializable {
 
     public float calcularSaldo(){
         return (totalVenta - descuento - pagoTotal);
+    }
+
+    public Pago getPago() {
+        return pago;
+    }
+
+    public void setPago(Pago pago) {
+        this.pago = pago;
     }
 }
