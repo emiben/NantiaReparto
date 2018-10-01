@@ -31,17 +31,17 @@ public class ListaDePrecio implements Serializable {
     private String nombreLista;
 
     @ColumnInfo(name = "fecha_alta")
-    @SerializedName("fechAlta")
-    private String fechAlta;
+    @SerializedName("fechaAlta")
+    private String fechaAlta;
 
     @SerializedName("setProductoLista")
     @TypeConverters(ProductoListaTypeConverter.class)
     private List<ProductoLista> productosLista;
 
-    public ListaDePrecio(long id, String nombreLista, String fechAlta, List<ProductoLista> productosLista) {
+    public ListaDePrecio(long id, String nombreLista, String fechaAlta, List<ProductoLista> productosLista) {
         this.id = id;
         this.nombreLista = nombreLista;
-        this.fechAlta = fechAlta;
+        this.fechaAlta = fechaAlta;
         this.productosLista = productosLista;
     }
 
@@ -69,12 +69,12 @@ public class ListaDePrecio implements Serializable {
         this.nombreLista = nombreLista;
     }
 
-    public String getFechAlta() {
-        return fechAlta;
+    public String getFechaAlta() {
+        return fechaAlta;
     }
 
-    public void setFechAlta(String fechAlta) {
-        this.fechAlta = fechAlta;
+    public void setFechaAlta(String fechAlta) {
+        this.fechaAlta = fechAlta;
     }
 
     public List<ProductoLista> getProductosLista() {

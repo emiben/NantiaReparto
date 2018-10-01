@@ -50,6 +50,7 @@ public class ListaRepartoFragment extends Fragment implements ListaRepartoView, 
                 AppDatabase.class, KEY_DB_NOMBRE).build();
         presenter = new ListaRepartoPresenter(this, db);
         initializeViewObjects(view);
+
         presenter.getRepartosInfo();
 
         return view;

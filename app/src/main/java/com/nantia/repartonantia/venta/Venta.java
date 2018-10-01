@@ -36,7 +36,7 @@ public class Venta implements Serializable {
     @SerializedName("cliente")
     private Cliente cliente;
 
-    @SerializedName("productosVenta")
+    @SerializedName("setProductoVenta")
     @TypeConverters(ProductoVentaTypeConverter.class)
     private List<ProductoVenta> productosVenta;
 
@@ -45,19 +45,19 @@ public class Venta implements Serializable {
     private float descuento;
 
     @ColumnInfo(name = "total_venta")
-    @SerializedName("totalVenta")
+    @SerializedName("totalventa")
     private float totalVenta;
 
     @ColumnInfo(name = "iva_total")
-    @SerializedName("ivaTotal")
+    @SerializedName("ivatotal")
     private float ivaTotal;
 
     @ColumnInfo(name = "pago_total")
-    @SerializedName("pagoTotal")
+    @SerializedName("pagototal")
     private float pagoTotal;
 
     @ColumnInfo(name = "reparto_id")
-    @SerializedName("reparto")
+    @SerializedName("repartoid")
     private long reaprtoID;
 
     @ColumnInfo(name = "actualizado_venta")

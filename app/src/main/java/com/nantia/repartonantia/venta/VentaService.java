@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 
 public interface VentaService {
 
-    @POST("ventas")
+    @POST("dataventas")
     @Headers({
             "Content-Type: application/json;charset=utf-8",
             "Accept: application/json;charset=utf-8"})

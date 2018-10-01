@@ -63,6 +63,8 @@
 
     <!-- Strings related to Reparto -->
     <string name="reparto_no_cargado">No hay ningun reparto cargado!</string>
+    <string name="reparto_comenzar">Comenzar Reparto</string>
+    <string name="reparto_finalizar">Finalizar Reparto</string>
 
     <!-- Strings related to Ventas -->
     <string name="venta_articulos">Articulos</string>

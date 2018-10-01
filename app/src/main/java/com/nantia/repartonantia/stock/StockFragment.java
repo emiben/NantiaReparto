@@ -83,6 +83,10 @@ public class StockFragment extends Fragment implements StockView{
         Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
     }
 
+    @Override public void finishActivity(){
+        getActivity().finish();
+    }
+
     private void initializeViewObjects(View view){
         progressBar = view.findViewById(R.id.stock_progress);
         stockRV = view.findViewById(R.id.stock_lista_rv);

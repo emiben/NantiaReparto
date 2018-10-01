@@ -16,12 +16,12 @@ public class Pago implements Serializable {
   private long id;
 
   @ColumnInfo(name = "fecha_pago")
-  @SerializedName("fechaPago")
-  private long fechaPago;
+  @SerializedName("fechapago")
+  private String fechaPago;
 
   @ColumnInfo(name = "monto")
   @SerializedName("monto")
-  private long monto;
+  private float monto;
 
   @ColumnInfo(name = "id_venta")
   @SerializedName("idVenta")
@@ -43,19 +43,19 @@ public class Pago implements Serializable {
     this.id = id;
   }
 
-  public long getFechaPago() {
+  public String getFechaPago() {
     return fechaPago;
   }
 
-  public void setFechaPago(long fechaPago) {
+  public void setFechaPago(String fechaPago) {
     this.fechaPago = fechaPago;
   }
 
-  public long getMonto() {
+  public float getMonto() {
     return monto;
   }
 
-  public void setMonto(long monto) {
+  public void setMonto(float monto) {
     this.monto = monto;
   }
 

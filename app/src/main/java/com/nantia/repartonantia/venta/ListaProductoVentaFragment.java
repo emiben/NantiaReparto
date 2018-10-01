@@ -164,7 +164,7 @@ public class ListaProductoVentaFragment extends Fragment
     }
 
     private void showDialog(final ProductoLista productoLista){
-        if(DataHolder.getReparto().getVehiculo().getStock() != null){
+        if(DataHolder.getReparto() != null && DataHolder.getReparto().getVehiculo().getStock() != null){
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(productoLista.getProducto().getNombre() + " " + productoLista.getProducto().getPresentacion());
             builder.setMessage(getString(R.string.lista_prod_venta_cantidad));

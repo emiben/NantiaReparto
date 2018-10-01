@@ -16,6 +16,7 @@ import com.nantia.repartonantia.usuario.Usuario;
 import com.nantia.repartonantia.utils.FechaHelper;
 import com.nantia.repartonantia.utils.RetrofitClientInstance;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -61,8 +62,8 @@ public class VentaPresenter {
     }
 
     public void finalizarVenta(){
-        //TODO: generar pago
         Usuario vendedor;
+        Pago pago = new Pago();
         Cliente clienteOrig = venta.getCliente();
         Cliente cliente = venta.getCliente();
         if(view.isVendedor1Checked()){
@@ -80,6 +81,7 @@ public class VentaPresenter {
         }
 
         cliente.setSaldo(cliente.getSaldo() + venta.calcularSaldo());
+        cliente.setDifSaldo(venta.calcularSaldo());
         cliente.setActualizado(false);
         DataHolder.getClientes().remove(clienteOrig);
         DataHolder.getClientes().add(cliente);
@@ -87,6 +89,11 @@ public class VentaPresenter {
         venta.setFecha(FechaHelper.getStringDate());
         venta.setReaprtoID(DataHolder.getReparto().getId());
         venta.setActualizado(false);
+
+        pago.setFechaPago(FechaHelper.getStringDate());
+        pago.setMonto(venta.getPagoTotal());
+
+        venta.setPago(pago);
 
         updateStock(venta.getProductosVenta());
         sendVenta(venta);
@@ -154,6 +161,10 @@ public class VentaPresenter {
     }
 
     private void saveVenta(final Venta venta){
+        if(DataHolder.getVentas() == null){
+            DataHolder.setVentas(new ArrayList<Venta>());
+        }
+        DataHolder.getVentas().remove(venta);
         DataHolder.getVentas().add(venta);
         AsyncTask.execute(new Runnable() {
             @Override
