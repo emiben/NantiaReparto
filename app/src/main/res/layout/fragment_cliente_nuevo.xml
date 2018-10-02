@@ -309,10 +309,11 @@
                                 android:layout_weight="1"
                                 android:orientation="horizontal">
 
-                                <RadioGroup
+                                <LinearLayout
                                     android:id="@+id/dias_rg"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:orientation="vertical"
                                     android:layout_weight="1" >
 
                                     <RadioButton
@@ -342,12 +343,13 @@
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
                                         android:text="Miercoles" />
-                                </RadioGroup>
+                                </LinearLayout>
 
-                                <RadioGroup
+                                <LinearLayout
                                     android:id="@+id/dias_2_rg"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:orientation="vertical"
                                     android:layout_weight="1" >
 
                                     <RadioButton
@@ -370,7 +372,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
                                         android:text="Sabado" />
-                                </RadioGroup>
+                                </LinearLayout>
 
                             </LinearLayout>
 

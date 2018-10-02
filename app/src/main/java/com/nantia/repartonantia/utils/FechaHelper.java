@@ -17,9 +17,9 @@ public class FechaHelper {
 
   public static String getFechParaMostrar(String fecha){
     String fechaFormateada = "";
-    String[] parts = fecha.split("T");
+    String[] parts = fecha.split(" ");
     String[] fechaParts = parts[0].split("-");
-    fechaFormateada = fechaParts[2]+"/"+fechaParts[1]+"/"+fechaParts[0]+" "+parts[1].substring(0, 5);
+    fechaFormateada = fechaParts[2]+"/"+fechaParts[1]+"/"+fechaParts[0];
 
     return fechaFormateada;
   }
