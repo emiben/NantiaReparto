@@ -45,6 +45,10 @@ public class ListaProductoVentaPresenter {
         view.onSetProgressBarVisibility(View.GONE);
     }
 
+    public List<ProductoLista> getProdsLista(){
+        return listaDePrecio.getProductosLista();
+    }
+
     public Venta getVenta() {
         venta.setProductosVenta(prodsVenta);
         venta.setCliente(cliente);

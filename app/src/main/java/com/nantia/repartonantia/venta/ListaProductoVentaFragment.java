@@ -52,7 +52,7 @@ public class ListaProductoVentaFragment extends Fragment
     private ConstraintLayout articulosCarroLO;
     private ListaProdVentaAdapter listaProdVentaAdapter;
     private ListaProductoVentaPresenter presenter;
-
+    private boolean refrescar = true;
 
 
     public ListaProductoVentaFragment() {
@@ -67,7 +67,8 @@ public class ListaProductoVentaFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_lista_producto_venta, container, false);
         initializeViewObjects(view);
 
-        if(getArguments().getSerializable(KEY_CLIENTE) != null){
+        if(getArguments().getSerializable(KEY_CLIENTE) != null && presenter == null){
+            refrescar = false;
             Cliente cliente = (Cliente) getArguments().getSerializable(KEY_CLIENTE);
             presenter = new ListaProductoVentaPresenter(this, cliente);
             presenter.getData();
@@ -79,7 +80,13 @@ public class ListaProductoVentaFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
-        updateCantidadCarro(presenter.getCantArticulos());
+        if(refrescar){
+            updateCantidadCarro(presenter.getCantArticulos());
+            loadData(presenter.getProdsLista());
+            setListeners();
+        }else {
+            refrescar = true;
+        }
     }
 
     @Override
