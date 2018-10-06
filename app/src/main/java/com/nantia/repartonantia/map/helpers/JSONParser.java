@@ -1,4 +1,4 @@
-package com.nantia.repartonantia.reparto.Map.Helpers;
+package com.nantia.repartonantia.map.helpers;
 
 import android.util.Log;
 

@@ -1,14 +1,11 @@
-package com.nantia.repartonantia.reparto.Map.Helpers;
+package com.nantia.repartonantia.map.helpers;
 
 import android.graphics.Color;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -70,5 +67,9 @@ public class MapRouteHelper {
             options.add(point);
         }
         return map.addPolyline(options);
+    }
+
+    public static interface RutaHelperListener {
+        void rutaMasCortaADestinoEncontrada(Ruta ruta);
     }
 }
