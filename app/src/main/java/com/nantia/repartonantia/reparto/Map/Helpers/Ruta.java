@@ -1,5 +1,7 @@
 package com.nantia.repartonantia.reparto.Map.Helpers;
 
+import android.support.annotation.NonNull;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.PolyUtil;
 
@@ -10,11 +12,13 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.List;
 
-public class Ruta implements Serializable {
+public class Ruta implements Serializable, Comparable<Ruta> {
 
     private int distance;
     private int duracion;
     private List<LatLng> camino;
+    private LatLng origen;
+    private LatLng destino;
 
     public Ruta(JSONObject json) {
         try {
@@ -34,6 +38,14 @@ public class Ruta implements Serializable {
         }
     }
 
+    @Override
+    public int compareTo(@NonNull Ruta ruta) {
+        if(this.distance < ruta.distance){
+            return -1;
+        }
+        return 1;
+    }
+
     public int getDistance() {
         return distance;
     }
@@ -44,6 +56,22 @@ public class Ruta implements Serializable {
 
     public List<LatLng> getCamino() {
         return camino;
+    }
+
+    public LatLng getOrigen() {
+        return origen;
+    }
+
+    public void setOrigen(LatLng origen) {
+        this.origen = origen;
+    }
+
+    public LatLng getDestino() {
+        return destino;
+    }
+
+    public void setDestino(LatLng destino) {
+        this.destino = destino;
     }
 }
 
