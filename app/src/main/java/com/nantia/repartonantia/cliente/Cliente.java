@@ -93,6 +93,9 @@ public class Cliente implements Serializable {
     @ColumnInfo(name = "actualizado_cliente")
     private transient boolean actualizado;
 
+    @ColumnInfo(name = "visitado")
+    private transient boolean visitado;
+
     public Cliente(){
 
     }
@@ -272,5 +275,13 @@ public class Cliente implements Serializable {
 
     public void setActualizado(boolean actualizado) {
         this.actualizado = actualizado;
+    }
+
+    public boolean isVisitado() {
+        return visitado;
+    }
+
+    public void setVisitado(boolean visitado) {
+        this.visitado = visitado;
     }
 }

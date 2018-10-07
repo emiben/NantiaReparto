@@ -5,6 +5,7 @@ import com.nantia.repartonantia.listadeprecios.ListaDePrecio;
 import com.nantia.repartonantia.producto.Envase;
 import com.nantia.repartonantia.producto.Producto;
 import com.nantia.repartonantia.reparto.Reparto;
+import com.nantia.repartonantia.reparto.Ruta;
 import com.nantia.repartonantia.stock.Stock;
 import com.nantia.repartonantia.usuario.Usuario;
 
@@ -25,6 +26,7 @@ public class DataHolder {
 //    private static Stock stock;
     private static Reparto reparto;
     private static List<Venta> ventas;
+    private static Ruta ruta;
 
     public static Usuario getUsuario() {
         return usuario;
@@ -88,6 +90,14 @@ public class DataHolder {
 
     public static void setVentas(List<Venta> ventas) {
         DataHolder.ventas = ventas;
+    }
+
+    public static Ruta getRuta() {
+        return ruta;
+    }
+
+    public static void setRuta(Ruta ruta) {
+        DataHolder.ruta = ruta;
     }
 
     public static ListaDePrecio getListaDePrecioById(long id){

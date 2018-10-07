@@ -1,6 +1,7 @@
 package com.nantia.repartonantia.reparto;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Layout;
@@ -12,8 +13,10 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.util.Base64Utils;
 import com.nantia.repartonantia.R;
+import com.nantia.repartonantia.cliente.ClienteActivity;
 import com.nantia.repartonantia.data.DataHolder;
 
+import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE_LISTA;
 import static com.nantia.repartonantia.utils.Constantes.KEY_REPARTO;
 
 /**
@@ -26,6 +29,7 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
     private TextView rutaTv;
     private TextView estadoTv;
     private View rutaLo;
+    private View clientesLo;
     private Reparto reparto;
     private Button comenzarRepartoBtn;
     private Button finalizarRepartoBtn;
@@ -57,12 +61,15 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
         vendedor2Tv = view.findViewById(R.id.reparto_vend_2_tv);
         rutaTv = view.findViewById(R.id.reparto_ruta_tv);
         rutaLo = view.findViewById(R.id.reparto_ruta_lo);
+        clientesLo = view.findViewById(R.id.reparto_clientes_lo);
         estadoTv = view.findViewById(R.id.reparto_estado_tv);
         comenzarRepartoBtn = view.findViewById(R.id.comenzar_reparto_btn);
         finalizarRepartoBtn = view.findViewById(R.id.finalizar_reparto_btn);
     }
 
     private void setListeners(){
+        rutaLo.setOnClickListener(this);
+        clientesLo.setOnClickListener(this);
         comenzarRepartoBtn.setOnClickListener(this);
         finalizarRepartoBtn.setOnClickListener(this);
     }
@@ -93,9 +100,26 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
             case R.id.venta_finalizar_btn:
                 finalizarReparto();
                 break;
+            case R.id.reparto_ruta_lo:
+                navigateToRepartoMap();
+                break;
+            case R.id.reparto_clientes_lo:
+                navigateToRepartoClientes();
+                break;
             default:
                 break;
         }
+    }
+
+    private void navigateToRepartoClientes() {
+        Intent i = new Intent(getActivity(), ClienteActivity.class);
+        Bundle b = new Bundle();
+        b.putSerializable(KEY_CLIENTE_LISTA, reparto.getRuta().getClientes());
+        i.putExtra(KEY_CLIENTE_LISTA, b);
+        startActivity(i);
+    }
+
+    private void navigateToRepartoMap() {
     }
 
     private void comenzarReparto(){

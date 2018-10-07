@@ -55,7 +55,7 @@ public class ClienteFragment extends Fragment implements ClienteView {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cliente, container, false);
         if(getArguments() != null){
-            cliente = (Cliente) getArguments().getSerializable("cliente");
+            cliente = (Cliente) getArguments().getSerializable(KEY_CLIENTE);
         }
         clientePresenter = new ClientePresenter(this, getActivity());
         initializeViewObjects(view);

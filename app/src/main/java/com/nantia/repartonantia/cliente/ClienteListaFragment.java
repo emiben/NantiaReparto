@@ -19,8 +19,10 @@ import com.nantia.repartonantia.adapters.ClienteListaAdapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE;
+import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE_LISTA;
 
 /**
  *
@@ -52,7 +54,12 @@ public class ClienteListaFragment extends Fragment implements ClienteListaAdapte
         View view = inflater.inflate(R.layout.fragment_cliente_lista, container, false);
         clienteListaPresenter = new ClienteListaPresenter(this);
         initializeViewObjects(view);
-        clienteListaPresenter.getClientes();
+        if(getArguments() != null && getArguments().getSerializable(KEY_CLIENTE_LISTA) != null){
+            setClienteInfo((ArrayList<Cliente>)getArguments().getSerializable(KEY_CLIENTE_LISTA));
+            addListeners();
+        }else{
+            clienteListaPresenter.getClientes();
+        }
 
         return view;
     }
