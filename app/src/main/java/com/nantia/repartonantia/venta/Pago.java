@@ -15,6 +15,10 @@ public class Pago implements Serializable {
   @SerializedName("id")
   private long id;
 
+  @ColumnInfo(name = "pago_cliente_id")
+  @SerializedName("clienteId")
+  private long clienteId;
+
   @ColumnInfo(name = "fecha_pago")
   @SerializedName("fechapago")
   private String fechaPago;
@@ -65,5 +69,13 @@ public class Pago implements Serializable {
 
   public void setIdVenta(long idVenta) {
     this.idVenta = idVenta;
+  }
+
+  public long getClienteId() {
+    return clienteId;
+  }
+
+  public void setClienteId(long clienteId) {
+    this.clienteId = clienteId;
   }
 }

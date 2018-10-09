@@ -65,6 +65,7 @@ public class ClienteListaMapFragment extends Fragment implements OnMapReadyCallb
         mapView = view.findViewById(R.id.cliente_lista_mapView);
         if(mapView != null){
             mapView.onCreate(null);
+
             mapView.onResume();
             mapView.getMapAsync(this);
         }

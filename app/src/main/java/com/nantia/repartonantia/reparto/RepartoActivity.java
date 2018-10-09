@@ -15,8 +15,6 @@ public class RepartoActivity extends AppCompatActivity {
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         ListaRepartoFragment fragment = new ListaRepartoFragment();
-        fragmentTransaction.add(R.id.reparto_layout, fragment)
-                .addToBackStack(null)
-                .commit();
+        fragmentTransaction.add(R.id.reparto_layout, fragment).commit();
     }
 }

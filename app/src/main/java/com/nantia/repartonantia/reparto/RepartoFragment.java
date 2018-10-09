@@ -15,6 +15,7 @@ import com.google.android.gms.common.util.Base64Utils;
 import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.cliente.ClienteActivity;
 import com.nantia.repartonantia.data.DataHolder;
+import com.nantia.repartonantia.map.MapActivity;
 
 import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE_LISTA;
 import static com.nantia.repartonantia.utils.Constantes.KEY_REPARTO;
@@ -120,6 +121,11 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
     }
 
     private void navigateToRepartoMap() {
+        Intent i = new Intent(getActivity(), MapActivity.class);
+        Bundle b = new Bundle();
+        b.putSerializable(KEY_CLIENTE_LISTA, reparto.getRuta().getClientes());
+        i.putExtra(KEY_CLIENTE_LISTA, b);
+        startActivity(i);
     }
 
     private void comenzarReparto(){

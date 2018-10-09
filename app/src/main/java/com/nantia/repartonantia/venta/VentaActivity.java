@@ -22,8 +22,6 @@ public class VentaActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         ListaProductoVentaFragment fragment = new ListaProductoVentaFragment();
         fragment.setArguments(b);
-        fragmentTransaction.add(R.id.venta_layout, fragment)
-                .addToBackStack(null)
-                .commit();
+        fragmentTransaction.add(R.id.venta_layout, fragment).commit();
     }
 }

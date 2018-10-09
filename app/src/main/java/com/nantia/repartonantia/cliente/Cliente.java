@@ -284,4 +284,8 @@ public class Cliente implements Serializable {
     public void setVisitado(boolean visitado) {
         this.visitado = visitado;
     }
+
+    public String getNombreCompleto(){
+        return nombre1 + " " + nombre2;
+    }
 }

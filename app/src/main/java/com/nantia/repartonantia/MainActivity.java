@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Toast;
 import com.nantia.repartonantia.cliente.ClienteActivity;
 import com.nantia.repartonantia.listadeprecios.ListaDePreciosActivity;
+import com.nantia.repartonantia.map.MapActivity;
 import com.nantia.repartonantia.producto.ProductoActivity;
 import com.nantia.repartonantia.reparto.Reparto;
 import com.nantia.repartonantia.reparto.RepartoActivity;
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(StockActivity.class);
                 break;
             case R.id.menu_mapa_cv:
-                Toast.makeText(MainActivity.this, "GridView Item: Mapa", Toast.LENGTH_LONG).show();
+                startActivity(MapActivity.class);
                 break;
             default:
                 break;
