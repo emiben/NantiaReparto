@@ -30,4 +30,7 @@ public interface StockDao {
 
     @Delete
     void delete(Stock stock);
+
+    @Query("DELETE FROM stock")
+    void nukeTable();
 }

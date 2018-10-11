@@ -10,15 +10,16 @@ import android.widget.Filterable;
 import android.widget.TextView;
 import com.nantia.repartonantia.R;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Emi on 23/7/2018.
  */
 
 public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> implements Filterable {
-    private ArrayList<StockInfoPOJO> mData;
+    private List<StockInfoPOJO> mData;
     private LayoutInflater mInflater;
-    private ArrayList<StockInfoPOJO> mDataOrigianl;
+    private List<StockInfoPOJO> mDataOrigianl;
     ValueFilter valueFilter;
 
 

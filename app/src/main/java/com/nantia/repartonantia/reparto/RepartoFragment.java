@@ -1,7 +1,9 @@
 package com.nantia.repartonantia.reparto;
 
 
+import android.arch.persistence.room.Room;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Layout;
@@ -14,10 +16,12 @@ import android.widget.TextView;
 import com.google.android.gms.common.util.Base64Utils;
 import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.cliente.ClienteActivity;
+import com.nantia.repartonantia.data.AppDatabase;
 import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.map.MapActivity;
 
 import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE_LISTA;
+import static com.nantia.repartonantia.utils.Constantes.KEY_DB_NOMBRE;
 import static com.nantia.repartonantia.utils.Constantes.KEY_REPARTO;
 
 /**
@@ -129,8 +133,8 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
     }
 
     private void comenzarReparto(){
-        DataHolder.getReparto().setEstado(RepartoEstado.COMENZADO.name());
         reparto.setEstado(RepartoEstado.COMENZADO.name());
+        guardarReparto(reparto);
         comenzarRepartoBtn.setVisibility(View.GONE);
         finalizarRepartoBtn.setVisibility(View.VISIBLE);
         estadoTv.setText(reparto.getEstado());
@@ -140,5 +144,18 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
         DataHolder.getReparto().setEstado(RepartoEstado.FINALIZADO.name());
         reparto.setEstado(RepartoEstado.FINALIZADO.name());
         estadoTv.setText(reparto.getEstado());
+    }
+
+    private void guardarReparto(final Reparto reparto){
+        DataHolder.setReparto(reparto);
+        final AppDatabase db = Room.databaseBuilder(getActivity(),
+                AppDatabase.class, KEY_DB_NOMBRE).build();
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                db.repartoDao().deleteById(reparto.getId());
+                db.repartoDao().insertAll(reparto);
+            }
+        });
     }
 }

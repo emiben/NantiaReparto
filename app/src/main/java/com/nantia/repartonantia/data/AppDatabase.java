@@ -13,6 +13,8 @@ import com.nantia.repartonantia.producto.Producto;
 import com.nantia.repartonantia.producto.ProductoDao;
 import com.nantia.repartonantia.reparto.Reparto;
 import com.nantia.repartonantia.reparto.RepartoDao;
+import com.nantia.repartonantia.reparto.Ruta;
+import com.nantia.repartonantia.reparto.RutaDao;
 import com.nantia.repartonantia.reparto.Vehiculo;
 import com.nantia.repartonantia.reparto.VehiculoDao;
 import com.nantia.repartonantia.stock.Stock;
@@ -25,7 +27,7 @@ import com.nantia.repartonantia.venta.VentaDao;
 @Database(entities = {Usuario.class, Cliente.class,
           Envase.class, Producto.class, Stock.class,
           ListaDePrecio.class, Reparto.class, Venta.class,
-          Vehiculo.class}, version = 1)
+          Vehiculo.class, Ruta.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract UsuarioDao usuarioDao();
@@ -46,5 +48,6 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract VentaDao ventaDao();
 
+    public abstract RutaDao rutaDao();
 
 }

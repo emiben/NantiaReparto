@@ -15,6 +15,7 @@ import com.nantia.repartonantia.producto.Envase;
 import com.nantia.repartonantia.producto.EnvaseService;
 import com.nantia.repartonantia.producto.Producto;
 import com.nantia.repartonantia.producto.ProductoService;
+import com.nantia.repartonantia.reparto.Reparto;
 import com.nantia.repartonantia.usuario.Usuario;
 import com.nantia.repartonantia.utils.RetrofitClientInstance;
 import java.util.ArrayList;
@@ -87,10 +88,42 @@ public class LoginPresenterImpl implements ILoginPresenter{
 
     @Override
     public void getData() {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                List<Reparto> repartos = db.repartoDao().getAll();
+                if(repartos.size() > 0){
+                    getDataFromDb(repartos.get(0));
+                }else {
+                    getDataFromServer();
+                }
+            }
+        });
+    }
+
+    private void getDataFromServer(){
         getEnvases();
         getProductos();
         getClientes();
         getListasDePrecios();
+    }
+
+    private void getDataFromDb(final Reparto reparto){
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                reparto.setVehiculo(db.vehiculoDao().getAll().get(0));
+                reparto.setStock(db.stockDao().getAll().get(0));
+                reparto.setVendedor1(db.usuarioDao().getAll().get(0));
+                reparto.setVendedor2(db.usuarioDao().getAll().get(1));
+                reparto.setRuta(db.rutaDao().getAll().get(0));
+                DataHolder.setReparto(reparto);
+                DataHolder.setEnvases(db.envaseDao().getAll());
+                DataHolder.setProductos(db.productoDao().getAll());
+                DataHolder.setClientes(db.clienteDao().getAll());
+                DataHolder.setListasDePrecios(db.listaDePrecioDao().getAll());
+            }
+        });
     }
 
     private void guardarUsuraio(final Usuario usuario){
@@ -158,12 +191,11 @@ public class LoginPresenterImpl implements ILoginPresenter{
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
+                db.clienteDao().nukeTable();
                 for (int i = 0; i < clientes.size(); i++){
                     clientes.get(i).setActualizado(true);
                     db.clienteDao().insertAll(clientes.get(i));
                 }
-                //TODO: Limpiar la base de datos cuando inicio y este get
-                db.clienteDao().getAll();
             }
         });
     }
@@ -172,10 +204,10 @@ public class LoginPresenterImpl implements ILoginPresenter{
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                for (int i = 0; i < envases.size(); i++){
-                    db.envaseDao().insertAll(envases.get(i));
+                db.envaseDao().nukeTable();
+                for (Envase envase : envases){
+                    db.envaseDao().insertAll(envase);
                 }
-                db.envaseDao().getAll();
             }
         });
     }
@@ -184,10 +216,10 @@ public class LoginPresenterImpl implements ILoginPresenter{
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                for (int i = 0; i < productos.size(); i++){
-                    db.productoDao().insertAll(productos.get(i));
+                db.productoDao().nukeTable();
+                for (Producto producto : productos){
+                    db.productoDao().insertAll(producto);
                 }
-                db.productoDao().getAll();
             }
         });
     }
@@ -200,6 +232,7 @@ public class LoginPresenterImpl implements ILoginPresenter{
             @Override
             public void onResponse(Call<ArrayList<ListaDePrecio>> call, Response<ArrayList<ListaDePrecio>> response) {
                 DataHolder.setListasDePrecios(response.body());
+                guardarListasDePrecio(response.body());
             }
 
             @Override
@@ -208,5 +241,17 @@ public class LoginPresenterImpl implements ILoginPresenter{
             }
         });
 
+    }
+
+    private void guardarListasDePrecio(final List<ListaDePrecio> listasDePrecios){
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                db.listaDePrecioDao().nukeTable();
+                for (ListaDePrecio listaDePrecio : listasDePrecios){
+                    db.listaDePrecioDao().insertAll(listaDePrecio);
+                }
+            }
+        });
     }
 }

@@ -23,4 +23,10 @@ public interface RepartoDao {
     @Delete
     void delete(Reparto reparto);
 
+    @Query("DELETE FROM reparto WHERE reparto_id = :repartoId")
+    void deleteById(long repartoId);
+
+    @Query("DELETE FROM reparto")
+    void nukeTable();
+
 }

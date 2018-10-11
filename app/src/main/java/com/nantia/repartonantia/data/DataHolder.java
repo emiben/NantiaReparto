@@ -6,11 +6,9 @@ import com.nantia.repartonantia.producto.Envase;
 import com.nantia.repartonantia.producto.Producto;
 import com.nantia.repartonantia.reparto.Reparto;
 import com.nantia.repartonantia.reparto.Ruta;
-import com.nantia.repartonantia.stock.Stock;
 import com.nantia.repartonantia.usuario.Usuario;
-
 import com.nantia.repartonantia.venta.Venta;
-import java.util.ArrayList;
+
 import java.util.List;
 
 /**
@@ -19,10 +17,10 @@ import java.util.List;
 
 public class DataHolder {
     private static Usuario usuario;
-    private static ArrayList<Envase> envases;
-    private static ArrayList<Producto> productos;
-    private static ArrayList<Cliente> clientes;
-    private static ArrayList<ListaDePrecio> listasDePrecios;
+    private static List<Envase> envases;
+    private static List<Producto> productos;
+    private static List<Cliente> clientes;
+    private static List<ListaDePrecio> listasDePrecios;
 //    private static Stock stock;
     private static Reparto reparto;
     private static List<Venta> ventas;
@@ -36,35 +34,35 @@ public class DataHolder {
         DataHolder.usuario = usuario;
     }
 
-    public static ArrayList<Envase> getEnvases() {
+    public static List<Envase> getEnvases() {
         return envases;
     }
 
-    public static void setEnvases(ArrayList<Envase> envases) {
+    public static void setEnvases(List<Envase> envases) {
         DataHolder.envases = envases;
     }
 
-    public static ArrayList<Producto> getProductos() {
+    public static List<Producto> getProductos() {
         return productos;
     }
 
-    public static void setProductos(ArrayList<Producto> productos) {
+    public static void setProductos(List<Producto> productos) {
         DataHolder.productos = productos;
     }
 
-    public static ArrayList<Cliente> getClientes() {
+    public static List<Cliente> getClientes() {
         return clientes;
     }
 
-    public static void setClientes(ArrayList<Cliente> clientes) {
+    public static void setClientes(List<Cliente> clientes) {
         DataHolder.clientes = clientes;
     }
 
-    public static ArrayList<ListaDePrecio> getListasDePrecios() {
+    public static List<ListaDePrecio> getListasDePrecios() {
         return listasDePrecios;
     }
 
-    public static void setListasDePrecios(ArrayList<ListaDePrecio> listasDePrecios) {
+    public static void setListasDePrecios(List<ListaDePrecio> listasDePrecios) {
         DataHolder.listasDePrecios = listasDePrecios;
     }
 

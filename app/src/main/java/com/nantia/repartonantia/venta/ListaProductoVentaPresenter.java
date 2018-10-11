@@ -32,7 +32,7 @@ public class ListaProductoVentaPresenter {
     public void getData(){
         view.onSetProgressBarVisibility(View.VISIBLE);
         if(DataHolder.getReparto() != null && DataHolder.getReparto().getVehiculo() != null){
-            stock = DataHolder.getReparto().getVehiculo().getStock();
+            stock = DataHolder.getReparto().getStock();
         }
         listaDePrecio = DataHolder.getListaDePrecioById(cliente.getIdLista());
         if(stock != null && listaDePrecio.getProductosLista() != null){

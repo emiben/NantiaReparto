@@ -13,6 +13,7 @@ import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.cliente.Cliente;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Emi on 28/5/2018.
@@ -20,17 +21,17 @@ import java.util.ArrayList;
 
 public class ClienteListaAdapter extends RecyclerView.Adapter<ClienteListaAdapter.ViewHolder> implements Filterable{
 
-    private ArrayList<Cliente> mData;
+    private List<Cliente> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
-    private ArrayList<Cliente> mDataOrigianl;
+    private List<Cliente> mDataOrigianl;
     ValueFilter valueFilter;
 
-    public ClienteListaAdapter(Context context, ArrayList<Cliente> mData) {
+    public ClienteListaAdapter(Context context, List<Cliente> mData) {
         this.mData = mData;
         this.mInflater = LayoutInflater.from(context);
         mDataOrigianl = new ArrayList<>();
-        mDataOrigianl.addAll((ArrayList<Cliente>)mData.clone());
+        mDataOrigianl.addAll(new ArrayList<>(mData));
     }
 
     @Override

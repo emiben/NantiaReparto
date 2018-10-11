@@ -33,7 +33,7 @@ public class ClienteListaFragment extends Fragment implements ClienteListaAdapte
     private RecyclerView clientesRV;
 
     private SearchView buscarSV;
-    private ArrayList<Cliente> clientes;
+    private List<Cliente> clientes;
     private ClienteListaAdapter clienteListaAdapter;
     private ClienteListaPresenter clienteListaPresenter;
     private FloatingActionButton clientesFAB;
@@ -102,7 +102,7 @@ public class ClienteListaFragment extends Fragment implements ClienteListaAdapte
 
 
     @Override
-    public void setClienteInfo(ArrayList<Cliente> clientes) {
+    public void setClienteInfo(List<Cliente> clientes) {
         if (clientes != null){
             this.clientes = clientes;
             clientesRV.setLayoutManager(new LinearLayoutManager(getActivity()));

@@ -90,6 +90,7 @@ public class VentaPresenter {
         venta.setReaprtoID(DataHolder.getReparto().getId());
         venta.setActualizado(false);
 
+        pago.setClienteId(cliente.getId());
         pago.setFechaPago(FechaHelper.getStringDate());
         pago.setMonto(venta.getPagoTotal());
 
@@ -101,7 +102,7 @@ public class VentaPresenter {
 
 
     private void updateStock(List<ProductoVenta> prodsVenta){
-        Stock stock = DataHolder.getReparto().getVehiculo().getStock();
+        Stock stock = DataHolder.getReparto().getStock();
         for(ProductoVenta productoVenta : prodsVenta){
             boolean encontreProd = false;
             Iterator<ProductoStock> prodIterator = stock.getProductosStock().iterator();
@@ -129,7 +130,7 @@ public class VentaPresenter {
             }
         }
         stock.setActualizado(false);
-        DataHolder.getReparto().getVehiculo().setStock(stock);
+        DataHolder.getReparto().setStock(stock);
         sendStock(stock);
     }
 
@@ -205,7 +206,7 @@ public class VentaPresenter {
     }
 
     private void saveStock(final Stock stock){
-        DataHolder.getReparto().getVehiculo().setStock(stock);
+        DataHolder.getReparto().setStock(stock);
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {

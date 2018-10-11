@@ -10,18 +10,18 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.nantia.repartonantia.R;
-import com.nantia.repartonantia.reparto.Reparto;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Emi on 29/7/2018.
  */
 
 public class RepartoListaAdapter extends RecyclerView.Adapter<RepartoListaAdapter.ViewHolder> implements Filterable{
-    private ArrayList<RepartoInfoPOJO> mData;
+    private List<RepartoInfoPOJO> mData;
     private LayoutInflater mInflater;
-    private ArrayList<RepartoInfoPOJO> mDataOrigianl;
+    private List<RepartoInfoPOJO> mDataOrigianl;
     private ItemClickListener mClickListener;
     ValueFilter valueFilter;
 

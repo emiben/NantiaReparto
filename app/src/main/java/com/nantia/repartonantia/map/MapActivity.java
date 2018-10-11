@@ -7,6 +7,8 @@ import android.os.Bundle;
 import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.data.DataHolder;
 
+import java.io.Serializable;
+
 import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE_LISTA;
 
 public class MapActivity extends AppCompatActivity {
@@ -25,7 +27,7 @@ public class MapActivity extends AppCompatActivity {
             clienteListaMapFragment.setArguments(b);
         }else if (DataHolder.getClientes() != null){
             Bundle b = new Bundle();
-            b.putSerializable(KEY_CLIENTE_LISTA, DataHolder.getClientes());
+            b.putSerializable(KEY_CLIENTE_LISTA, (Serializable) DataHolder.getClientes());
             clienteListaMapFragment.setArguments(b);
         }
         fragmentTransaction.add(R.id.map_layout, clienteListaMapFragment).commit();

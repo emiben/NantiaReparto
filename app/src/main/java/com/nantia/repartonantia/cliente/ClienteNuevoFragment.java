@@ -76,10 +76,10 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     private DatePickerDialog.OnDateSetListener date;
     private Calendar calendar = Calendar.getInstance();
     private Spinner listaDePreciosSP;
-    private ArrayList<ListaDePrecio> listasDePrecio;
+    private List<ListaDePrecio> listasDePrecio;
     private List<EnvaseEnPrestamo> envasesEnPrestamo;
     private List<EnvaseEnPrestamo> envasesEnPrestamoOrig;
-    private ArrayList<Envase> envases;
+    private List<Envase> envases;
     private List<Dia> dias;
     private RadioButton domingo;
     private RadioButton lunes;
@@ -263,7 +263,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     }
 
     @Override
-    public void setEnvases(ArrayList<Envase> envases) {
+    public void setEnvases(List<Envase> envases) {
         if(envases != null && envases.get(0) != null && envases.get(0).getId() != 0){
             envases.add(0, new Envase(0, "Nuevo envase a prestamo..."));
         }

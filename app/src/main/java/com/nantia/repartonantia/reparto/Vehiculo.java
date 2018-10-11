@@ -46,21 +46,17 @@ public class Vehiculo implements Serializable{
     @SerializedName("activo")
     private boolean activo;
 
-    @Ignore
-    @SerializedName("stock")
-    private Stock stock;
 
     public Vehiculo(){}
 
     public Vehiculo(long id, String matricula, String marca,
-                    String modelo, String descripcion, boolean activo, Stock stock) {
+                    String modelo, String descripcion, boolean activo) {
         this.id = id;
         this.matricula = matricula;
         this.marca = marca;
         this.modelo = modelo;
         this.descripcion = descripcion;
         this.activo = activo;
-        this.stock = stock;
     }
 
     public long getVehiculoPK() {
@@ -117,13 +113,5 @@ public class Vehiculo implements Serializable{
 
     public void setActivo(boolean activo) {
         this.activo = activo;
-    }
-
-    public Stock getStock() {
-        return stock;
-    }
-
-    public void setStock(Stock stock) {
-        this.stock = stock;
     }
 }

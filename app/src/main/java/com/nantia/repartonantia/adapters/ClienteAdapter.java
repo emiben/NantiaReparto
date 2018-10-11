@@ -11,13 +11,14 @@ import android.widget.TextView;
 import com.nantia.repartonantia.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Emi on 28/5/2018.
  */
 
 public class ClienteAdapter extends RecyclerView.Adapter<ClienteAdapter.ViewHolder> {
-    private ArrayList<ClienteInfoPOJO> mData;
+    private List<ClienteInfoPOJO> mData;
     private LayoutInflater mInflater;
 
     public ClienteAdapter(Context context, ArrayList<ClienteInfoPOJO> mData) {

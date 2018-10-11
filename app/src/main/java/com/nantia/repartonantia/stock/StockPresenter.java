@@ -27,8 +27,8 @@ public class StockPresenter {
 
     public void getStock(){
         view.onSetProgressBarVisibility(View.VISIBLE);
-        if(DataHolder.getReparto() != null && DataHolder.getReparto().getVehiculo().getStock() != null){
-            Stock stock = DataHolder.getReparto().getVehiculo().getStock();
+        if(DataHolder.getReparto() != null && DataHolder.getReparto().getStock() != null){
+            Stock stock = DataHolder.getReparto().getStock();
             view.setStockInfo(prepareStockInfoPOJO(stock));
             view.addListeners();
             view.onSetProgressBarVisibility(View.GONE);
