@@ -29,6 +29,7 @@ import com.nantia.repartonantia.listadeprecios.ProductoLista;
 
 import static com.nantia.repartonantia.utils.Constantes.KEY_DB_NOMBRE;
 import static com.nantia.repartonantia.utils.Constantes.KEY_VENTA;
+import static com.nantia.repartonantia.utils.Constantes.KEY_VENTA_VISTA;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -69,6 +70,10 @@ public class VentaFragment  extends Fragment implements VentaView, View.OnClickL
             ventaPresenter = new VentaPresenter(this, venta, db);
             loadData(venta);
             setListeners(view);
+        }
+
+        if(getArguments().getBoolean(KEY_VENTA_VISTA)){
+            ocultarBotones(view);
         }
 
         return view;
@@ -130,6 +135,15 @@ public class VentaFragment  extends Fragment implements VentaView, View.OnClickL
                 }
             }
         });
+    }
+
+    private void ocultarBotones(View view){
+        descuentoTV.setClickable(false);
+        entregaTV.setClickable(false);
+        vendedor1RB.setClickable(false);
+        vendedor2RB.setClickable(false);
+        view.findViewById(R.id.venta_cancelar_btn).setVisibility(View.GONE);
+        view.findViewById(R.id.venta_finalizar_btn).setVisibility(View.GONE);
     }
 
     @Override

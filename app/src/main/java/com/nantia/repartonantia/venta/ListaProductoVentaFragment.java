@@ -104,6 +104,10 @@ public class ListaProductoVentaFragment extends Fragment
         Toast.makeText(getActivity(), R.string.lista_prod_error_stock_no_asociado, Toast.LENGTH_LONG).show();
     }
 
+    public void showSeleccionarArticulosError() {
+        Toast.makeText(getActivity(), R.string.lista_prod_error_no_articulos, Toast.LENGTH_LONG).show();
+    }
+
     @Override
     public void finishActivity(){
         getActivity().finish();
@@ -124,7 +128,11 @@ public class ListaProductoVentaFragment extends Fragment
         articulosCarroLO.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigateToVenta();
+                if(presenter.getCantArticulos() > 0){
+                    navigateToVenta();
+                }else{
+                    showSeleccionarArticulosError();
+                }
             }
         });
         buscar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

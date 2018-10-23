@@ -15,6 +15,8 @@
     <string name="menu_listas_de_precios">Listas de Precios</string>
     <string name="menu_stock">Stock</string>
     <string name="menu_mapa">Mapa</string>
+    <string name="menu_ventas">Ventas</string>
+    <string name="menu_vendedores">Vendedores</string>
 
     <!-- Strings related to producto -->
     <string name="producto_no_retornable">No Retornable</string>
@@ -86,6 +88,7 @@
     <string name="lista_prod_venta_cantidad">Cantidad:</string>
     <string name="lista_prod_error_stock">Stock insuficiente. Cantidad max.: </string>
     <string name="lista_prod_error_stock_no_asociado">Stock no asociado al camion.</string>
+    <string name="lista_prod_error_no_articulos">Seleccione al menos un artuculo!</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

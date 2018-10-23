@@ -13,6 +13,9 @@ import com.nantia.repartonantia.producto.ProductoActivity;
 import com.nantia.repartonantia.reparto.Reparto;
 import com.nantia.repartonantia.reparto.RepartoActivity;
 import com.nantia.repartonantia.stock.StockActivity;
+import com.nantia.repartonantia.venta.VentaActivity;
+
+import static com.nantia.repartonantia.utils.Constantes.KEY_VENTA_LISTA;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -33,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.menu_listas_de_precios_cv).setOnClickListener(this);
         findViewById(R.id.menu_stock_cv).setOnClickListener(this);
         findViewById(R.id.menu_mapa_cv).setOnClickListener(this);
+        findViewById(R.id.menu_ventas_cv).setOnClickListener(this);
+        findViewById(R.id.menu_vendedores_cv).setOnClickListener(this);
     }
 
     @Override public void onClick(View v) {
@@ -55,6 +60,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.menu_mapa_cv:
                 startActivity(MapActivity.class);
                 break;
+            case R.id.menu_ventas_cv:
+                navigateToVentas();
+                break;
+            case R.id.menu_vendedores_cv:
+//                startActivity(MapActivity.class);
+                break;
             default:
                 break;
         }
@@ -65,5 +76,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(i);
     }
 
+    private void navigateToVentas(){
+        Intent i = new Intent(this, VentaActivity.class);
+        i.putExtra(KEY_VENTA_LISTA, true);
+        startActivity(i);
+    }
 
 }

@@ -1,6 +1,5 @@
 package com.nantia.repartonantia.cliente;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -18,7 +17,6 @@ import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.adapters.ClienteListaAdapter;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE;

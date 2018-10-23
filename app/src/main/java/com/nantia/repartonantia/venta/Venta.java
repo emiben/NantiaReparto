@@ -64,7 +64,7 @@ public class Venta implements Serializable {
     private transient boolean actualizado;
 
     @Embedded
-    @SerializedName("pago")
+    @SerializedName("datapago")
     private Pago pago;
 
     public Venta(){}

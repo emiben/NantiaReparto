@@ -8,6 +8,8 @@ import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.cliente.Cliente;
 
 import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE;
+import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE_LISTA;
+import static com.nantia.repartonantia.utils.Constantes.KEY_VENTA_LISTA;
 
 public class VentaActivity extends AppCompatActivity {
 
@@ -16,12 +18,17 @@ public class VentaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_venta);
 
-        Cliente cliente = (Cliente) this.getIntent().getBundleExtra(KEY_CLIENTE).getSerializable(KEY_CLIENTE);
-        Bundle b = new Bundle();
-        b.putSerializable(KEY_CLIENTE, cliente);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        ListaProductoVentaFragment fragment = new ListaProductoVentaFragment();
-        fragment.setArguments(b);
-        fragmentTransaction.add(R.id.venta_layout, fragment).commit();
+        if(this.getIntent().getBooleanExtra(KEY_VENTA_LISTA, false)){
+            VentaListaFragment fragment = new VentaListaFragment();
+            fragmentTransaction.add(R.id.venta_layout, fragment).commit();
+        }else{
+            Cliente cliente = (Cliente) this.getIntent().getBundleExtra(KEY_CLIENTE).getSerializable(KEY_CLIENTE);
+            Bundle b = new Bundle();
+            b.putSerializable(KEY_CLIENTE, cliente);
+            ListaProductoVentaFragment fragment = new ListaProductoVentaFragment();
+            fragment.setArguments(b);
+            fragmentTransaction.add(R.id.venta_layout, fragment).commit();
+        }
     }
 }

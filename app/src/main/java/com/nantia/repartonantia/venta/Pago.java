@@ -11,12 +11,8 @@ public class Pago implements Serializable {
   @ColumnInfo(name = "pago_pk")
   private transient long localPK;
 
-  @ColumnInfo(name = "pago_id")
-  @SerializedName("id")
-  private long id;
-
   @ColumnInfo(name = "pago_cliente_id")
-  @SerializedName("clienteId")
+  @SerializedName("clienteid")
   private long clienteId;
 
   @ColumnInfo(name = "fecha_pago")
@@ -27,24 +23,12 @@ public class Pago implements Serializable {
   @SerializedName("monto")
   private float monto;
 
-  @ColumnInfo(name = "id_venta")
-  @SerializedName("idVenta")
-  private long idVenta;
-
   public long getLocalPK() {
     return localPK;
   }
 
   public void setLocalPK(long localPK) {
     this.localPK = localPK;
-  }
-
-  public long getId() {
-    return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
   }
 
   public String getFechaPago() {
@@ -61,14 +45,6 @@ public class Pago implements Serializable {
 
   public void setMonto(float monto) {
     this.monto = monto;
-  }
-
-  public long getIdVenta() {
-    return idVenta;
-  }
-
-  public void setIdVenta(long idVenta) {
-    this.idVenta = idVenta;
   }
 
   public long getClienteId() {
