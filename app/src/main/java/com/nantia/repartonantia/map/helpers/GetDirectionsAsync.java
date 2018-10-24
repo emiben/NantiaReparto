@@ -17,6 +17,8 @@ class GetDirectionsAsync extends AsyncTask<LatLng, Void, List<Ruta>> {
     JSONParser jsonParser;
     String DIRECTIONS_URL = "https://maps.googleapis.com/maps/api/directions/json";
     private GetDirectionsListener listener;
+    private LatLng origen;
+    private LatLng destino;
 
 
     @Override
@@ -28,7 +30,8 @@ class GetDirectionsAsync extends AsyncTask<LatLng, Void, List<Ruta>> {
     protected List<Ruta> doInBackground(LatLng... params) {
         LatLng start = params[0];
         LatLng end = params[1];
-
+        this.origen = start;
+        this.destino = end;
         HashMap<String, String> points = new HashMap<>();
         points.put("origin", start.latitude + "," + start.longitude);
         points.put("destination", end.latitude + "," + end.longitude);
@@ -53,6 +56,8 @@ class GetDirectionsAsync extends AsyncTask<LatLng, Void, List<Ruta>> {
             for (int i = 0; i< routeArray.length(); i++){
                 JSONObject rutaJson = routeArray.getJSONObject(i);
                 Ruta ruta = new Ruta(rutaJson);
+                ruta.setOrigen(this.origen);
+                ruta.setDestino(this.destino);
                 if (list == null){
                     list = new ArrayList<Ruta>();
                 }
