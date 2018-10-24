@@ -561,7 +561,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         if(cliente.getNombre1() != null) nombre1.setText(cliente.getNombre1());
         if(cliente.getNombre2() != null) nombre2.setText(cliente.getNombre2());
         if(cliente.getNroDocumento() != null) nroDeDoc.setText(cliente.getNroDocumento());
-        if(cliente.getTipoDocumento().equals(TipoDocumento.RUT)){
+        if(cliente.getTipoDocumento().equals(TipoDocumento.RUT.name())){
             tipoDeDoc.setSelection(1);
             usuarioImage.setImageResource(R.drawable.factory_2);
             casaImage.setImageResource(R.drawable.factory_2);
