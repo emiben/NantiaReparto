@@ -10,16 +10,16 @@ import java.io.Serializable;
 
 public class RepartoInfoPOJO implements Serializable{
 
-    @SerializedName("id")
+    @SerializedName("idReparto")
     private long id;
 
     @SerializedName("descripcion")
     private String descripcion;
 
-    @SerializedName("vehiculo")
+    @SerializedName("descripcionVehiculo")
     private String vehiculo;
 
-    @SerializedName("dia")
+    @SerializedName("dias")
     private String dia;
 
     public RepartoInfoPOJO(long id, String descripcion, String vehiculo, String dia) {

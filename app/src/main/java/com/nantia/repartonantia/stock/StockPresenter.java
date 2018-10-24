@@ -27,12 +27,14 @@ public class StockPresenter {
 
     public void getStock(){
         view.onSetProgressBarVisibility(View.VISIBLE);
-        if(DataHolder.getReparto().getVehiculo().getStock() != null){
-            Stock stock = DataHolder.getStock();
+        if(DataHolder.getReparto() != null && DataHolder.getReparto().getStock() != null){
+            Stock stock = DataHolder.getReparto().getStock();
             view.setStockInfo(prepareStockInfoPOJO(stock));
             view.addListeners();
             view.onSetProgressBarVisibility(View.GONE);
         }else {
+            view.onSetProgressBarVisibility(View.GONE);
+            view.finishActivity();
             view.showError("No hay ningun reparto cargado!");
 //            StockService stockService = RetrofitClientInstance.getRetrofitInstance().create(StockService.class);
 //            //TODO: Traer el id del stock del reparto

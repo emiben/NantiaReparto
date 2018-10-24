@@ -6,19 +6,342 @@
     android:layout_height="match_parent"
     tools:context="com.nantia.repartonantia.MainActivity">
 
-    <GridView
-        android:id="@+id/menu_gridview"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:numColumns="auto_fit"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+  <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      >
+    <android.support.v7.widget.GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:padding="14dp"
+        app:alignmentMode="alignMargins"
+        app:columnCount="2"
+        app:columnOrderPreserved="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:rowCount="3"
+        >
+
+      <android.support.v7.widget.CardView
+          android:id="@+id/menu_clientes_cv"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_margin="16dp"
+          app:cardBackgroundColor="@color/colorVerdeMenu"
+          app:layout_columnWeight="1"
+          app:layout_rowWeight="1"
+          >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_margin="16dp"
+            android:orientation="vertical"
+            >
+
+
+          <ImageView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              app:srcCompat="@drawable/cliente_icono"
+              />
+
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:layout_marginTop="@dimen/default_gap"
+              android:gravity="center"
+              android:text="@string/menu_clientes"
+              android:textAlignment="center"
+              android:textColor="@android:color/white"
+              android:textSize="18sp"
+              />
+        </LinearLayout>
+      </android.support.v7.widget.CardView>
+
+      <android.support.v7.widget.CardView
+          android:id="@+id/menu_reparto_cv"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_margin="16dp"
+          app:cardBackgroundColor="@color/colorVerdeMenu"
+          app:layout_columnWeight="1"
+          app:layout_rowWeight="1"
+          >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_margin="16dp"
+            android:orientation="vertical"
+            >
+
+
+          <ImageView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              app:srcCompat="@drawable/camion_icono"
+              />
+
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:layout_marginTop="@dimen/default_gap"
+              android:text="@string/menu_reparto"
+              android:textAlignment="center"
+              android:textColor="@android:color/white"
+              android:textSize="18sp"
+              />
+        </LinearLayout>
+      </android.support.v7.widget.CardView>
+
+
+      <android.support.v7.widget.CardView
+          android:id="@+id/menu_productos_cv"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_margin="16dp"
+          app:cardBackgroundColor="@color/colorVerdeMenu"
+          app:layout_columnWeight="1"
+          app:layout_rowWeight="1"
+          >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_margin="16dp"
+            android:orientation="vertical"
+            >
+
+
+          <ImageView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              app:srcCompat="@drawable/producto_icono"
+              />
+
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:layout_marginTop="@dimen/default_gap"
+              android:gravity="center"
+              android:text="@string/menu_productos"
+              android:textAlignment="center"
+              android:textColor="@android:color/white"
+              android:textSize="18sp"
+              />
+        </LinearLayout>
+      </android.support.v7.widget.CardView>
+
+      <android.support.v7.widget.CardView
+          android:id="@+id/menu_listas_de_precios_cv"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_margin="16dp"
+          app:cardBackgroundColor="@color/colorVerdeMenu"
+          app:layout_columnWeight="1"
+          app:layout_rowWeight="1"
+          >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_margin="16dp"
+            android:orientation="vertical"
+            >
+
+
+          <ImageView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              app:srcCompat="@drawable/lista_icono"
+              />
+
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:layout_marginTop="@dimen/default_gap"
+              android:text="@string/menu_listas_de_precios"
+              android:textAlignment="center"
+              android:textColor="@android:color/white"
+              android:textSize="18sp"
+              />
+        </LinearLayout>
+      </android.support.v7.widget.CardView>
+
+      <android.support.v7.widget.CardView
+          android:id="@+id/menu_stock_cv"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_margin="16dp"
+          app:cardBackgroundColor="@color/colorVerdeMenu"
+          app:layout_columnWeight="1"
+          app:layout_rowWeight="1"
+          >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_margin="16dp"
+            android:orientation="vertical"
+            >
+
+
+          <ImageView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              app:srcCompat="@drawable/stock_icono"
+              />
+
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:layout_marginTop="@dimen/default_gap"
+              android:gravity="center"
+              android:text="@string/menu_stock"
+              android:textAlignment="center"
+              android:textColor="@android:color/white"
+              android:textSize="18sp"
+              />
+        </LinearLayout>
+      </android.support.v7.widget.CardView>
+
+      <android.support.v7.widget.CardView
+          android:id="@+id/menu_mapa_cv"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_margin="16dp"
+          app:cardBackgroundColor="@color/colorVerdeMenu"
+          app:layout_columnWeight="1"
+          app:layout_rowWeight="1"
+          >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_margin="16dp"
+            android:orientation="vertical"
+            >
+
+
+          <ImageView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              app:srcCompat="@drawable/mapa_icono"
+              />
+
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:layout_marginTop="@dimen/default_gap"
+              android:text="@string/menu_mapa"
+              android:textAlignment="center"
+              android:textColor="@android:color/white"
+              android:textSize="18sp"
+              />
+        </LinearLayout>
+      </android.support.v7.widget.CardView>
+
+      <android.support.v7.widget.CardView
+          android:id="@+id/menu_ventas_cv"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_margin="16dp"
+          app:cardBackgroundColor="@color/colorVerdeMenu"
+          app:layout_columnWeight="1"
+          app:layout_rowWeight="1"
+          >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_margin="16dp"
+            android:orientation="vertical"
+            >
+
+
+          <ImageView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              app:srcCompat="@drawable/ventas_icono_2"
+              />
+
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:layout_marginTop="@dimen/default_gap"
+              android:text="@string/menu_ventas"
+              android:textAlignment="center"
+              android:textColor="@android:color/white"
+              android:textSize="18sp"
+              />
+        </LinearLayout>
+      </android.support.v7.widget.CardView>
+
+      <android.support.v7.widget.CardView
+          android:id="@+id/menu_vendedores_cv"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_margin="16dp"
+          app:cardBackgroundColor="@color/colorVerdeMenu"
+          app:layout_columnWeight="1"
+          app:layout_rowWeight="1"
+          >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_margin="16dp"
+            android:orientation="vertical"
+            >
+
+
+          <ImageView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              app:srcCompat="@drawable/vendedores_icono_2"
+              />
+
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:layout_marginTop="@dimen/default_gap"
+              android:text="@string/menu_vendedores"
+              android:textAlignment="center"
+              android:textColor="@android:color/white"
+              android:textSize="18sp"
+              />
+        </LinearLayout>
+      </android.support.v7.widget.CardView>
+
+    </android.support.v7.widget.GridLayout>
+  </ScrollView>
 </android.support.constraint.ConstraintLayout>

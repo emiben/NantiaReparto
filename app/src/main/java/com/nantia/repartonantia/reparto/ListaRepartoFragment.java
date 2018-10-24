@@ -5,7 +5,6 @@ import android.arch.persistence.room.Room;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,6 +20,7 @@ import com.nantia.repartonantia.adapters.RepartoListaAdapter;
 import com.nantia.repartonantia.data.AppDatabase;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.nantia.repartonantia.utils.Constantes.KEY_DB_NOMBRE;
 import static com.nantia.repartonantia.utils.Constantes.KEY_REPARTO;
@@ -33,7 +33,7 @@ public class ListaRepartoFragment extends Fragment implements ListaRepartoView, 
     private RecyclerView repartoRV;
     private SearchView buscarSV;
     private RepartoListaAdapter repartoListaAdapter;
-    private ArrayList<RepartoInfoPOJO> repartos;
+    private List<RepartoInfoPOJO> repartos;
     private ListaRepartoPresenter presenter;
 
 
@@ -50,6 +50,7 @@ public class ListaRepartoFragment extends Fragment implements ListaRepartoView, 
                 AppDatabase.class, KEY_DB_NOMBRE).build();
         presenter = new ListaRepartoPresenter(this, db);
         initializeViewObjects(view);
+
         presenter.getRepartosInfo();
 
         return view;
@@ -81,6 +82,7 @@ public class ListaRepartoFragment extends Fragment implements ListaRepartoView, 
     @Override
     public void addListeners() {
         if(repartoListaAdapter != null){
+            repartoListaAdapter.setClickListener(this);
             buscarSV.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String s) {

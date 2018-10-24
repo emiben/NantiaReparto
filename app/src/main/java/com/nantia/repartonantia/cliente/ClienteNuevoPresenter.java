@@ -27,9 +27,6 @@ public class ClienteNuevoPresenter {
         this.view = view;
     }
 
-    public void navigateToClienteMapa(){
-
-    }
 
     public void getEnvases(){
         view.onSetProgressBarVisibility(View.VISIBLE);
@@ -64,9 +61,15 @@ public class ClienteNuevoPresenter {
         call.enqueue(new Callback<Cliente>() {
             @Override
             public void onResponse(Call<Cliente> call, Response<Cliente> response) {
-                DataHolder.getClientes().add(response.body());
-                view.onSetProgressBarVisibility(View.GONE);
-                view.navigateToClienteFragment(response.body());
+                if (response.code() < 400){
+                    DataHolder.getClientes().add(response.body());
+                    view.onSetProgressBarVisibility(View.GONE);
+                    view.navigateToClienteFragment(response.body());
+                }else {
+                    Log.e(TAG, "Error : " + response.code() + " " + response.message());
+                    view.onSetProgressBarVisibility(View.GONE);
+                    view.showError("Error : " + response.code() + " " + response.message());
+                }
             }
 
             @Override
@@ -87,6 +90,7 @@ public class ClienteNuevoPresenter {
             public void onResponse(Call<Cliente> call, Response<Cliente> response) {
                 DataHolder.getClientes().remove(clienteToRemove);
                 DataHolder.getClientes().add(response.body());
+                //TODO: Guardar en base de datos
                 view.onSetProgressBarVisibility(View.GONE);
                 view.navigateToClienteFragment(response.body());
             }

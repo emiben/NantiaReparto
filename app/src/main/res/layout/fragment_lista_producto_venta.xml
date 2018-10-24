@@ -8,9 +8,10 @@
 
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout4"
+        android:id="@+id/articulos_carro_lo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -48,6 +49,7 @@
             android:layout_marginEnd="24dp"
             android:layout_marginTop="8dp"
             android:textSize="24sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -62,7 +64,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+        app:layout_constraintTop_toBottomOf="@+id/articulos_carro_lo">
 
         <ProgressBar
             android:id="@+id/lista_prod_venta_progress"

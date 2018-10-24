@@ -18,6 +18,7 @@ import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.adapters.ListaDePreciosAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.nantia.repartonantia.utils.Constantes.KEY_LISTA_DE_PRECIOS;
 
@@ -30,7 +31,7 @@ public class ListaDeListasDePrecioFragment extends Fragment
     private ProgressBar progressBar;
     private RecyclerView listasRV;
     private SearchView buscarSV;
-    private ArrayList<ListaDePrecio> listasDePrecios;
+    private List<ListaDePrecio> listasDePrecios;
     private ListaDePreciosAdapter listaDePreciosAdapter;
 
 
@@ -55,7 +56,7 @@ public class ListaDeListasDePrecioFragment extends Fragment
     }
 
     @Override
-    public void setListasDePrecioInfo(ArrayList<ListaDePrecio> listasDePrecios) {
+    public void setListasDePrecioInfo(List<ListaDePrecio> listasDePrecios) {
         if(listasDePrecios != null){
             this.listasDePrecios = listasDePrecios;
             listasRV.setLayoutManager(new LinearLayoutManager(getActivity()));

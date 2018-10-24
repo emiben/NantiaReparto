@@ -23,4 +23,7 @@ public interface VehiculoDao {
 
     @Delete
     void delete(Vehiculo vehiculo);
+
+    @Query("DELETE FROM vehiculo")
+    void nukeTable();
 }

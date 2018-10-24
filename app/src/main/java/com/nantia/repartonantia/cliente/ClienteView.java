@@ -11,5 +11,4 @@ import java.util.ArrayList;
 public interface ClienteView {
     Cliente getCliente();
     void setClienteInfo(ArrayList<ClienteInfoPOJO> clientes, String nombre);
-    void addListeners();
 }

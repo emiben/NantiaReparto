@@ -10,18 +10,18 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.nantia.repartonantia.R;
-import com.nantia.repartonantia.reparto.Reparto;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Emi on 29/7/2018.
  */
 
 public class RepartoListaAdapter extends RecyclerView.Adapter<RepartoListaAdapter.ViewHolder> implements Filterable{
-    private ArrayList<RepartoInfoPOJO> mData;
+    private List<RepartoInfoPOJO> mData;
     private LayoutInflater mInflater;
-    private ArrayList<RepartoInfoPOJO> mDataOrigianl;
+    private List<RepartoInfoPOJO> mDataOrigianl;
     private ItemClickListener mClickListener;
     ValueFilter valueFilter;
 
@@ -81,6 +81,7 @@ public class RepartoListaAdapter extends RecyclerView.Adapter<RepartoListaAdapte
             descripcion = itemView.findViewById(R.id.reparto_lista_desc_tv);
             vehiculo = itemView.findViewById(R.id.reparto_lista_vehiculo_tv);
             dia = itemView.findViewById(R.id.reparto_lista_dia_tv);
+            itemView.setOnClickListener(this);
         }
 
         @Override

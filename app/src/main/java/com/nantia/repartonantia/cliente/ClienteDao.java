@@ -29,4 +29,7 @@ public interface ClienteDao {
   @Delete
   void delete(Cliente cliente);
 
+  @Query("DELETE FROM cliente")
+  void nukeTable();
+
 }

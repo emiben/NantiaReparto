@@ -13,4 +13,5 @@ public interface StockView {
     void addListeners();
     void onSetProgressBarVisibility(int visibility);
     void showError(String error);
+    void finishActivity();
 }

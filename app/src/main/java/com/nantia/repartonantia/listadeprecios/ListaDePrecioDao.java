@@ -27,4 +27,7 @@ public interface ListaDePrecioDao {
     @Delete
     void delete(ListaDePrecio listaDePrecio);
 
+    @Query("DELETE FROM listadeprecio")
+    void nukeTable();
+
 }

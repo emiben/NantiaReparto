@@ -12,7 +12,9 @@ import android.widget.TextView;
 import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.listadeprecios.ListaDePrecio;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Emi on 6/7/2018.
@@ -20,17 +22,17 @@ import java.util.ArrayList;
 
 public class ListaDePreciosAdapter extends RecyclerView.Adapter<ListaDePreciosAdapter.ViewHolder> implements Filterable {
 
-    private ArrayList<ListaDePrecio> mData;
+    private List<ListaDePrecio> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
-    private ArrayList<ListaDePrecio> mDataOrigianl;
+    private List<ListaDePrecio> mDataOrigianl;
     ValueFilter valueFilter;
 
-    public ListaDePreciosAdapter(Context context, ArrayList<ListaDePrecio> mData) {
+    public ListaDePreciosAdapter(Context context, List<ListaDePrecio> mData) {
         this.mData = mData;
         this.mInflater = LayoutInflater.from(context);
         mDataOrigianl = new ArrayList<>();
-        mDataOrigianl.addAll((ArrayList<ListaDePrecio>)mData.clone());
+        mDataOrigianl.addAll(new ArrayList<>(mData));
     }
 
     @Override

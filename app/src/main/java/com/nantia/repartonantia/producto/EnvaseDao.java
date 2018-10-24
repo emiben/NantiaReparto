@@ -19,4 +19,7 @@ public interface EnvaseDao {
   @Delete
   void delete(Envase envase);
 
+  @Query("DELETE FROM envase")
+  void nukeTable();
+
 }

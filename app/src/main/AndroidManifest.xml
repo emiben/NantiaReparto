@@ -42,7 +42,10 @@
         <activity android:name=".listadeprecios.ListaDePreciosActivity" />
         <activity android:name=".stock.StockActivity" />
         <activity android:name=".reparto.RepartoActivity" />
-        <activity android:name=".venta.VentaActivity"></activity>
+        <activity
+            android:name=".venta.VentaActivity"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity android:name=".map.MapActivity"></activity>
     </application>
 
 </manifest>

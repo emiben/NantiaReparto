@@ -30,4 +30,7 @@ public interface UsuarioDao {
   @Delete
   void delete(Usuario usuario);
 
+  @Query("DELETE FROM usuario")
+  void nukeTable();
+
 }

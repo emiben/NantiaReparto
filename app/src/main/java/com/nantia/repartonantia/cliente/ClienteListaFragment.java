@@ -1,6 +1,5 @@
 package com.nantia.repartonantia.cliente;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -18,9 +17,10 @@ import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.adapters.ClienteListaAdapter;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.List;
 
 import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE;
+import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE_LISTA;
 
 /**
  *
@@ -31,7 +31,7 @@ public class ClienteListaFragment extends Fragment implements ClienteListaAdapte
     private RecyclerView clientesRV;
 
     private SearchView buscarSV;
-    private ArrayList<Cliente> clientes;
+    private List<Cliente> clientes;
     private ClienteListaAdapter clienteListaAdapter;
     private ClienteListaPresenter clienteListaPresenter;
     private FloatingActionButton clientesFAB;
@@ -52,7 +52,12 @@ public class ClienteListaFragment extends Fragment implements ClienteListaAdapte
         View view = inflater.inflate(R.layout.fragment_cliente_lista, container, false);
         clienteListaPresenter = new ClienteListaPresenter(this);
         initializeViewObjects(view);
-        clienteListaPresenter.getClientes();
+        if(getArguments() != null && getArguments().getSerializable(KEY_CLIENTE_LISTA) != null){
+            setClienteInfo((ArrayList<Cliente>)getArguments().getSerializable(KEY_CLIENTE_LISTA));
+            addListeners();
+        }else{
+            clienteListaPresenter.getClientes();
+        }
 
         return view;
     }
@@ -95,7 +100,7 @@ public class ClienteListaFragment extends Fragment implements ClienteListaAdapte
 
 
     @Override
-    public void setClienteInfo(ArrayList<Cliente> clientes) {
+    public void setClienteInfo(List<Cliente> clientes) {
         if (clientes != null){
             this.clientes = clientes;
             clientesRV.setLayoutManager(new LinearLayoutManager(getActivity()));

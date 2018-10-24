@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorAzul">#0b0ba6</color>
     <color name="colorVerde">#900b330d</color>
+    <color name="colorVerdeMenu">#28a745</color>
     <color name="colorBlanco">#ffffff</color>
     <color name="colorNegro">#000000</color>
 </resources>

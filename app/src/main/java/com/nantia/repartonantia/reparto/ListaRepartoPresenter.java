@@ -3,6 +3,7 @@ package com.nantia.repartonantia.reparto;
 import android.os.AsyncTask;
 import android.view.View;
 
+import com.google.gson.Gson;
 import com.nantia.repartonantia.adapters.RepartoInfoPOJO;
 import com.nantia.repartonantia.data.AppDatabase;
 import com.nantia.repartonantia.data.DataHolder;
@@ -31,6 +32,7 @@ public class ListaRepartoPresenter {
 
     void getRepartosInfo(){
         view.onSetProgressBarVisibility(View.VISIBLE);
+
         RepartoService service = RetrofitClientInstance.getRetrofitInstance().create(RepartoService.class);
         Call<ArrayList<RepartoInfoPOJO>> call = service.getRepartosInfo();
         call.enqueue(new Callback<ArrayList<RepartoInfoPOJO>>() {
@@ -57,6 +59,7 @@ public class ListaRepartoPresenter {
 
     void getReparto(final long repartoId){
         view.onSetProgressBarVisibility(View.VISIBLE);
+
         RepartoService service = RetrofitClientInstance.getRetrofitInstance().create(RepartoService.class);
         Call<Reparto> call = service.getReparto(repartoId);
         call.enqueue(new Callback<Reparto>() {
@@ -64,7 +67,7 @@ public class ListaRepartoPresenter {
             public void onResponse(Call<Reparto> call, Response<Reparto> response) {
                 if(response.body() != null){
                     view.onSetProgressBarVisibility(View.GONE);
-                    response.body().getVehiculo().getStock().setActualizado(true);
+                    response.body().getStock().setActualizado(true);
                     DataHolder.setReparto(response.body());
                     guardarReparto(response.body());
                     view.navigateToReparto(response.body());
@@ -85,12 +88,21 @@ public class ListaRepartoPresenter {
     }
 
     private void guardarReparto(final Reparto reparto){
+        DataHolder.setReparto(reparto);
+
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
+                db.repartoDao().nukeTable();
                 db.repartoDao().insertAll(reparto);
+                db.vehiculoDao().nukeTable();
                 db.vehiculoDao().insertAll(reparto.getVehiculo());
-                db.stockDao().insertAll(reparto.getVehiculo().getStock());
+                db.stockDao().nukeTable();
+                db.stockDao().insertAll(reparto.getStock());
+                db.usuarioDao().nukeTable();
+                db.usuarioDao().insertAll(reparto.getVendedor1(), reparto.getVendedor2());
+                db.rutaDao().nukeTable();
+                db.rutaDao().insertAll(reparto.getRuta());
             }
         });
     }

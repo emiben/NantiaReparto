@@ -36,7 +36,7 @@ public class Venta implements Serializable {
     @SerializedName("cliente")
     private Cliente cliente;
 
-    @SerializedName("productosVenta")
+    @SerializedName("setProductoVenta")
     @TypeConverters(ProductoVentaTypeConverter.class)
     private List<ProductoVenta> productosVenta;
 
@@ -45,27 +45,33 @@ public class Venta implements Serializable {
     private float descuento;
 
     @ColumnInfo(name = "total_venta")
-    @SerializedName("totalVenta")
+    @SerializedName("totalventa")
     private float totalVenta;
 
     @ColumnInfo(name = "iva_total")
-    @SerializedName("ivaTotal")
+    @SerializedName("ivatotal")
     private float ivaTotal;
 
     @ColumnInfo(name = "pago_total")
-    @SerializedName("pagoTotal")
+    @SerializedName("pagototal")
     private float pagoTotal;
 
     @ColumnInfo(name = "reparto_id")
-    @SerializedName("reparto")
+    @SerializedName("repartoid")
     private long reaprtoID;
 
     @ColumnInfo(name = "actualizado_venta")
     private transient boolean actualizado;
 
-    public Venta(){};
+    @Embedded
+    @SerializedName("datapago")
+    private Pago pago;
 
-    public Venta(long localPK, long id, String fecha, Usuario usuario, Cliente cliente, List<ProductoVenta> productosVenta, float descuento, float totalVenta, float ivaTotal, float pagoTotal, long reaprtoID, boolean actualizado) {
+    public Venta(){}
+
+    public Venta(long localPK, long id, String fecha, Usuario usuario, Cliente cliente,
+                 List<ProductoVenta> productosVenta, float descuento, float totalVenta,
+                 float ivaTotal, float pagoTotal, long reaprtoID, boolean actualizado, Pago pago) {
         this.localPK = localPK;
         this.id = id;
         this.fecha = fecha;
@@ -78,6 +84,7 @@ public class Venta implements Serializable {
         this.pagoTotal = pagoTotal;
         this.reaprtoID = reaprtoID;
         this.actualizado = actualizado;
+        this.pago = pago;
     }
 
     public long getLocalPK() {
@@ -178,5 +185,13 @@ public class Venta implements Serializable {
 
     public float calcularSaldo(){
         return (totalVenta - descuento - pagoTotal);
+    }
+
+    public Pago getPago() {
+        return pago;
+    }
+
+    public void setPago(Pago pago) {
+        this.pago = pago;
     }
 }

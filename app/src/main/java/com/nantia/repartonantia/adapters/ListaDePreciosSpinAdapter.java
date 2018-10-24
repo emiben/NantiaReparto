@@ -14,6 +14,7 @@ import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.listadeprecios.ListaDePrecio;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Emi on 16/7/2018.
@@ -22,9 +23,9 @@ import java.util.ArrayList;
 public class ListaDePreciosSpinAdapter extends ArrayAdapter<ListaDePrecio> {
 
     private final Context mContext;
-    private final ArrayList<ListaDePrecio> items;
+    private final List<ListaDePrecio> items;
 
-    public ListaDePreciosSpinAdapter(Context mContext, ArrayList<ListaDePrecio> items) {
+    public ListaDePreciosSpinAdapter(Context mContext, List<ListaDePrecio> items) {
         super(mContext, 0, items);
         this.mContext = mContext;
         this.items = items;

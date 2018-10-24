@@ -34,7 +34,9 @@ import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.listadeprecios.ListaDePrecio;
 import com.nantia.repartonantia.map.ClienteMapaFragment;
 import com.nantia.repartonantia.producto.Envase;
+import com.nantia.repartonantia.utils.FechaHelper;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,7 +48,7 @@ import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE;
 /**
  *
  */
-public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, View.OnClickListener {
     private ClienteNuevoPresenter presenter;
     private Cliente cliente;
     private Cliente clienteOriginal;
@@ -74,10 +76,10 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     private DatePickerDialog.OnDateSetListener date;
     private Calendar calendar = Calendar.getInstance();
     private Spinner listaDePreciosSP;
-    private ArrayList<ListaDePrecio> listasDePrecio;
+    private List<ListaDePrecio> listasDePrecio;
     private List<EnvaseEnPrestamo> envasesEnPrestamo;
     private List<EnvaseEnPrestamo> envasesEnPrestamoOrig;
-    private ArrayList<Envase> envases;
+    private List<Envase> envases;
     private List<Dia> dias;
     private RadioButton domingo;
     private RadioButton lunes;
@@ -119,10 +121,10 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
             if(getArguments().getDouble("lat") != 0.0){
                 posicionMapa = new LatLng(getArguments().getDouble("lat"), getArguments().getDouble("lng"));
             }
-            if(getArguments().getSerializable("cliente") != null){
+            if(getArguments().getSerializable(KEY_CLIENTE) != null){
                 updateCliente = true;
-                cliente = (Cliente) getArguments().getSerializable("cliente");
-                clienteOriginal = (Cliente) getArguments().getSerializable("cliente");
+                cliente = (Cliente) getArguments().getSerializable(KEY_CLIENTE);
+                clienteOriginal = (Cliente) getArguments().getSerializable(KEY_CLIENTE);
                 if(posicionMapa != null){
                     cliente.getDireccion().setCoordLat(String.valueOf(posicionMapa.latitude));
                     cliente.getDireccion().setCoordLon(String.valueOf(posicionMapa.longitude));
@@ -172,7 +174,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         }
         cliente.setFechaNacimiento(fechaDeNacimiento);
         //TODO cambiar a fecha de creado
-        cliente.setFechaAlta(fechaDeNacimiento);
+        cliente.setFechaAlta(FechaHelper.getStringDate());
         cliente.setCelular(telefono1.getText().toString());
         cliente.setMail(email.getText().toString());
         String coordLat = "";
@@ -190,10 +192,21 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         cliente.setDireccion(direccion);
         cliente.setObservaciones(observaciones.getText().toString());
         cliente.setDias(dias);
-        envasesEnPrestamo.clear();
         if(((ListaDePrecio)listaDePreciosSP.getSelectedItem()).getId() != 0){
             cliente.setIdLista(((ListaDePrecio)listaDePreciosSP.getSelectedItem()).getId());
         }
+
+        addEnvases();
+
+        if(updateCliente){
+            presenter.updateCliente(cliente, clienteOriginal);
+        }else {
+            presenter.saveCliente(cliente);
+        }
+    }
+
+    private void addEnvases(){
+        envasesEnPrestamo.clear();
         for (int i = 0; i < envAPrestamoSPs.size(); i++){
             Envase envase = (Envase) envAPrestamoSPs.get(i).getSelectedItem();
             if(envase.getId() != 0){
@@ -208,14 +221,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
             }
         }
         cliente.setEnvasesEnPrestamo(envasesEnPrestamo);
-
-        if(updateCliente){
-            presenter.updateCliente(cliente, clienteOriginal);
-        }else {
-            presenter.saveCliente(cliente);
-        }
     }
-
 
 
     @Override
@@ -230,14 +236,37 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
             case R.id.boton_guardar:
                 saveCliente();
                 break;
+            case R.id.domingo_rb:
+                addRemoveDia(!domingo.isSelected(), Dia.DOMINGO);
+                break;
+            case R.id.lunes_rb:
+                addRemoveDia(!lunes.isSelected(), Dia.LUNES);
+                break;
+            case R.id.martes_rb:
+                addRemoveDia(!martes.isSelected(), Dia.MARTES);
+                break;
+            case R.id.miercoles_rb:
+                addRemoveDia(!miercoles.isSelected(), Dia.MIERCOLES);
+                break;
+            case R.id.jueves_rb:
+                addRemoveDia(!jueves.isSelected(), Dia.JUEVES);
+                break;
+            case R.id.viernes_rb:
+                addRemoveDia(!viernes.isSelected(), Dia.VIERNES);
+                break;
+            case R.id.sabado_rb:
+                addRemoveDia(!sabado.isSelected(), Dia.SABADO);
+                break;
             default:
                 break;
         }
     }
 
     @Override
-    public void setEnvases(ArrayList<Envase> envases) {
-        envases.add(0, new Envase(0, "Nuevo envase a prestamo..."));
+    public void setEnvases(List<Envase> envases) {
+        if(envases != null && envases.get(0) != null && envases.get(0).getId() != 0){
+            envases.add(0, new Envase(0, "Nuevo envase a prestamo..."));
+        }
         this.envases = envases;
     }
 
@@ -251,34 +280,34 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
     }
 
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()){
-            case R.id.domingo_rb:
-                addRemoveDia(isChecked, Dia.DOMINGO);
-                break;
-            case R.id.lunes_rb:
-                addRemoveDia(isChecked, Dia.LUNES);
-                break;
-            case R.id.martes_rb:
-                addRemoveDia(isChecked, Dia.MARTES);
-                break;
-            case R.id.miercoles_rb:
-                addRemoveDia(isChecked, Dia.MIERCOLES);
-                break;
-            case R.id.jueves_rb:
-                addRemoveDia(isChecked, Dia.JUEVES);
-                break;
-            case R.id.viernes_rb:
-                addRemoveDia(isChecked, Dia.VIERNES);
-                break;
-            case R.id.sabado_rb:
-                addRemoveDia(isChecked, Dia.SABADO);
-                break;
-            default:
-                break;
-        }
-    }
+//    @Override
+//    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//        switch (buttonView.getId()){
+//            case R.id.domingo_rb:
+//                addRemoveDia(domingo.isChecked(), Dia.DOMINGO);
+//                break;
+//            case R.id.lunes_rb:
+//                addRemoveDia(lunes.isChecked(), Dia.LUNES);
+//                break;
+//            case R.id.martes_rb:
+//                addRemoveDia(martes.isChecked(), Dia.MARTES);
+//                break;
+//            case R.id.miercoles_rb:
+//                addRemoveDia(miercoles.isChecked(), Dia.MIERCOLES);
+//                break;
+//            case R.id.jueves_rb:
+//                addRemoveDia(jueves.isChecked(), Dia.JUEVES);
+//                break;
+//            case R.id.viernes_rb:
+//                addRemoveDia(viernes.isChecked(), Dia.VIERNES);
+//                break;
+//            case R.id.sabado_rb:
+//                addRemoveDia(sabado.isChecked(), Dia.SABADO);
+//                break;
+//            default:
+//                break;
+//        }
+//    }
 
     @Override
     public void navigateToClienteFragment(Cliente cliente) {
@@ -363,13 +392,20 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
             }
         });
 
-        domingo.setOnCheckedChangeListener(this);
-        lunes.setOnCheckedChangeListener(this);
-        martes.setOnCheckedChangeListener(this);
-        miercoles.setOnCheckedChangeListener(this);
-        jueves.setOnCheckedChangeListener(this);
-        viernes.setOnCheckedChangeListener(this);
-        sabado.setOnCheckedChangeListener(this);
+//        domingo.setOnCheckedChangeListener(this);
+//        lunes.setOnCheckedChangeListener(this);
+//        martes.setOnCheckedChangeListener(this);
+//        miercoles.setOnCheckedChangeListener(this);
+//        jueves.setOnCheckedChangeListener(this);
+//        viernes.setOnCheckedChangeListener(this);
+//        sabado.setOnCheckedChangeListener(this);
+        domingo.setOnClickListener(this);
+        lunes.setOnClickListener(this);
+        martes.setOnClickListener(this);
+        miercoles.setOnClickListener(this);
+        jueves.setOnClickListener(this);
+        viernes.setOnClickListener(this);
+        sabado.setOnClickListener(this);
     }
 
     private void loadSpinners(){
@@ -382,7 +418,10 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
 
         if(DataHolder.getListasDePrecios() != null && DataHolder.getListasDePrecios().size() > 0){
             this.listasDePrecio = DataHolder.getListasDePrecios();
-            this.listasDePrecio.add(0, new ListaDePrecio(0, "Elija una lista de precios...", "", null));
+            if(this.listasDePrecio != null && this.listasDePrecio.get(0) != null
+                    && this.listasDePrecio.get(0).getId() != 0){
+                this.listasDePrecio.add(0, new ListaDePrecio(0, "Elija una lista de precios...", "", null));
+            }
             ListaDePreciosSpinAdapter adapterListaPrecios =
                     new ListaDePreciosSpinAdapter(getActivity(),this.listasDePrecio);
             listaDePreciosSP.setAdapter(adapterListaPrecios);
@@ -420,6 +459,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
 
 
     private void navigateToClienteNuevoMapaFragment() {
+        addEnvases();
         ClienteMapaFragment clienteMapaFragment = new ClienteMapaFragment();
         if(posicionMapa != null){
             Bundle b = new Bundle();
@@ -528,8 +568,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         }
         if(cliente.getFechaNacimiento() != null){
             fechaDeNacimiento = cliente.getFechaNacimiento();
-            String[] fecha = cliente.getFechaNacimiento().split("-");
-            fecDeNac.setText(fecha[2]+"/"+fecha[1]+"/"+fecha[0]);
+            fecDeNac.setText(FechaHelper.getFechParaMostrar(cliente.getFechaNacimiento()));
         }
         if(cliente.getCelular() != null) telefono1.setText(cliente.getCelular());
         if(cliente.getDireccion().getTelefono() != null) telefono2.setText(cliente.getDireccion().getTelefono());
@@ -547,7 +586,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
 //        }
         List<Dia> diasTemp = cliente.getDias();
         for(int i  =0; i < diasTemp.size(); i++){
-            selectDias(diasTemp.get(i));
+            selectDias(diasTemp.get(i), true);
         }
         if(cliente.getDireccion().getCoordLat() != null &&
                 !cliente.getDireccion().getCoordLat().isEmpty()){
@@ -557,28 +596,35 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     }
 
 
-    private void selectDias(Dia dia){
+    private void selectDias(Dia dia, boolean isChecked){
         switch (dia){
             case DOMINGO:
-                domingo.setChecked(true);
+                domingo.setSelected(isChecked);
+                domingo.setChecked(isChecked);
                 break;
             case LUNES:
-                lunes.setChecked(true);
+                lunes.setSelected(isChecked);
+                lunes.setChecked(isChecked);
                 break;
             case MARTES:
-                martes.setChecked(true);
+                martes.setSelected(isChecked);
+                martes.setChecked(isChecked);
                 break;
             case MIERCOLES:
-                miercoles.setChecked(true);
+                miercoles.setSelected(isChecked);
+                miercoles.setChecked(isChecked);
                 break;
             case JUEVES:
-                jueves.setChecked(true);
+                jueves.setSelected(isChecked);
+                jueves.setChecked(isChecked);
                 break;
             case VIERNES:
-                viernes.setChecked(true);
+                viernes.setSelected(isChecked);
+                viernes.setChecked(isChecked);
                 break;
             case SABADO:
-                sabado.setChecked(true);
+                viernes.setSelected(isChecked);
+                sabado.setChecked(isChecked);
                 break;
             default:
                 break;
@@ -586,19 +632,17 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     }
 
     private void updateLabel() {
-        String myFormat = "dd/MM/yyyy";
-        String myFormat2 = "yyyy-MM-dd";
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        SimpleDateFormat sdf2 = new SimpleDateFormat(myFormat2, Locale.US);
-        fechaDeNacimiento = sdf2.format(calendar.getTime());
-        fecDeNac.setText(sdf.format(calendar.getTime()));
+        fechaDeNacimiento = FechaHelper.getFechaParaEnviar(calendar.getTime());
+        fecDeNac.setText(FechaHelper.getFechParaMostrar(calendar.getTime()));
     }
 
 
     private void addRemoveDia(boolean add, Dia dia){
         if(add){
+            selectDias(dia, true);
             dias.add(dia);
         }else{
+            selectDias(dia, false);
             dias.remove(dia);
         }
     }

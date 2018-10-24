@@ -43,13 +43,16 @@ public class ProductoVentaAdapter extends RecyclerView.Adapter<ProductoVentaAdap
 
     }
 
+    public void setClickListener(ItemClickListener itemClickListener) {
+        this.mClickListener = itemClickListener;
+    }
+
     @Override
     public int getItemCount() {
         return mData.size();
     }
 
-
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView producto;
         TextView precioUnitario;
         TextView cantidad;
@@ -60,7 +63,11 @@ public class ProductoVentaAdapter extends RecyclerView.Adapter<ProductoVentaAdap
             producto = itemView.findViewById(R.id.venta_articulo_tv);
             precioUnitario = itemView.findViewById(R.id.venta_pu_tv);
             cantidad = itemView.findViewById(R.id.venta_cantidad_tv);
-            total = itemView.findViewById(R.id.venta_total_tv);
+            total = itemView.findViewById(R.id.venta_total_articulo_tv);
+        }
+
+        @Override public void onClick(View view) {
+            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 

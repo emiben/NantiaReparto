@@ -1,6 +1,7 @@
 package com.nantia.repartonantia.stock;
 
 import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Embedded;
 
 import com.google.gson.annotations.SerializedName;
 import com.nantia.repartonantia.producto.Envase;
@@ -25,7 +26,7 @@ public class EnvaseStock implements Serializable {
     @SerializedName("fecha")
     private String fecha;
 
-    @ColumnInfo(name = "envase")
+    @Embedded
     @SerializedName("envasesTipos")
     private Envase envase;
 

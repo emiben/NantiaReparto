@@ -8,6 +8,16 @@
     <string name="login_ingresar">Ingresar</string>
     <string name="title_activity_producto">ProductoActivity</string>
 
+    <!-- Strings related to Main Menu -->
+    <string name="menu_clientes">Clientes</string>
+    <string name="menu_reparto">Reparto</string>
+    <string name="menu_productos">Productos</string>
+    <string name="menu_listas_de_precios">Listas de Precios</string>
+    <string name="menu_stock">Stock</string>
+    <string name="menu_mapa">Mapa</string>
+    <string name="menu_ventas">Ventas</string>
+    <string name="menu_vendedores">Vendedores</string>
+
     <!-- Strings related to producto -->
     <string name="producto_no_retornable">No Retornable</string>
     <string name="producto_retornable">Retornable</string>
@@ -55,6 +65,8 @@
 
     <!-- Strings related to Reparto -->
     <string name="reparto_no_cargado">No hay ningun reparto cargado!</string>
+    <string name="reparto_comenzar">Comenzar Reparto</string>
+    <string name="reparto_finalizar">Finalizar Reparto</string>
 
     <!-- Strings related to Ventas -->
     <string name="venta_articulos">Articulos</string>
@@ -68,10 +80,15 @@
     <string name="venta_saldo">Saldo $</string>
     <string name="venta_cancelar">Cancelar</string>
     <string name="venta_finalizar">Finalizar</string>
+    <string name="venta_error_vendedor_no_selec">Para finalizar una venta se debe seleccionar un vendedor!</string>
 
 
     <!-- Strings related to Lista Productos Ventas -->
     <string name="lista_prod_venta_articulos">Articulos en Carro:</string>
+    <string name="lista_prod_venta_cantidad">Cantidad:</string>
+    <string name="lista_prod_error_stock">Stock insuficiente. Cantidad max.: </string>
+    <string name="lista_prod_error_stock_no_asociado">Stock no asociado al camion.</string>
+    <string name="lista_prod_error_no_articulos">Seleccione al menos un artuculo!</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

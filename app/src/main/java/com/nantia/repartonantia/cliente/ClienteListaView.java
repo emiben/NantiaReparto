@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ClienteListaView {
     void onSetProgressBarVisibility(int visibility);
-    void setClienteInfo(ArrayList<Cliente> clientes);
+    void setClienteInfo(List<Cliente> clientes);
     void clearSearchView();
     void addListeners();
     void showError(String error);

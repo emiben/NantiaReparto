@@ -14,6 +14,7 @@ import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.producto.Envase;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Emi on 4/6/2018.
@@ -23,9 +24,9 @@ public class EnvaseSpinnerAdapter extends ArrayAdapter<Envase> {
 
 //    private final LayoutInflater mInflater;
     private final Context mContext;
-    private final ArrayList<Envase> items;
+    private final List<Envase> items;
 
-    public EnvaseSpinnerAdapter(@NonNull Context context, @NonNull ArrayList<Envase> objects) {
+    public EnvaseSpinnerAdapter(@NonNull Context context, @NonNull List<Envase> objects) {
         super(context, 0, objects);
         this.mContext = context;
         this.items = objects;

@@ -7,6 +7,7 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
+import com.nantia.repartonantia.stock.Stock;
 import com.nantia.repartonantia.usuario.Usuario;
 
 import java.io.Serializable;
@@ -54,10 +55,14 @@ public class Reparto implements Serializable {
     @SerializedName("estado")
     private String estado;
 
-    public Reparto(){};
+    @Ignore
+    @SerializedName("stock")
+    private Stock stock;
+
+    public Reparto(){}
 
     public Reparto(long id, String descripcion, Usuario vendedor1,
-                   Usuario vendedor2, Vehiculo vehiculo, String fecha, Ruta ruta, String estado) {
+                   Usuario vendedor2, Vehiculo vehiculo, String fecha, Ruta ruta, String estado, Stock stock) {
         this.id = id;
         this.descripcion = descripcion;
         this.vendedor1 = vendedor1;
@@ -66,6 +71,7 @@ public class Reparto implements Serializable {
         this.fecha = fecha;
         this.ruta = ruta;
         this.estado = estado;
+        this.stock = stock;
     }
 
     public long getRepartoPK() {
@@ -138,5 +144,13 @@ public class Reparto implements Serializable {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public Stock getStock() {
+        return stock;
+    }
+
+    public void setStock(Stock stock) {
+        this.stock = stock;
     }
 }
