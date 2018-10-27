@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.adapters.ProductoVentaAdapter;
+import com.nantia.repartonantia.cliente.ClienteActivity;
 import com.nantia.repartonantia.data.AppDatabase;
 import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.listadeprecios.ProductoLista;
@@ -109,6 +110,11 @@ public class VentaFragment  extends Fragment implements VentaView, View.OnClickL
 
     @Override public boolean isVendedor1Checked() {
         return vendedor1RB.isChecked();
+    }
+
+    @Override
+    public void finishActivities() {
+        getActivity().finish();
     }
 
     private void loadData(Venta venta){

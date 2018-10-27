@@ -12,6 +12,7 @@ import com.nantia.repartonantia.map.MapActivity;
 import com.nantia.repartonantia.producto.ProductoActivity;
 import com.nantia.repartonantia.reparto.RepartoActivity;
 import com.nantia.repartonantia.stock.StockActivity;
+import com.nantia.repartonantia.usuario.VendedoresActivity;
 import com.nantia.repartonantia.venta.VentaActivity;
 
 import static com.nantia.repartonantia.utils.Constantes.KEY_VENTA_LISTA;
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 navigateToVentas();
                 break;
             case R.id.menu_vendedores_cv:
-//                startActivity(MapActivity.class);
+                startActivity(VendedoresActivity.class);
                 break;
             default:
                 break;

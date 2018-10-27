@@ -101,6 +101,9 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dias = new ArrayList<>();
+        envasesEnPrestamo = new ArrayList<>();
+        envasesEnPrestamoOrig = new ArrayList<>();
     }
 
     @Override
@@ -114,9 +117,6 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
 
         presenter.getEnvases();
 
-        dias = new ArrayList<>();
-        envasesEnPrestamo = new ArrayList<>();
-        envasesEnPrestamoOrig = new ArrayList<>();
         if(getArguments() != null){
             if(getArguments().getDouble("lat") != 0.0){
                 posicionMapa = new LatLng(getArguments().getDouble("lat"), getArguments().getDouble("lng"));
@@ -153,15 +153,14 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
                     addEditTexts(envasesEnPrestamo.get(i));
                 }
             }
+        }else{
+            cliente = new Cliente();
         }
 
     }
 
     @Override
     public void saveCliente() {
-        if(cliente == null){
-            cliente = new Cliente();
-        }
         cliente.setNombre1(nombre1.getText().toString());
         cliente.setNombre2(nombre2.getText().toString());
         cliente.setNroDocumento(nroDeDoc.getText().toString());
@@ -280,35 +279,6 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
     }
 
-//    @Override
-//    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//        switch (buttonView.getId()){
-//            case R.id.domingo_rb:
-//                addRemoveDia(domingo.isChecked(), Dia.DOMINGO);
-//                break;
-//            case R.id.lunes_rb:
-//                addRemoveDia(lunes.isChecked(), Dia.LUNES);
-//                break;
-//            case R.id.martes_rb:
-//                addRemoveDia(martes.isChecked(), Dia.MARTES);
-//                break;
-//            case R.id.miercoles_rb:
-//                addRemoveDia(miercoles.isChecked(), Dia.MIERCOLES);
-//                break;
-//            case R.id.jueves_rb:
-//                addRemoveDia(jueves.isChecked(), Dia.JUEVES);
-//                break;
-//            case R.id.viernes_rb:
-//                addRemoveDia(viernes.isChecked(), Dia.VIERNES);
-//                break;
-//            case R.id.sabado_rb:
-//                addRemoveDia(sabado.isChecked(), Dia.SABADO);
-//                break;
-//            default:
-//                break;
-//        }
-//    }
-
     @Override
     public void navigateToClienteFragment(Cliente cliente) {
         Bundle b = new Bundle();
@@ -392,13 +362,6 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
             }
         });
 
-//        domingo.setOnCheckedChangeListener(this);
-//        lunes.setOnCheckedChangeListener(this);
-//        martes.setOnCheckedChangeListener(this);
-//        miercoles.setOnCheckedChangeListener(this);
-//        jueves.setOnCheckedChangeListener(this);
-//        viernes.setOnCheckedChangeListener(this);
-//        sabado.setOnCheckedChangeListener(this);
         domingo.setOnClickListener(this);
         lunes.setOnClickListener(this);
         martes.setOnClickListener(this);
@@ -526,8 +489,10 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
             envaseCantET.setText(String.valueOf(envaseEnPrestamo.getCantidad()));
         }
 
-        envAPrestamoSPs.add(envaseSp);
-        envAPrestamoCantETs.add(envaseCantET);
+        if(envaseEnPrestamo == null){
+            envAPrestamoSPs.add(envaseSp);
+            envAPrestamoCantETs.add(envaseCantET);
+        }
         envAPrestamoLO.addView(envaseSp, 0);
         envAPrestamoLO.addView(envaseCantET, 1);
     }

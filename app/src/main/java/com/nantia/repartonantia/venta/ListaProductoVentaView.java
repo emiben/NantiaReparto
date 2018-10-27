@@ -11,5 +11,6 @@ public interface ListaProductoVentaView {
     void setListeners();
     void updateCantidadCarro(int cant);
     void showStockNoAsociadoError();
+    void showClienteSinListaPrecioError();
     void finishActivity();
 }
