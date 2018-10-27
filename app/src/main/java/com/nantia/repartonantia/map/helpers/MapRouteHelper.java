@@ -33,9 +33,9 @@ public class MapRouteHelper {
         direcciones.execute(origen,destino);
     }
 
-    public static void traerRutaMasCorta(final List<LatLng> origenes, LatLng destino, final RutaHelperListener listener) {
+    public static void traerRutaMasCorta(LatLng origen, final List<LatLng> destinos, final RutaHelperListener listener) {
         final ArrayList<Ruta> rutasADestino = new ArrayList<Ruta>();
-        for (int i = 0; i < origenes.size();i++){
+        for (int i = 0; i < destinos.size();i++){
             GetDirectionsAsync direccion = new GetDirectionsAsync();
             direccion.setListener(new GetDirectionsListener() {
                 @Override
@@ -45,7 +45,7 @@ public class MapRouteHelper {
                     // si proceso termino hacer sort de la lista por distancia y llamar al listener con la ruta mas corta
                     Collections.sort(rutas);
                     rutasADestino.add(rutas.get(0));
-                    if (rutasADestino.size() == origenes.size()) {
+                    if (rutasADestino.size() == destinos.size()) {
                         Collections.sort(rutasADestino);
                         listener.rutaMasCortaADestinoEncontrada(rutasADestino.get(0));
                     }
@@ -56,7 +56,7 @@ public class MapRouteHelper {
                     // decidir como manejar error
                 }
             });
-            direccion.execute(origenes.get(i),destino);
+            direccion.execute(origen, destinos.get(i));
         }
     }
 
