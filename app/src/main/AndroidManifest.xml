@@ -45,7 +45,8 @@
         <activity
             android:name=".venta.VentaActivity"
             android:windowSoftInputMode="adjustNothing" />
-        <activity android:name=".map.MapActivity"></activity>
+        <activity android:name=".map.MapActivity" />
+        <activity android:name=".usuario.VendedoresActivity"></activity>
     </application>
 
 </manifest>
