@@ -1,14 +1,19 @@
 package com.nantia.repartonantia.map;
 
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -22,9 +27,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.cliente.Cliente;
 import com.nantia.repartonantia.cliente.ClienteActivity;
+import com.nantia.repartonantia.geolocalizacion.Helpers.ControladorGeolocalizacion;
+import com.nantia.repartonantia.geolocalizacion.Helpers.GeolocalizacionListener;
+import com.nantia.repartonantia.map.helpers.MapRouteHelper;
+import com.nantia.repartonantia.map.helpers.Ruta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.ResourceBundle;
 
 import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE;
 import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE_LISTA;
@@ -38,12 +49,68 @@ public class ClienteListaMapFragment extends Fragment implements OnMapReadyCallb
     private MapView mapView;
     private ArrayList<Cliente> clientes;
     private HashMap<Marker, Cliente> clientesMarkers;
+    private ControladorGeolocalizacion controladorGeolocalizacion;
+    private LatLng puntoPartida;
+
+    public void setPuntoPartida(LatLng puntoPartida){
+        this.puntoPartida = puntoPartida;
+    }
+    private final GeolocalizacionListener geolocalizacionListener = new GeolocalizacionListener() {
+        @Override
+        public void localizacionActualizada(double longitud, double latitud) {
+            // hacer algo
+            setPuntoPartida(new LatLng(latitud,longitud));
+            if(googleMap != null){
+                LatLng currentLatLng = new LatLng(latitud,
+                        longitud);
+                MapRouteHelper.crearRuta(currentLatLng, new LatLng(40.762810,-73.944066), googleMap);
+                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(currentLatLng,
+                        15);
+                googleMap.moveCamera(update);
+                if (ActivityCompat.checkSelfPermission(getActivity(),
+                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    googleMap.setMyLocationEnabled(true);
+                }
+                procesarRutaMasCorta();
+            }
+
+        }
+    };
+
+    private List<LatLng> parsearDestinos() {
+        ArrayList<LatLng> destinosParseados = new ArrayList<LatLng>();
+        for (Cliente cliente : clientes) {
+            LatLng point = new LatLng(Double.valueOf(cliente.getDireccion().getCoordLat()),
+                    Double.valueOf(cliente.getDireccion().getCoordLon()));
+            destinosParseados.add(point);
+        }
+        return destinosParseados;
+    }
+
+    private void procesarRutaMasCorta(){
+        MapRouteHelper.traerRutaMasCorta(puntoPartida, parsearDestinos(), new MapRouteHelper.RutaHelperListener() {
+            @Override
+            public void rutaMasCortaADestinoEncontrada(Ruta ruta) {
+                //trazar ruta en mapa
+                MapRouteHelper.trazarRuta(ruta,googleMap);
+            }
+        });
+    }
+
 
 
     public ClienteListaMapFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        controladorGeolocalizacion = new ControladorGeolocalizacion(context.getSystemService(Context.LOCATION_SERVICE),context);
+        controladorGeolocalizacion.setListener(geolocalizacionListener);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,12 +130,13 @@ public class ClienteListaMapFragment extends Fragment implements OnMapReadyCallb
         }
 
         mapView = view.findViewById(R.id.cliente_lista_mapView);
-        if(mapView != null){
+        if(mapView != null) {
             mapView.onCreate(null);
 
             mapView.onResume();
             mapView.getMapAsync(this);
         }
+        // get geolocalizacion
     }
 
     private void loadData(){
@@ -97,6 +165,10 @@ public class ClienteListaMapFragment extends Fragment implements OnMapReadyCallb
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        //googleMap.setMyLocationEnabled(true);
+        if(controladorGeolocalizacion.GPSHabilitado()) {
+            controladorGeolocalizacion.obtenerLocalizacion();
+        }
         //Setea el mapa en Sta Lucia
         CameraPosition fabrica = CameraPosition.builder()
                 .target(new LatLng(-34.455691, -56.387059))
