@@ -66,7 +66,7 @@ public class VentaPresenter {
     public void finalizarVenta(){
         Usuario vendedor;
         Pago pago = new Pago();
-        Cliente clienteOrig = venta.getCliente();
+//        Cliente clienteOrig = venta.getCliente();
         Cliente cliente = venta.getCliente();
         if(view.isVendedor1Checked()){
             vendedor = DataHolder.getReparto().getVendedor1();
@@ -85,7 +85,7 @@ public class VentaPresenter {
         cliente.setSaldo(cliente.getSaldo() + venta.calcularSaldo());
         cliente.setDifSaldo(venta.calcularSaldo());
         cliente.setActualizado(false);
-        DataHolder.getClientes().remove(clienteOrig);
+        DataHolder.removeClienteById(cliente.getId());
         DataHolder.getClientes().add(cliente);
 
         venta.setFecha(FechaHelper.getStringDate());

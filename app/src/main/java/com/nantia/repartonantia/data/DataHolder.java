@@ -106,4 +106,14 @@ public class DataHolder {
         }
         return null;
     }
+
+    public static void removeClienteById(long clineteId){
+        Boolean encontre = false;
+        for (int i = 0; i < clientes.size() && !encontre; i++){
+            if(clientes.get(i).getId() == clineteId){
+                clientes.remove(i);
+                encontre = true;
+            }
+        }
+    }
 }

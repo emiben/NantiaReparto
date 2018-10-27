@@ -114,9 +114,6 @@ public class VentaFragment  extends Fragment implements VentaView, View.OnClickL
 
     @Override
     public void finishActivities() {
-        if(ClienteActivity.instance != null){
-            ClienteActivity.instance.finish();
-        }
         getActivity().finish();
     }
 
