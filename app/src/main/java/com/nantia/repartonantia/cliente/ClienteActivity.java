@@ -1,5 +1,6 @@
 package com.nantia.repartonantia.cliente;
 
+import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -14,12 +15,15 @@ import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE_LISTA;
 
 public class ClienteActivity extends AppCompatActivity {
 
+    public static Activity instance;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cliente);
 
         if(this.getIntent().getBundleExtra(KEY_CLIENTE) != null){
+            instance = this;
             Cliente cliente = (Cliente) this.getIntent().getBundleExtra(KEY_CLIENTE).getSerializable(KEY_CLIENTE);
             Bundle b = new Bundle();
             b.putSerializable(KEY_CLIENTE, cliente);

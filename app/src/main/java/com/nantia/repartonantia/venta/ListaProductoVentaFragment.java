@@ -104,6 +104,11 @@ public class ListaProductoVentaFragment extends Fragment
         Toast.makeText(getActivity(), R.string.lista_prod_error_stock_no_asociado, Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void showClienteSinListaPrecioError() {
+        Toast.makeText(getActivity(), R.string.lista_prod_error_cliente_sin_lista, Toast.LENGTH_LONG).show();
+    }
+
     public void showSeleccionarArticulosError() {
         Toast.makeText(getActivity(), R.string.lista_prod_error_no_articulos, Toast.LENGTH_LONG).show();
     }

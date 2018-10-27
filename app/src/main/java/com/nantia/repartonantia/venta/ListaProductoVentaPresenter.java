@@ -35,6 +35,12 @@ public class ListaProductoVentaPresenter {
             stock = DataHolder.getReparto().getStock();
         }
         listaDePrecio = DataHolder.getListaDePrecioById(cliente.getIdLista());
+
+        if(listaDePrecio == null){
+            view.showClienteSinListaPrecioError();
+            view.finishActivity();
+        }
+
         if(stock != null && listaDePrecio.getProductosLista() != null){
             view.loadData(listaDePrecio.getProductosLista());
             view.setListeners();

@@ -1,10 +1,12 @@
 package com.nantia.repartonantia.venta;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 
 import com.nantia.repartonantia.cliente.Cliente;
+import com.nantia.repartonantia.cliente.ClienteActivity;
 import com.nantia.repartonantia.data.AppDatabase;
 import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.producto.Envase;
@@ -151,6 +153,7 @@ public class VentaPresenter {
                     saveVenta(venta);
                     Log.e(TAG, "Venta Creada ERROR: " + response.message());
                 }
+                view.finishActivities();
             }
 
             @Override
@@ -160,6 +163,7 @@ public class VentaPresenter {
             }
         });
     }
+
 
     private void saveVenta(final Venta venta){
         if(DataHolder.getVentas() == null){

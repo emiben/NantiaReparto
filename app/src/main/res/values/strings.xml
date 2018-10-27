@@ -89,6 +89,7 @@
     <string name="lista_prod_error_stock">Stock insuficiente. Cantidad max.: </string>
     <string name="lista_prod_error_stock_no_asociado">Stock no asociado al camion.</string>
     <string name="lista_prod_error_no_articulos">Seleccione al menos un artuculo!</string>
+    <string name="lista_prod_error_cliente_sin_lista">Cliente no tiene lista de precios Asociada!</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

@@ -33,7 +33,8 @@
             android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".cliente.ClienteActivity"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustNothing"
+            android:launchMode="singleInstance" />
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
