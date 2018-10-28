@@ -126,9 +126,10 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
 
     private void navigateToRepartoMap() {
         Intent i = new Intent(getActivity(), MapActivity.class);
-        Bundle b = new Bundle();
-        b.putSerializable(KEY_CLIENTE_LISTA, reparto.getRuta().getClientes());
-        i.putExtra(KEY_CLIENTE_LISTA, b);
+//        Bundle b = new Bundle();
+//        b.putSerializable(KEY_CLIENTE_LISTA, reparto.getRuta().getClientes());
+//        i.putExtra(KEY_REPARTO, b);
+        i.putExtra(KEY_REPARTO, true);
         startActivity(i);
     }
 

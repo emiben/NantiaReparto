@@ -116,4 +116,16 @@ public class DataHolder {
             }
         }
     }
+
+    public static void updateClienteEnReparto(Cliente cliente){
+        if(reparto != null && reparto.getRuta() != null && reparto.getRuta().getClientes() != null){
+            List<Cliente> clientes = reparto.getRuta().getClientes();
+            Boolean encontre = false;
+            for (int i = 0; i < clientes.size() && !encontre; i++){
+                if(clientes.get(i).getId() == cliente.getId()){
+                    reparto.getRuta().updateCliente(cliente);
+                }
+            }
+        }
+    }
 }

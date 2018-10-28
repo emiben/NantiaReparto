@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.cliente.Cliente;
 import com.nantia.repartonantia.cliente.ClienteActivity;
+import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.geolocalizacion.Helpers.ControladorGeolocalizacion;
 import com.nantia.repartonantia.geolocalizacion.Helpers.GeolocalizacionListener;
 import com.nantia.repartonantia.map.helpers.MapRouteHelper;
@@ -39,6 +40,7 @@ import java.util.ResourceBundle;
 
 import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE;
 import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE_LISTA;
+import static com.nantia.repartonantia.utils.Constantes.KEY_REPARTO;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,59 +48,13 @@ import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE_LISTA;
 public class ClienteListaMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap googleMap;
+    private Boolean mapReady = false;
     private MapView mapView;
-    private ArrayList<Cliente> clientes;
+    private List<Cliente> clientes;
     private HashMap<Marker, Cliente> clientesMarkers;
     private ControladorGeolocalizacion controladorGeolocalizacion;
+    private Boolean reparto;
     private LatLng puntoPartida;
-
-    public void setPuntoPartida(LatLng puntoPartida){
-        this.puntoPartida = puntoPartida;
-    }
-    private final GeolocalizacionListener geolocalizacionListener = new GeolocalizacionListener() {
-        @Override
-        public void localizacionActualizada(double longitud, double latitud) {
-            // hacer algo
-            setPuntoPartida(new LatLng(latitud,longitud));
-            if(googleMap != null){
-                LatLng currentLatLng = new LatLng(latitud,
-                        longitud);
-                MapRouteHelper.crearRuta(currentLatLng, new LatLng(40.762810,-73.944066), googleMap);
-                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(currentLatLng,
-                        15);
-                googleMap.moveCamera(update);
-                if (ActivityCompat.checkSelfPermission(getActivity(),
-                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                        && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    googleMap.setMyLocationEnabled(true);
-                }
-                procesarRutaMasCorta();
-            }
-
-        }
-    };
-
-    private List<LatLng> parsearDestinos() {
-        ArrayList<LatLng> destinosParseados = new ArrayList<LatLng>();
-        for (Cliente cliente : clientes) {
-            LatLng point = new LatLng(Double.valueOf(cliente.getDireccion().getCoordLat()),
-                    Double.valueOf(cliente.getDireccion().getCoordLon()));
-            destinosParseados.add(point);
-        }
-        return destinosParseados;
-    }
-
-    private void procesarRutaMasCorta(){
-        MapRouteHelper.traerRutaMasCorta(puntoPartida, parsearDestinos(), new MapRouteHelper.RutaHelperListener() {
-            @Override
-            public void rutaMasCortaADestinoEncontrada(Ruta ruta) {
-                //trazar ruta en mapa
-                MapRouteHelper.trazarRuta(ruta,googleMap);
-            }
-        });
-    }
-
 
 
     public ClienteListaMapFragment() {
@@ -117,6 +73,13 @@ public class ClienteListaMapFragment extends Fragment implements OnMapReadyCallb
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cliente_lista_map, container, false);
 
+        if(getArguments().getBoolean(KEY_REPARTO, false)){
+//            clientes = DataHolder.getReparto().getRuta().getClientesSinVisitar();
+            reparto = true;
+        }else {
+            clientes = DataHolder.getClientes();
+            reparto = false;
+        }
         MapsInitializer.initialize(getContext());
         return view;
     }
@@ -124,10 +87,6 @@ public class ClienteListaMapFragment extends Fragment implements OnMapReadyCallb
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        if(getArguments() != null){
-            clientes = (ArrayList<Cliente>) getArguments().getSerializable(KEY_CLIENTE_LISTA);
-        }
 
         mapView = view.findViewById(R.id.cliente_lista_mapView);
         if(mapView != null) {
@@ -137,6 +96,20 @@ public class ClienteListaMapFragment extends Fragment implements OnMapReadyCallb
             mapView.getMapAsync(this);
         }
         // get geolocalizacion
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(reparto){
+            clientes = DataHolder.getReparto().getRuta().getClientesSinVisitar();
+            if(mapReady){
+                googleMap.clear();
+                loadData(); //llamar al listener
+                controladorGeolocalizacion.obtenerLocalizacion();
+            }
+        }
+
     }
 
     private void loadData(){
@@ -180,6 +153,7 @@ public class ClienteListaMapFragment extends Fragment implements OnMapReadyCallb
         this.googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(fabrica));
         this.googleMap.setOnInfoWindowClickListener(this);
 //        googleMap.setOnMapClickListener(this);
+        mapReady = true;
         loadData();
     }
 
@@ -195,4 +169,56 @@ public class ClienteListaMapFragment extends Fragment implements OnMapReadyCallb
         i.putExtra(KEY_CLIENTE, b);
         startActivity(i);
     }
+
+    public void setPuntoPartida(LatLng puntoPartida){
+        this.puntoPartida = puntoPartida;
+    }
+
+    private final GeolocalizacionListener geolocalizacionListener = new GeolocalizacionListener() {
+        @Override
+        public void localizacionActualizada(double longitud, double latitud) {
+            // hacer algo
+            setPuntoPartida(new LatLng(latitud,longitud));
+            if(googleMap != null){
+                LatLng currentLatLng = new LatLng(latitud,
+                        longitud);
+                MapRouteHelper.crearRuta(currentLatLng, new LatLng(40.762810,-73.944066), googleMap);
+                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(currentLatLng,
+                        15);
+                googleMap.moveCamera(update);
+                if (ActivityCompat.checkSelfPermission(getActivity(),
+                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    googleMap.setMyLocationEnabled(true);
+                }
+                procesarRutaMasCorta();
+            }
+
+        }
+    };
+
+    private List<LatLng> parsearDestinos() {
+        ArrayList<LatLng> destinosParseados = new ArrayList<LatLng>();
+        for (Cliente cliente : clientes) {
+            if(cliente.getDireccion().getCoordLat() != null && !cliente.getDireccion().getCoordLat().isEmpty()
+                    && cliente.getDireccion().getCoordLon() != null && !cliente.getDireccion().getCoordLon().isEmpty()) {
+                LatLng point = new LatLng(Double.valueOf(cliente.getDireccion().getCoordLat()),
+                        Double.valueOf(cliente.getDireccion().getCoordLon()));
+                destinosParseados.add(point);
+            }
+        }
+        return destinosParseados;
+    }
+
+    private void procesarRutaMasCorta(){
+        MapRouteHelper.traerRutaMasCorta(puntoPartida, parsearDestinos(), new MapRouteHelper.RutaHelperListener() {
+            @Override
+            public void rutaMasCortaADestinoEncontrada(Ruta ruta) {
+                //trazar ruta en mapa
+                MapRouteHelper.trazarRuta(ruta,googleMap);
+            }
+        });
+    }
 }
+

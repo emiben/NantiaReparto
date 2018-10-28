@@ -4,6 +4,7 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
+import android.text.BoringLayout;
 
 import com.google.gson.annotations.SerializedName;
 import com.nantia.repartonantia.cliente.Cliente;
@@ -82,4 +83,26 @@ public class Ruta implements Serializable {
         }
         return clientes;
     }
+
+
+    public List<Cliente> getClientesSinVisitar(){
+        ArrayList<Cliente> clientes = new ArrayList<>();
+        for (RutaCliente rutaCliente : rutaClientes){
+            if(!rutaCliente.getCliente().isVisitado()){
+                clientes.add(rutaCliente.getCliente());
+            }
+        }
+        return clientes;
+    }
+
+    public void updateCliente(Cliente cliente){
+        Boolean encontre = false;
+        for (int i = 0; i < rutaClientes.size() && !encontre; i++){
+            if(rutaClientes.get(i).getCliente().getId() == cliente.getId()){
+                rutaClientes.get(i).setCliente(cliente);
+                encontre = true;
+            }
+        }
+    }
+
 }

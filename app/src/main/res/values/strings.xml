@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">RepartoNantia</string>
-    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_login">Ingresar</string>
 
     <!-- Strings related to login -->
     <string name="login_nombre_usuario">Nombre Usuario</string>

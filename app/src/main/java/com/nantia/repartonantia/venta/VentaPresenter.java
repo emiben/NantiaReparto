@@ -85,6 +85,8 @@ public class VentaPresenter {
         cliente.setSaldo(cliente.getSaldo() + venta.calcularSaldo());
         cliente.setDifSaldo(venta.calcularSaldo());
         cliente.setActualizado(false);
+        cliente.setVisitado(true);
+        DataHolder.updateClienteEnReparto(cliente);
         DataHolder.removeClienteById(cliente.getId());
         DataHolder.getClientes().add(cliente);
 

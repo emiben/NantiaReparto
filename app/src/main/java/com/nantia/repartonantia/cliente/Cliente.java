@@ -94,7 +94,7 @@ public class Cliente implements Serializable {
     private transient boolean actualizado;
 
     @ColumnInfo(name = "visitado")
-    private transient boolean visitado;
+    private transient boolean visitado = false;
 
     public Cliente(){
 
