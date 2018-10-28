@@ -93,6 +93,10 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
                 rutaTv.setText(reparto.getRuta().getNombre());
             if(reparto.getEstado() != null && !reparto.getEstado().isEmpty())
                 estadoTv.setText(reparto.getEstado());
+            if(reparto.getEstado().equals(RepartoEstado.COMENZADO.name())){
+                comenzarRepartoBtn.setVisibility(View.GONE);
+                finalizarRepartoBtn.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -126,14 +130,12 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
 
     private void navigateToRepartoMap() {
         Intent i = new Intent(getActivity(), MapActivity.class);
-//        Bundle b = new Bundle();
-//        b.putSerializable(KEY_CLIENTE_LISTA, reparto.getRuta().getClientes());
-//        i.putExtra(KEY_REPARTO, b);
         i.putExtra(KEY_REPARTO, true);
         startActivity(i);
     }
 
     private void comenzarReparto(){
+        //TODO: Pergarle al endpoint para actualizar el estado del reparto
         reparto.setEstado(RepartoEstado.COMENZADO.name());
         guardarReparto(reparto);
         comenzarRepartoBtn.setVisibility(View.GONE);
@@ -142,6 +144,7 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
     }
 
     private void finalizarReparto(){
+        //TODO: Pergarle al endpoint para actualizar el estado del reparto
         DataHolder.getReparto().setEstado(RepartoEstado.FINALIZADO.name());
         reparto.setEstado(RepartoEstado.FINALIZADO.name());
         estadoTv.setText(reparto.getEstado());
@@ -154,8 +157,11 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                db.repartoDao().deleteById(reparto.getId());
+//                db.repartoDao().deleteById(reparto.getId());
+                db.repartoDao().nukeTable();
                 db.repartoDao().insertAll(reparto);
+                //Todo: Borrar despues de probar
+                db.repartoDao().getAll();
             }
         });
     }

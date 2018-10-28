@@ -18,6 +18,8 @@ import com.nantia.repartonantia.producto.ProductoService;
 import com.nantia.repartonantia.reparto.Reparto;
 import com.nantia.repartonantia.usuario.Usuario;
 import com.nantia.repartonantia.utils.RetrofitClientInstance;
+import com.nantia.repartonantia.venta.Venta;
+
 import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Call;
@@ -122,6 +124,11 @@ public class LoginPresenterImpl implements ILoginPresenter{
                 DataHolder.setProductos(db.productoDao().getAll());
                 DataHolder.setClientes(db.clienteDao().getAll());
                 DataHolder.setListasDePrecios(db.listaDePrecioDao().getAll());
+                if(db.ventaDao().getAll() != null){
+                    DataHolder.setVentas(db.ventaDao().getAll());
+                }else{
+                    DataHolder.setVentas(new ArrayList<Venta>());
+                }
             }
         });
     }

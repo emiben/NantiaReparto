@@ -23,6 +23,10 @@ public class Pago implements Serializable {
   @SerializedName("monto")
   private float monto;
 
+  @ColumnInfo(name = "dif_saldo")
+  @SerializedName("difSaldo")
+  private float difSaldo;
+
   public long getLocalPK() {
     return localPK;
   }
@@ -53,5 +57,13 @@ public class Pago implements Serializable {
 
   public void setClienteId(long clienteId) {
     this.clienteId = clienteId;
+  }
+
+  public float getDifSaldo() {
+    return difSaldo;
+  }
+
+  public void setDifSaldo(float difSaldo) {
+    this.difSaldo = difSaldo;
   }
 }

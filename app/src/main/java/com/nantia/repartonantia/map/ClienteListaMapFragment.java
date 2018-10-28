@@ -74,7 +74,6 @@ public class ClienteListaMapFragment extends Fragment implements OnMapReadyCallb
         View view = inflater.inflate(R.layout.fragment_cliente_lista_map, container, false);
 
         if(getArguments().getBoolean(KEY_REPARTO, false)){
-//            clientes = DataHolder.getReparto().getRuta().getClientesSinVisitar();
             reparto = true;
         }else {
             clientes = DataHolder.getClientes();
@@ -95,7 +94,6 @@ public class ClienteListaMapFragment extends Fragment implements OnMapReadyCallb
             mapView.onResume();
             mapView.getMapAsync(this);
         }
-        // get geolocalizacion
     }
 
     @Override
@@ -105,7 +103,7 @@ public class ClienteListaMapFragment extends Fragment implements OnMapReadyCallb
             clientes = DataHolder.getReparto().getRuta().getClientesSinVisitar();
             if(mapReady){
                 googleMap.clear();
-                loadData(); //llamar al listener
+                loadData();
                 controladorGeolocalizacion.obtenerLocalizacion();
             }
         }

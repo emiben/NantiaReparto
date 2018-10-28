@@ -83,7 +83,6 @@ public class VentaPresenter {
         }
 
         cliente.setSaldo(cliente.getSaldo() + venta.calcularSaldo());
-        cliente.setDifSaldo(venta.calcularSaldo());
         cliente.setActualizado(false);
         cliente.setVisitado(true);
         DataHolder.updateClienteEnReparto(cliente);
@@ -97,13 +96,28 @@ public class VentaPresenter {
         pago.setClienteId(cliente.getId());
         pago.setFechaPago(FechaHelper.getStringDate());
         pago.setMonto(venta.getPagoTotal());
+        pago.setDifSaldo(venta.calcularSaldo());
 
         venta.setPago(pago);
 
+        updateUsuariosEnDB();
         updateStock(venta.getProductosVenta());
         sendVenta(venta);
     }
 
+
+    private void updateUsuariosEnDB(){
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                db.usuarioDao().nukeTable();
+                db.usuarioDao().insertAll(DataHolder.getReparto().getVendedor1(),
+                        DataHolder.getReparto().getVendedor2());
+                //TODO: Eliminar despues de chequear que funciona
+                db.usuarioDao().getAll();
+            }
+        });
+    }
 
     private void updateStock(List<ProductoVenta> prodsVenta){
         Stock stock = DataHolder.getReparto().getStock();
@@ -171,7 +185,6 @@ public class VentaPresenter {
         if(DataHolder.getVentas() == null){
             DataHolder.setVentas(new ArrayList<Venta>());
         }
-        DataHolder.getVentas().remove(venta);
         DataHolder.getVentas().add(venta);
         AsyncTask.execute(new Runnable() {
             @Override
@@ -217,7 +230,8 @@ public class VentaPresenter {
             @Override
             public void run() {
                 db.stockDao().updateStock(stock);
-                Log.i(TAG, "Stock guardado en base");
+                //TODO: Eliminar despues de chequear que funciona
+                db.stockDao().getAll();
             }
         });
     }

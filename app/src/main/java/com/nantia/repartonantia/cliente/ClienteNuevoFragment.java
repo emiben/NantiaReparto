@@ -163,6 +163,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     public void saveCliente() {
         cliente.setNombre1(nombre1.getText().toString());
         cliente.setNombre2(nombre2.getText().toString());
+        cliente.setActivo(true);
         cliente.setNroDocumento(nroDeDoc.getText().toString());
         if(tipoDeDoc.getSelectedItem().equals(TipoDocumento.CI.name())){
             cliente.setTipoDocumento(TipoDocumento.CI.name());
