@@ -42,6 +42,14 @@ public class Vehiculo implements Serializable{
     @SerializedName("descripcion")
     private String descripcion;
 
+    @ColumnInfo(name = "coord_lon")
+    @SerializedName("coordLon")
+    private String coordLon;
+
+    @ColumnInfo(name = "coord_lat")
+    @SerializedName("coordLat")
+    private String coordLat;
+
     @ColumnInfo(name = "activo")
     @SerializedName("activo")
     private boolean activo;
@@ -113,5 +121,21 @@ public class Vehiculo implements Serializable{
 
     public void setActivo(boolean activo) {
         this.activo = activo;
+    }
+
+    public String getCoordLon() {
+        return coordLon;
+    }
+
+    public void setCoordLon(String coordLon) {
+        this.coordLon = coordLon;
+    }
+
+    public String getCoordLat() {
+        return coordLat;
+    }
+
+    public void setCoordLat(String coordLat) {
+        this.coordLat = coordLat;
     }
 }

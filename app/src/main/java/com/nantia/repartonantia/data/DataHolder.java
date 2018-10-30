@@ -9,6 +9,7 @@ import com.nantia.repartonantia.reparto.Ruta;
 import com.nantia.repartonantia.usuario.Usuario;
 import com.nantia.repartonantia.venta.Venta;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -127,5 +128,17 @@ public class DataHolder {
                 }
             }
         }
+    }
+
+    public static List<Venta> getVentasSinEnviar(){
+        List<Venta> mVentas = new ArrayList<>();
+        if(ventas != null){
+            for (Venta venta : ventas){
+                if(!venta.isActualizado()){
+                    mVentas.add(venta);
+                }
+            }
+        }
+        return mVentas;
     }
 }

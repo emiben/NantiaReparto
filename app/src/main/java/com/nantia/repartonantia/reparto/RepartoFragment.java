@@ -19,6 +19,10 @@ import com.nantia.repartonantia.cliente.ClienteActivity;
 import com.nantia.repartonantia.data.AppDatabase;
 import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.map.MapActivity;
+import com.nantia.repartonantia.usuario.Usuario;
+import com.nantia.repartonantia.venta.Venta;
+
+import java.util.List;
 
 import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE_LISTA;
 import static com.nantia.repartonantia.utils.Constantes.KEY_DB_NOMBRE;
@@ -148,6 +152,14 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
         DataHolder.getReparto().setEstado(RepartoEstado.FINALIZADO.name());
         reparto.setEstado(RepartoEstado.FINALIZADO.name());
         estadoTv.setText(reparto.getEstado());
+        enviarData();
+    }
+
+    private void enviarData(){
+        List<Venta> ventas = DataHolder.getVentasSinEnviar();
+        if(ventas.size() > 0){
+
+        }
     }
 
     private void guardarReparto(final Reparto reparto){

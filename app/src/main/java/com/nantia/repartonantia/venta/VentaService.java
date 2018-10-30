@@ -1,5 +1,8 @@
 package com.nantia.repartonantia.venta;
 
+import java.util.List;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Headers;
@@ -11,5 +14,11 @@ public interface VentaService {
     @Headers({
             "Content-Type: application/json;charset=utf-8",
             "Accept: application/json;charset=utf-8"})
-    Call<Venta> saveVenta(@Body Venta cliente);
+    Call<Venta> saveVenta(@Body Venta venta);
+
+    @POST("Loquesea")
+    @Headers({
+            "Content-Type: application/json;charset=utf-8",
+            "Accept: application/json;charset=utf-8"})
+    Call<ResponseBody> enviarVentas(@Body List<Venta> ventas);
 }

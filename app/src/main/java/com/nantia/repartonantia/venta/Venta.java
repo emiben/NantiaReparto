@@ -61,7 +61,7 @@ public class Venta implements Serializable {
     private long reaprtoID;
 
     @ColumnInfo(name = "actualizado_venta")
-    private transient boolean actualizado;
+    private transient boolean actualizado = false;
 
     @Embedded
     @SerializedName("datapago")

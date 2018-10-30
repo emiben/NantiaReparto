@@ -163,18 +163,19 @@ public class VentaPresenter {
                 if(response.code() == HTTP_CREATED){
                     response.body().setActualizado(true);
                     saveVenta(response.body());
-                    view.onSetProgressBarVisibility(View.GONE);
                     Log.i(TAG, "Venta Creada OK");
                 }else {
                     saveVenta(venta);
                     Log.e(TAG, "Venta Creada ERROR: " + response.message());
                 }
+                view.onSetProgressBarVisibility(View.GONE);
                 view.finishActivities();
             }
 
             @Override
             public void onFailure(Call<Venta> call, Throwable t) {
                 saveVenta(venta);
+                view.onSetProgressBarVisibility(View.GONE);
                 Log.e(TAG, "Venta Creada ERROR: " + t.getMessage());
             }
         });
