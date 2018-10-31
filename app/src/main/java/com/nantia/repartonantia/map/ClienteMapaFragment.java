@@ -15,7 +15,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -23,6 +22,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.cliente.ClienteNuevoFragment;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,6 +45,7 @@ public class ClienteMapaFragment extends Fragment implements OnMapReadyCallback,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_cliente_mapa, container, false);
+        MapsInitializer.initialize(getContext());
         return view;
     }
 
@@ -76,10 +77,9 @@ public class ClienteMapaFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        MapsInitializer.initialize(getContext());
-
         this.googleMap = googleMap;
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        //Setea el mapa en Sta Lucia
         CameraPosition fabrica = CameraPosition.builder()
                 .target(new LatLng(-34.455691, -56.387059))
                 .zoom(15)
@@ -118,7 +118,6 @@ public class ClienteMapaFragment extends Fragment implements OnMapReadyCallback,
         }
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.cliente_lista_layout, clienteNuevoFragment)
-                .addToBackStack(null)
                 .commit();
     }
 }

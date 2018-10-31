@@ -1,81 +1,136 @@
 package com.nantia.repartonantia.cliente;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Embedded;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Emi on 23/5/2018.
  */
 
+@Entity
 public class Cliente implements Serializable {
 
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "local_pk")
+    private transient long localPK;
+
+    @ColumnInfo(name = "cliente_id")
     @SerializedName("id")
     private long id;
 
-    @SerializedName("direccion")
-    private Direccion direccion;
-
-    @SerializedName("tipoDocumento")
-    private TipoDocumento tipoDocumento;
-
+    @ColumnInfo(name = "nro_documento")
     @SerializedName("nroDocumento")
     private String nroDocumento;
 
+    @ColumnInfo(name = "tipo_documento")
+    @SerializedName("tipoDocumento")
+    private String tipoDocumento;
+
+    @ColumnInfo(name = "nombre_1")
     @SerializedName("nombre1")
     private String nombre1;
 
+    @ColumnInfo(name = "nombre_2")
     @SerializedName("nombre2")
     private String nombre2;
 
+    @ColumnInfo(name = "saldo")
     @SerializedName("saldo")
     private float saldo;
 
-    @SerializedName("envaseEnPrestamo")
-    private ArrayList<EnvaseEnPrestamo> envasesEnPrestamo;
+//    @ColumnInfo(name = "dif_saldo")
+//    @SerializedName("difSaldo")
+//    private float difSaldo;
 
+    @ColumnInfo(name = "fecha_nacimiento")
     @SerializedName("fechaNacimiento")
-    private Date fechaNacimiento;
+    private String fechaNacimiento;
 
+    @ColumnInfo(name = "fecha_alta")
     @SerializedName("fechaAlta")
-    private Date fechaAlta;
+    private String fechaAlta;
 
-    @SerializedName("celular")
-    private int celular;
-
+    @ColumnInfo(name = "mail")
     @SerializedName("mail")
     private String mail;
 
-    @SerializedName("idLista")
-    private int idLista;
+    @ColumnInfo(name = "celular")
+    @SerializedName("celular")
+    private String celular;
 
+    @ColumnInfo(name = "id_lista")
+    @SerializedName("idLista")
+    private long idLista;
+
+    @ColumnInfo(name = "observaciones")
     @SerializedName("observaciones")
     private String observaciones;
 
+    @ColumnInfo(name = "activo")
     @SerializedName("activo")
     private boolean activo;
 
-    public Cliente(long id, Direccion direccion, TipoDocumento tipoDocumento, String nroDocumento,
-                   String nombre1, String nombre2, float saldo, ArrayList<EnvaseEnPrestamo> envasesEnPrestamo,
-                   Date fechaNacimiento, Date fechaAlta, int celular, String mail, int idLista,
-                   String observaciones, boolean activo) {
+    @Embedded
+    @SerializedName("direccion")
+    private Direccion direccion;
+
+    @SerializedName("setEnvasesEnPrestamo")
+    @TypeConverters(EnvaseEnPrestamoTypeConverter.class)
+    private List<EnvaseEnPrestamo> envasesEnPrestamo;
+
+    @SerializedName("dias")
+    @TypeConverters(DiaTypeConverter.class)
+    private List<Dia> dias;
+
+    @ColumnInfo(name = "actualizado_cliente")
+    private transient boolean actualizado;
+
+    @ColumnInfo(name = "visitado")
+    private transient boolean visitado = false;
+
+    public Cliente(){
+
+    }
+
+    //@Ignore
+    public Cliente(long id, String nroDocumento, String tipoDocumento,
+                   String nombre1, String nombre2, float saldo, String fechaNacimiento,
+                   String fechaAlta, String mail, String celular, long idLista, String observaciones,
+                   boolean activo, Direccion direccion, List<EnvaseEnPrestamo> envasesEnPrestamo,
+                   List<Dia> dias) {
         this.id = id;
-        this.direccion = direccion;
-        this.tipoDocumento = tipoDocumento;
         this.nroDocumento = nroDocumento;
+        this.tipoDocumento = tipoDocumento;
         this.nombre1 = nombre1;
         this.nombre2 = nombre2;
         this.saldo = saldo;
-        this.envasesEnPrestamo = envasesEnPrestamo;
+//        this.difSaldo = difSaldo;
         this.fechaNacimiento = fechaNacimiento;
         this.fechaAlta = fechaAlta;
-        this.celular = celular;
         this.mail = mail;
+        this.celular = celular;
         this.idLista = idLista;
         this.observaciones = observaciones;
         this.activo = activo;
+        this.direccion = direccion;
+        this.envasesEnPrestamo = envasesEnPrestamo;
+        this.dias = dias;
+    }
+
+    public long getLocalPK() {
+        return localPK;
+    }
+
+    public void setLocalPK(long localPK) {
+        this.localPK = localPK;
     }
 
     public long getId() {
@@ -94,11 +149,11 @@ public class Cliente implements Serializable {
         this.direccion = direccion;
     }
 
-    public TipoDocumento getTipoDocumento() {
+    public String getTipoDocumento() {
         return tipoDocumento;
     }
 
-    public void setTipoDocumento(TipoDocumento tipoDocumento) {
+    public void setTipoDocumento(String tipoDocumento) {
         this.tipoDocumento = tipoDocumento;
     }
 
@@ -134,35 +189,43 @@ public class Cliente implements Serializable {
         this.saldo = saldo;
     }
 
-    public ArrayList<EnvaseEnPrestamo> getEnvasesEnPrestamo() {
+//    public float getDifSaldo() {
+//        return difSaldo;
+//    }
+//
+//    public void setDifSaldo(float difSaldo) {
+//        this.difSaldo = difSaldo;
+//    }
+
+    public List<EnvaseEnPrestamo> getEnvasesEnPrestamo() {
         return envasesEnPrestamo;
     }
 
-    public void setEnvasesEnPrestamo(ArrayList<EnvaseEnPrestamo> envasesEnPrestamo) {
+    public void setEnvasesEnPrestamo(List<EnvaseEnPrestamo> envasesEnPrestamo) {
         this.envasesEnPrestamo = envasesEnPrestamo;
     }
 
-    public Date getFechaNacimiento() {
+    public String getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(Date fechaNacimiento) {
+    public void setFechaNacimiento(String fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public Date getFechaAlta() {
+    public String getFechaAlta() {
         return fechaAlta;
     }
 
-    public void setFechaAlta(Date fechaAlta) {
+    public void setFechaAlta(String fechaAlta) {
         this.fechaAlta = fechaAlta;
     }
 
-    public int getCelular() {
+    public String getCelular() {
         return celular;
     }
 
-    public void setCelular(int celular) {
+    public void setCelular(String celular) {
         this.celular = celular;
     }
 
@@ -174,11 +237,11 @@ public class Cliente implements Serializable {
         this.mail = mail;
     }
 
-    public int getIdLista() {
+    public long getIdLista() {
         return idLista;
     }
 
-    public void setIdLista(int idLista) {
+    public void setIdLista(long idLista) {
         this.idLista = idLista;
     }
 
@@ -196,5 +259,33 @@ public class Cliente implements Serializable {
 
     public void setActivo(boolean activo) {
         this.activo = activo;
+    }
+
+    public List<Dia> getDias() {
+        return dias;
+    }
+
+    public void setDias(List<Dia> dias) {
+        this.dias = dias;
+    }
+
+    public boolean isActualizado() {
+        return actualizado;
+    }
+
+    public void setActualizado(boolean actualizado) {
+        this.actualizado = actualizado;
+    }
+
+    public boolean isVisitado() {
+        return visitado;
+    }
+
+    public void setVisitado(boolean visitado) {
+        this.visitado = visitado;
+    }
+
+    public String getNombreCompleto(){
+        return nombre1 + " " + nombre2;
     }
 }

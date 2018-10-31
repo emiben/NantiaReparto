@@ -11,11 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.adapters.ClienteListaAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE;
+import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE_LISTA;
 
 /**
  *
@@ -24,12 +29,12 @@ public class ClienteListaFragment extends Fragment implements ClienteListaAdapte
         ClienteListaView {
     private ProgressBar progressBar;
     private RecyclerView clientesRV;
+
     private SearchView buscarSV;
-    private ArrayList<Cliente> clientes;
+    private List<Cliente> clientes;
     private ClienteListaAdapter clienteListaAdapter;
     private ClienteListaPresenter clienteListaPresenter;
     private FloatingActionButton clientesFAB;
-
 
     public ClienteListaFragment() {
         // Required empty public constructor
@@ -47,7 +52,12 @@ public class ClienteListaFragment extends Fragment implements ClienteListaAdapte
         View view = inflater.inflate(R.layout.fragment_cliente_lista, container, false);
         clienteListaPresenter = new ClienteListaPresenter(this);
         initializeViewObjects(view);
-        clienteListaPresenter.getClientes();
+        if(getArguments() != null && getArguments().getSerializable(KEY_CLIENTE_LISTA) != null){
+            setClienteInfo((ArrayList<Cliente>)getArguments().getSerializable(KEY_CLIENTE_LISTA));
+            addListeners();
+        }else{
+            clienteListaPresenter.getClientes();
+        }
 
         return view;
     }
@@ -61,7 +71,7 @@ public class ClienteListaFragment extends Fragment implements ClienteListaAdapte
 
     private void navigateToClienteFragment(Cliente cliente) {
         Bundle b = new Bundle();
-        b.putSerializable("cliente", cliente);
+        b.putSerializable(KEY_CLIENTE, cliente);
         ClienteFragment clienteFragmentf = new ClienteFragment();
         clienteFragmentf.setArguments(b);
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -90,30 +100,33 @@ public class ClienteListaFragment extends Fragment implements ClienteListaAdapte
 
 
     @Override
-    public void setClienteInfo(ArrayList<Cliente> clientes) {
-        this.clientes = clientes;
-        clientesRV.setLayoutManager(new LinearLayoutManager(getActivity()));
-        clienteListaAdapter = new ClienteListaAdapter(getActivity(), clientes);
-        clienteListaAdapter.setClickListener(this);
-        clientesRV.setAdapter(clienteListaAdapter);
-
+    public void setClienteInfo(List<Cliente> clientes) {
+        if (clientes != null){
+            this.clientes = clientes;
+            clientesRV.setLayoutManager(new LinearLayoutManager(getActivity()));
+            clienteListaAdapter = new ClienteListaAdapter(getActivity(), clientes);
+            clienteListaAdapter.setClickListener(this);
+            clientesRV.setAdapter(clienteListaAdapter);
+        }
     }
 
     @Override
     public void addListeners() {
-        buscarSV.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                clienteListaAdapter.getFilter().filter(s);
-                return false;
-            }
+        if (clienteListaAdapter != null){
+            buscarSV.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String s) {
+                    clienteListaAdapter.getFilter().filter(s);
+                    return false;
+                }
 
-            @Override
-            public boolean onQueryTextChange(String s) {
-                clienteListaAdapter.getFilter().filter(s);
-                return false;
-            }
-        });
+                @Override
+                public boolean onQueryTextChange(String s) {
+                    clienteListaAdapter.getFilter().filter(s);
+                    return false;
+                }
+            });
+        }
 
         clientesFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,6 +144,6 @@ public class ClienteListaFragment extends Fragment implements ClienteListaAdapte
 
     @Override
     public void showError(String error) {
-
+        Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
     }
 }

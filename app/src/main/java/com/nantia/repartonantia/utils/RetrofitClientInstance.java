@@ -9,7 +9,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClientInstance {
     private static Retrofit retrofit;
-    private static final String BASE_URL = "https://nantia-servidor.herokuapp.com/api/";
+//    private static final String BASE_URL = "https://nantia-servidor.herokuapp.com/api/";
+    private static final String BASE_URL = "https://nantia-servidor-test.herokuapp.com/api/";
     //private static final String BASE_URL = "http://localhost:8080/api/";
 
     public static Retrofit getRetrofitInstance() {

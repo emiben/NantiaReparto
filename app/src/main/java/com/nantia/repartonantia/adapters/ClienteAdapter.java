@@ -11,13 +11,14 @@ import android.widget.TextView;
 import com.nantia.repartonantia.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Emi on 28/5/2018.
  */
 
 public class ClienteAdapter extends RecyclerView.Adapter<ClienteAdapter.ViewHolder> {
-    private ArrayList<ClienteInfoPOJO> mData;
+    private List<ClienteInfoPOJO> mData;
     private LayoutInflater mInflater;
 
     public ClienteAdapter(Context context, ArrayList<ClienteInfoPOJO> mData) {
@@ -44,12 +45,12 @@ public class ClienteAdapter extends RecyclerView.Adapter<ClienteAdapter.ViewHold
         return mData.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         ImageView icono;
         TextView primario;
         TextView secundario;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             icono = itemView.findViewById(R.id.cliente_icono);
             primario = itemView.findViewById(R.id.primarioTV);

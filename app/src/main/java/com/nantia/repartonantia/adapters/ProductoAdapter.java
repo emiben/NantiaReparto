@@ -15,6 +15,7 @@ import com.nantia.repartonantia.producto.ProductoListaView;
 import com.nantia.repartonantia.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Emi on 20/5/2018.
@@ -24,9 +25,9 @@ public class ProductoAdapter extends ArrayAdapter<Producto> implements Filterabl
 
     private ProductoListaView productoListaView;
     private Context context;
-    private ArrayList<Producto> productos;
+    private List<Producto> productos;
     private LayoutInflater inflater;
-    ArrayList<Producto> productosOriginal;
+    List<Producto> productosOriginal;
     ValueFilter valueFilter;
 
     private static class ViewHolder {
