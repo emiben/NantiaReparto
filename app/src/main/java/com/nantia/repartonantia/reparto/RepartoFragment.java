@@ -11,7 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.util.Base64Utils;
 import com.nantia.repartonantia.R;
@@ -20,10 +22,18 @@ import com.nantia.repartonantia.data.AppDatabase;
 import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.map.MapActivity;
 import com.nantia.repartonantia.usuario.Usuario;
+import com.nantia.repartonantia.utils.RetrofitClientInstance;
 import com.nantia.repartonantia.venta.Venta;
+import com.nantia.repartonantia.venta.VentaService;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.nantia.repartonantia.utils.Constantes.HTTP_OK;
 import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE_LISTA;
 import static com.nantia.repartonantia.utils.Constantes.KEY_DB_NOMBRE;
 import static com.nantia.repartonantia.utils.Constantes.KEY_REPARTO;
@@ -32,6 +42,7 @@ import static com.nantia.repartonantia.utils.Constantes.KEY_REPARTO;
  * A simple {@link Fragment} subclass.
  */
 public class RepartoFragment extends Fragment implements View.OnClickListener {
+    private ProgressBar progressBar;
     private TextView repartoTv;
     private TextView vendedor1Tv;
     private TextView vendedor2Tv;
@@ -65,6 +76,7 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initializeViewObjects(View view){
+        progressBar = view.findViewById(R.id.reparto_progressBar);
         repartoTv = view.findViewById(R.id.reparto_desc_tv);
         vendedor1Tv = view.findViewById(R.id.reparto_vend_1_tv);
         vendedor2Tv = view.findViewById(R.id.reparto_vend_2_tv);
@@ -139,7 +151,6 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
     }
 
     private void comenzarReparto(){
-        //TODO: Pergarle al endpoint para actualizar el estado del reparto
         reparto.setEstado(RepartoEstado.COMENZADO.name());
         guardarReparto(reparto);
         comenzarRepartoBtn.setVisibility(View.GONE);
@@ -148,7 +159,7 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
     }
 
     private void finalizarReparto(){
-        //TODO: Pergarle al endpoint para actualizar el estado del reparto
+        progressBar.setVisibility(View.VISIBLE);
         DataHolder.getReparto().setEstado(RepartoEstado.FINALIZADO.name());
         reparto.setEstado(RepartoEstado.FINALIZADO.name());
         estadoTv.setText(reparto.getEstado());
@@ -158,8 +169,50 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
     private void enviarData(){
         List<Venta> ventas = DataHolder.getVentasSinEnviar();
         if(ventas.size() > 0){
+            VentaService ventaService = RetrofitClientInstance.getRetrofitInstance().create(VentaService.class);
+            Call<ResponseBody> call = ventaService.enviarVentas(ventas);
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if(response.code() == HTTP_OK){
+                        borrarData();
+                    }else{
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(getContext(),
+                                "Error al enviar las ventas" + response.message(), Toast.LENGTH_LONG).show();
+                    }
+                }
 
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(getContext(),
+                            "Error al enviar las ventas" + t.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }else{
+            borrarData();
         }
+    }
+
+    private void borrarData(){
+        DataHolder.setRuta(null);
+        DataHolder.setReparto(null);
+        DataHolder.getVentas().clear();
+        final AppDatabase db = Room.databaseBuilder(getActivity(),
+                AppDatabase.class, KEY_DB_NOMBRE).build();
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                db.vehiculoDao().nukeTable();
+                db.stockDao().nukeTable();
+                db.usuarioDao().nukeTable();
+                db.rutaDao().nukeTable();
+                db.repartoDao().nukeTable();
+                db.ventaDao().nukeTable();
+                progressBar.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void guardarReparto(final Reparto reparto){

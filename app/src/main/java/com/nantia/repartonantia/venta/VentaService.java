@@ -16,7 +16,7 @@ public interface VentaService {
             "Accept: application/json;charset=utf-8"})
     Call<Venta> saveVenta(@Body Venta venta);
 
-    @POST("Loquesea")
+    @POST("addListVentas")
     @Headers({
             "Content-Type: application/json;charset=utf-8",
             "Accept: application/json;charset=utf-8"})

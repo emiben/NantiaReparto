@@ -27,4 +27,7 @@ public interface VentaDao {
 
     @Delete
     void delete(Venta venta);
+
+    @Query("DELETE FROM venta")
+    void nukeTable();
 }
