@@ -161,10 +161,10 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
     private void finalizarReparto(){
         progressBar.setVisibility(View.VISIBLE);
         DataHolder.getReparto().setEstado(RepartoEstado.FINALIZADO.name());
-        actualizarEstadoReparto(reparto.getId(), RepartoEstado.FINALIZADO.name());
         reparto.setEstado(RepartoEstado.FINALIZADO.name());
         estadoTv.setText(reparto.getEstado());
         enviarData();
+        actualizarEstadoReparto(reparto.getId(), RepartoEstado.FINALIZADO.name());
     }
 
     private void enviarData(){
