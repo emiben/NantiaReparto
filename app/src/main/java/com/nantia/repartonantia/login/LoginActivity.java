@@ -50,9 +50,6 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, View
         btnIngresar = findViewById(R.id.boton_ingresar);
         progressBar = findViewById(R.id.login_progress);
 
-        //TODO: Remove this
-        nombreUsuario.setText("usuario1");
-        contrasenia.setText("usuario1");
     }
 
 
