@@ -36,24 +36,6 @@ public class StockPresenter {
             view.onSetProgressBarVisibility(View.GONE);
             view.finishActivity();
             view.showError("No hay ningun reparto cargado!");
-//            StockService stockService = RetrofitClientInstance.getRetrofitInstance().create(StockService.class);
-//            //TODO: Traer el id del stock del reparto
-//            Call<Stock> call = stockService.getStock(1);
-//            call.enqueue(new Callback<Stock>() {
-//                @Override public void onResponse(Call<Stock> call, Response<Stock> response) {
-//                    DataHolder.setStock(response.body());
-//                    view.setStockInfo(prepareStockInfoPOJO(response.body()));
-//                    view.addListeners();
-//                    view.onSetProgressBarVisibility(View.GONE);
-//                }
-//
-//                @Override public void onFailure(Call<Stock> call, Throwable t) {
-//                    view.onSetProgressBarVisibility(View.GONE);
-//                    Log.e(TAG, t.getMessage());
-//                    view.showError(t.getMessage());
-//                }
-//            });
-
         }
     }
 

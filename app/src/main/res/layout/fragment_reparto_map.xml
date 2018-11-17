@@ -5,8 +5,6 @@
     android:layout_height="match_parent"
     tools:context=".reparto.RepartoMapFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <com.google.android.gms.maps.MapView
         android:id="@+id/repartomapView"
         android:layout_width="match_parent"

@@ -72,18 +72,6 @@ public class ListaDePrecioFragment extends Fragment {
         listaDepreciosRV.setAdapter(productoListaAdapter);
     }
 
-//    //TODO: eliminar esto
-//    private void cargarLista(){
-//        ArrayList<ProductoLista> productosLista = new ArrayList<>();
-//        for (int i=0; i < 100; i++){
-//
-//            Producto producto = new Producto(i, "Producto " + i, i+"L", "Descripcion " + i, true);
-//            ProductoLista productoLista = new ProductoLista(producto, i*10, Calendar.getInstance().getTime());
-//            productosLista.add(productoLista);
-//        }
-//        listaDePrecios = new ListaDePrecio(1, "Lista de Test", Calendar.getInstance().getTime().toString(), productosLista);
-//    }
-
     private void addListeners(){
         buscar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

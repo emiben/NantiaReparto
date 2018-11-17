@@ -92,8 +92,4 @@
     <string name="lista_prod_error_cliente_sin_lista">Cliente no tiene lista de precios Asociada!</string>
 
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
-
 </resources>

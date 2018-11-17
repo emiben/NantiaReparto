@@ -173,7 +173,6 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
             cliente.setTipoDocumento(TipoDocumento.NA.name());
         }
         cliente.setFechaNacimiento(fechaDeNacimiento);
-        //TODO cambiar a fecha de creado
         cliente.setFechaAlta(FechaHelper.getStringDate());
         cliente.setCelular(telefono1.getText().toString());
         cliente.setMail(email.getText().toString());
@@ -210,7 +209,6 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
         for (int i = 0; i < envAPrestamoSPs.size(); i++){
             Envase envase = (Envase) envAPrestamoSPs.get(i).getSelectedItem();
             if(envase.getId() != 0){
-                //TODO manejar los que ya existian
                 EnvaseEnPrestamo envaseEnPrestamo =
                         new EnvaseEnPrestamo(0, envase, Integer.valueOf(envAPrestamoCantETs.get(i).getText().toString()));
                 long updateId = presenter.getIdIfUpdateDeEnvase(envasesEnPrestamoOrig, envaseEnPrestamo);
@@ -343,7 +341,6 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
-                // TODO Auto-generated method stub
                 calendar.set(Calendar.YEAR, year);
                 calendar.set(Calendar.MONTH, monthOfYear);
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -356,7 +353,6 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 new DatePickerDialog(getContext(), date, calendar
                         .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH)).show();

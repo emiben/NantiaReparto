@@ -242,8 +242,6 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
 //                db.repartoDao().deleteById(reparto.getId());
                 db.repartoDao().nukeTable();
                 db.repartoDao().insertAll(reparto);
-                //Todo: Borrar despues de probar
-                db.repartoDao().getAll();
             }
         });
     }

@@ -120,8 +120,6 @@ public class VentaPresenter {
                 db.usuarioDao().nukeTable();
                 db.usuarioDao().insertAll(DataHolder.getReparto().getVendedor1(),
                         DataHolder.getReparto().getVendedor2());
-                //TODO: Eliminar despues de chequear que funciona
-                db.usuarioDao().getAll();
             }
         });
     }
@@ -259,8 +257,6 @@ public class VentaPresenter {
             @Override
             public void run() {
                 db.stockDao().updateStock(stock);
-                //TODO: Eliminar despues de chequear que funciona
-                db.stockDao().getAll();
             }
         });
     }
