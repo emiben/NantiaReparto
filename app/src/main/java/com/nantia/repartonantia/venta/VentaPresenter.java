@@ -1,15 +1,21 @@
 package com.nantia.repartonantia.venta;
 
 import android.app.Activity;
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.nantia.repartonantia.cliente.Cliente;
 import com.nantia.repartonantia.cliente.ClienteActivity;
 import com.nantia.repartonantia.data.AppDatabase;
 import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.producto.Envase;
+import com.nantia.repartonantia.reparto.Vehiculo;
+import com.nantia.repartonantia.reparto.VehiculoService;
 import com.nantia.repartonantia.stock.EnvaseStock;
 import com.nantia.repartonantia.stock.ProductoStock;
 import com.nantia.repartonantia.stock.Stock;
@@ -100,6 +106,7 @@ public class VentaPresenter {
 
         venta.setPago(pago);
 
+        updateUbicacionVehiculo();
         updateUsuariosEnDB();
         updateStock(venta.getProductosVenta());
         sendVenta(venta);
@@ -115,6 +122,27 @@ public class VentaPresenter {
                         DataHolder.getReparto().getVendedor2());
                 //TODO: Eliminar despues de chequear que funciona
                 db.usuarioDao().getAll();
+            }
+        });
+    }
+
+
+    private void updateUbicacionVehiculo(){
+        LatLng latLng = view.getUbicacionVeiculo();
+        Vehiculo vehiculo = DataHolder.getReparto().getVehiculo();
+        vehiculo.setCoordLat(String.valueOf(latLng.latitude));
+        vehiculo.setCoordLon(String.valueOf(latLng.longitude));
+        VehiculoService vehiculoService = RetrofitClientInstance.getRetrofitInstance().create(VehiculoService.class);
+        Call<Vehiculo> call = vehiculoService.updateVehiculo(vehiculo.getId(), vehiculo);
+        call.enqueue(new Callback<Vehiculo>() {
+            @Override
+            public void onResponse(Call<Vehiculo> call, Response<Vehiculo> response) {
+                Log.i(TAG, response.message());
+            }
+
+            @Override
+            public void onFailure(Call<Vehiculo> call, Throwable t) {
+                Log.e(TAG, t.getMessage());
             }
         });
     }

@@ -1,9 +1,15 @@
 package com.nantia.repartonantia.venta;
 
 
+import android.Manifest;
 import android.arch.persistence.room.Room;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +27,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
 import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.adapters.ProductoVentaAdapter;
 import com.nantia.repartonantia.cliente.ClienteActivity;
@@ -35,7 +43,7 @@ import static com.nantia.repartonantia.utils.Constantes.KEY_VENTA_VISTA;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class VentaFragment  extends Fragment implements VentaView, View.OnClickListener {
+public class VentaFragment extends Fragment implements VentaView, View.OnClickListener {
     private ProgressBar progressBar;
     private RecyclerView articulosRV;
     private TextView ivaTV;
@@ -64,8 +72,8 @@ public class VentaFragment  extends Fragment implements VentaView, View.OnClickL
         vendedor1RB.setText(DataHolder.getReparto().getVendedor1().getNombreCompleto());
         vendedor2RB.setText(DataHolder.getReparto().getVendedor2().getNombreCompleto());
 
-        if(getArguments().getSerializable(KEY_VENTA) != null){
-            Venta venta = (Venta)getArguments().getSerializable(KEY_VENTA);
+        if (getArguments().getSerializable(KEY_VENTA) != null) {
+            Venta venta = (Venta) getArguments().getSerializable(KEY_VENTA);
             AppDatabase db = Room.databaseBuilder(getContext(),
                     AppDatabase.class, KEY_DB_NOMBRE).build();
             ventaPresenter = new VentaPresenter(this, venta, db);
@@ -73,7 +81,7 @@ public class VentaFragment  extends Fragment implements VentaView, View.OnClickL
             setListeners(view);
         }
 
-        if(getArguments().getBoolean(KEY_VENTA_VISTA)){
+        if (getArguments().getBoolean(KEY_VENTA_VISTA)) {
             ocultarBotones(view);
         }
 
@@ -81,7 +89,7 @@ public class VentaFragment  extends Fragment implements VentaView, View.OnClickL
     }
 
 
-    private void initializeViewObjects(View view){
+    private void initializeViewObjects(View view) {
         articulosRV = view.findViewById(R.id.venta_articulos_rv);
         ivaTV = view.findViewById(R.id.venta_iva_tv);
         totalTV = view.findViewById(R.id.venta_total_tv);
@@ -108,7 +116,8 @@ public class VentaFragment  extends Fragment implements VentaView, View.OnClickL
         saldoTV.setText(String.valueOf(venta.calcularSaldo()));
     }
 
-    @Override public boolean isVendedor1Checked() {
+    @Override
+    public boolean isVendedor1Checked() {
         return vendedor1RB.isChecked();
     }
 
@@ -117,14 +126,38 @@ public class VentaFragment  extends Fragment implements VentaView, View.OnClickL
         getActivity().finish();
     }
 
-    private void loadData(Venta venta){
+    @Override
+    public LatLng getUbicacionVeiculo() {
+        LatLng latLng = new LatLng(-34.4557, -56.3871);
+        LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return latLng;
+        }
+        if(lm != null){
+            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            return new LatLng(location.getLatitude(), location.getLongitude());
+        }else{
+            return latLng;
+        }
+    }
+
+    private void loadData(Venta venta) {
         productoVentaAdapter = new ProductoVentaAdapter(getActivity(), venta.getProductosVenta());
         articulosRV.setLayoutManager(new LinearLayoutManager(getActivity()));
         articulosRV.setAdapter(productoVentaAdapter);
         ventaPresenter.setData("0", "0");
     }
 
-    private void setListeners(View view){
+    private void setListeners(View view) {
         descuentoTV.setOnClickListener(this);
         entregaTV.setOnClickListener(this);
         view.findViewById(R.id.venta_cancelar_btn).setOnClickListener(this);
@@ -132,7 +165,7 @@ public class VentaFragment  extends Fragment implements VentaView, View.OnClickL
         ((RadioGroup) view.findViewById(R.id.venta_rg)).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId){
+                switch (checkedId) {
                     case R.id.venta_vendedor_1_rb:
                         vendedor2RB.setChecked(false);
                         break;
@@ -143,7 +176,7 @@ public class VentaFragment  extends Fragment implements VentaView, View.OnClickL
         });
     }
 
-    private void ocultarBotones(View view){
+    private void ocultarBotones(View view) {
         descuentoTV.setClickable(false);
         entregaTV.setClickable(false);
         vendedor1RB.setClickable(false);
@@ -154,7 +187,7 @@ public class VentaFragment  extends Fragment implements VentaView, View.OnClickL
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.venta_descuento_tv:
                 showDialog(false);
                 break;
@@ -172,26 +205,26 @@ public class VentaFragment  extends Fragment implements VentaView, View.OnClickL
         }
     }
 
-    private void showError(String error){
+    private void showError(String error) {
         Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
 
     }
 
-    private void finalizarVenta(){
-        if(vendedor1RB.isChecked() || vendedor2RB.isChecked()){
+    private void finalizarVenta() {
+        if (vendedor1RB.isChecked() || vendedor2RB.isChecked()) {
             ventaPresenter.finalizarVenta();
-        }else {
+        } else {
             showError(getString(R.string.venta_error_vendedor_no_selec));
         }
     }
 
 
-    private void showDialog(final Boolean entrega){
+    private void showDialog(final Boolean entrega) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        if(entrega){
+        if (entrega) {
             builder.setTitle("Entrega");
             builder.setMessage("Ingrese el monto de entrega");
-        }else {
+        } else {
             builder.setTitle("Descuento");
             builder.setMessage("Ingrese el descuento");
         }
@@ -204,9 +237,9 @@ public class VentaFragment  extends Fragment implements VentaView, View.OnClickL
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(entrega){
+                if (entrega) {
                     entregaTV.setText(dinero.getText());
-                }else {
+                } else {
                     descuentoTV.setText(dinero.getText());
                 }
                 ventaPresenter.setData(descuentoTV.getText().toString(), entregaTV.getText().toString());
@@ -223,4 +256,5 @@ public class VentaFragment  extends Fragment implements VentaView, View.OnClickL
         builder.show();
 
     }
+
 }

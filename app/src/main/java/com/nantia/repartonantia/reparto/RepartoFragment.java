@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +15,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.util.Base64Utils;
 import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.cliente.ClienteActivity;
 import com.nantia.repartonantia.data.AppDatabase;
 import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.map.MapActivity;
-import com.nantia.repartonantia.usuario.Usuario;
 import com.nantia.repartonantia.utils.RetrofitClientInstance;
 import com.nantia.repartonantia.venta.Venta;
 import com.nantia.repartonantia.venta.VentaService;
@@ -42,6 +40,7 @@ import static com.nantia.repartonantia.utils.Constantes.KEY_REPARTO;
  * A simple {@link Fragment} subclass.
  */
 public class RepartoFragment extends Fragment implements View.OnClickListener {
+    private final String TAG = RepartoFragment.class.getName();
     private ProgressBar progressBar;
     private TextView repartoTv;
     private TextView vendedor1Tv;
@@ -109,7 +108,7 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
                 rutaTv.setText(reparto.getRuta().getNombre());
             if(reparto.getEstado() != null && !reparto.getEstado().isEmpty())
                 estadoTv.setText(reparto.getEstado());
-            if(reparto.getEstado().equals(RepartoEstado.COMENZADO.name())){
+            if(reparto.getEstado().equals(RepartoEstado.INICIADO.name())){
                 comenzarRepartoBtn.setVisibility(View.GONE);
                 finalizarRepartoBtn.setVisibility(View.VISIBLE);
             }
@@ -151,8 +150,9 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
     }
 
     private void comenzarReparto(){
-        reparto.setEstado(RepartoEstado.COMENZADO.name());
+        reparto.setEstado(RepartoEstado.INICIADO.name());
         guardarReparto(reparto);
+        actualizarEstadoReparto(reparto.getId(), RepartoEstado.INICIADO.name());
         comenzarRepartoBtn.setVisibility(View.GONE);
         finalizarRepartoBtn.setVisibility(View.VISIBLE);
         estadoTv.setText(reparto.getEstado());
@@ -161,6 +161,7 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
     private void finalizarReparto(){
         progressBar.setVisibility(View.VISIBLE);
         DataHolder.getReparto().setEstado(RepartoEstado.FINALIZADO.name());
+        actualizarEstadoReparto(reparto.getId(), RepartoEstado.FINALIZADO.name());
         reparto.setEstado(RepartoEstado.FINALIZADO.name());
         estadoTv.setText(reparto.getEstado());
         enviarData();
@@ -193,6 +194,22 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
         }else{
             borrarData();
         }
+    }
+
+    private void actualizarEstadoReparto(long id, String estado){
+        RepartoService repartoService = RetrofitClientInstance.getRetrofitInstance().create(RepartoService.class);
+        Call<ResponseBody> call = repartoService.updateEstadoReparto(id, estado);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.i(TAG, response.message());
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e(TAG, t.getMessage());
+            }
+        });
     }
 
     private void borrarData(){
