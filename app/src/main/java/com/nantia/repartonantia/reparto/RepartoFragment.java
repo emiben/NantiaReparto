@@ -121,7 +121,7 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
             case R.id.comenzar_reparto_btn:
                 comenzarReparto();
                 break;
-            case R.id.venta_finalizar_btn:
+            case R.id.finalizar_reparto_btn:
                 finalizarReparto();
                 break;
             case R.id.reparto_ruta_lo:
@@ -164,7 +164,6 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
         reparto.setEstado(RepartoEstado.FINALIZADO.name());
         estadoTv.setText(reparto.getEstado());
         enviarData();
-        actualizarEstadoReparto(reparto.getId(), RepartoEstado.FINALIZADO.name());
     }
 
     private void enviarData(){
@@ -177,6 +176,8 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     if(response.code() == HTTP_OK){
                         borrarData();
+                        actualizarEstadoReparto(reparto.getId(), RepartoEstado.FINALIZADO.name());
+                        getActivity().finish();
                     }else{
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(getContext(),
@@ -193,6 +194,8 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
             });
         }else{
             borrarData();
+            actualizarEstadoReparto(reparto.getId(), RepartoEstado.FINALIZADO.name());
+            getActivity().finish();
         }
     }
 
@@ -227,9 +230,9 @@ public class RepartoFragment extends Fragment implements View.OnClickListener {
                 db.rutaDao().nukeTable();
                 db.repartoDao().nukeTable();
                 db.ventaDao().nukeTable();
-                progressBar.setVisibility(View.GONE);
             }
         });
+        progressBar.setVisibility(View.GONE);
     }
 
     private void guardarReparto(final Reparto reparto){

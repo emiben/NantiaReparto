@@ -23,7 +23,7 @@ public interface RepartoService {
     @GET("reparto/{id}")
     Call<Reparto> getReparto(@Path("id") long id);
 
-    @PUT("updateEstadoReparto/{id}/{estado}")
+    @PUT("datareparto/updateEstadoReparto/{id}/{estado}")
     @Headers({
             "Content-Type: application/json;charset=utf-8",
             "Accept: application/json;charset=utf-8"})

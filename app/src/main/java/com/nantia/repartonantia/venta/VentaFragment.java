@@ -51,10 +51,12 @@ public class VentaFragment extends Fragment implements VentaView, View.OnClickLi
     private TextView descuentoTV;
     private TextView entregaTV;
     private TextView saldoTV;
+    private RadioGroup radioGroup;
     private RadioButton vendedor1RB;
     private RadioButton vendedor2RB;
     private VentaPresenter ventaPresenter;
     private ProductoVentaAdapter productoVentaAdapter;
+    private Boolean ventaVista;
 
     public VentaFragment() {
         // Required empty public constructor
@@ -72,6 +74,8 @@ public class VentaFragment extends Fragment implements VentaView, View.OnClickLi
         vendedor1RB.setText(DataHolder.getReparto().getVendedor1().getNombreCompleto());
         vendedor2RB.setText(DataHolder.getReparto().getVendedor2().getNombreCompleto());
 
+        ventaVista = getArguments().getBoolean(KEY_VENTA_VISTA);
+
         if (getArguments().getSerializable(KEY_VENTA) != null) {
             Venta venta = (Venta) getArguments().getSerializable(KEY_VENTA);
             AppDatabase db = Room.databaseBuilder(getContext(),
@@ -81,7 +85,7 @@ public class VentaFragment extends Fragment implements VentaView, View.OnClickLi
             setListeners(view);
         }
 
-        if (getArguments().getBoolean(KEY_VENTA_VISTA)) {
+        if (ventaVista) {
             ocultarBotones(view);
         }
 
@@ -96,6 +100,7 @@ public class VentaFragment extends Fragment implements VentaView, View.OnClickLi
         descuentoTV = view.findViewById(R.id.venta_descuento_tv);
         entregaTV = view.findViewById(R.id.venta_entrega_tv);
         saldoTV = view.findViewById(R.id.venta_saldo_tv);
+        radioGroup = view.findViewById(R.id.venta_rg);
         vendedor1RB = view.findViewById(R.id.venta_vendedor_1_rb);
         vendedor2RB = view.findViewById(R.id.venta_vendedor_2_rb);
         progressBar = view.findViewById(R.id.venta_pb);
@@ -154,7 +159,11 @@ public class VentaFragment extends Fragment implements VentaView, View.OnClickLi
         productoVentaAdapter = new ProductoVentaAdapter(getActivity(), venta.getProductosVenta());
         articulosRV.setLayoutManager(new LinearLayoutManager(getActivity()));
         articulosRV.setAdapter(productoVentaAdapter);
-        ventaPresenter.setData("0", "0");
+        if(ventaVista){
+            ventaPresenter.setData(String.valueOf(venta.getDescuento()), String.valueOf(venta.getPagoTotal()));
+        }else{
+            ventaPresenter.setData("0", "0");
+        }
     }
 
     private void setListeners(View view) {
@@ -179,8 +188,7 @@ public class VentaFragment extends Fragment implements VentaView, View.OnClickLi
     private void ocultarBotones(View view) {
         descuentoTV.setClickable(false);
         entregaTV.setClickable(false);
-        vendedor1RB.setClickable(false);
-        vendedor2RB.setClickable(false);
+        radioGroup.setVisibility(View.GONE);
         view.findViewById(R.id.venta_cancelar_btn).setVisibility(View.GONE);
         view.findViewById(R.id.venta_finalizar_btn).setVisibility(View.GONE);
     }

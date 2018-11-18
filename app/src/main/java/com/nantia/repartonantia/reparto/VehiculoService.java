@@ -9,7 +9,7 @@ import retrofit2.http.Path;
 
 public interface VehiculoService {
 
-    @PUT("updateEstadoReparto/{id}")
+    @PUT("vehiculo/{id}")
     @Headers({
             "Content-Type: application/json;charset=utf-8",
             "Accept: application/json;charset=utf-8"})

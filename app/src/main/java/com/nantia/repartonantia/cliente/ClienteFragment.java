@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.adapters.ClienteAdapter;
 import com.nantia.repartonantia.adapters.ClienteInfoPOJO;
+import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.producto.Envase;
 import com.nantia.repartonantia.venta.Venta;
 import com.nantia.repartonantia.venta.VentaActivity;
@@ -64,6 +65,19 @@ public class ClienteFragment extends Fragment implements ClienteView {
         addListeners(view);
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(cliente != null){
+            if(DataHolder.getClienteById(cliente.getId()) != null){
+                cliente = DataHolder.getClienteById(cliente.getId());
+            }
+            clientePresenter.cargarInfo();
+        }
+
     }
 
     @Override

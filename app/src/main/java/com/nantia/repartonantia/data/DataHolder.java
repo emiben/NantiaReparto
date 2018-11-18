@@ -141,4 +141,14 @@ public class DataHolder {
         }
         return mVentas;
     }
+
+    public static Cliente getClienteById(long id){
+        Cliente cliente = null;
+        for(Cliente clienteTemp : clientes){
+            if(clienteTemp.getId() == id){
+                cliente = clienteTemp;
+            }
+        }
+        return cliente;
+    }
 }
