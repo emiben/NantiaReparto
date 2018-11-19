@@ -106,6 +106,35 @@ public class ClienteFragment extends Fragment implements ClienteView {
                 navigateToVenta();
             }
         });
+        view.findViewById(R.id.visitado_boton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                marcarComoVisitado();
+            }
+        });
+    }
+
+    private void marcarComoVisitado(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("Desea marcar el cliente como visitado?");
+        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                cliente.setVisitado(true);
+                DataHolder.updateClienteEnReparto(cliente);
+                DataHolder.removeClienteById(cliente.getId());
+                DataHolder.getClientes().add(cliente);
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     private void navigateToVenta() {
