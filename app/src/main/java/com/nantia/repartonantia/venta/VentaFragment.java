@@ -161,6 +161,12 @@ public class VentaFragment extends Fragment implements VentaView, View.OnClickLi
         articulosRV.setAdapter(productoVentaAdapter);
         if(ventaVista){
             ventaPresenter.setData(String.valueOf(venta.getDescuento()), String.valueOf(venta.getPagoTotal()));
+            if(vendedor1RB.getText().equals(venta.getUsuario().getNombreCompleto())){
+                vendedor1RB.setChecked(true);
+            }else{
+                vendedor2RB.setChecked(true);
+            }
+
         }else{
             ventaPresenter.setData("0", "0");
         }
@@ -188,7 +194,9 @@ public class VentaFragment extends Fragment implements VentaView, View.OnClickLi
     private void ocultarBotones(View view) {
         descuentoTV.setClickable(false);
         entregaTV.setClickable(false);
-        radioGroup.setVisibility(View.GONE);
+//        radioGroup.setVisibility(View.GONE);
+        vendedor1RB.setClickable(false);
+        vendedor2RB.setClickable(false);
         view.findViewById(R.id.venta_cancelar_btn).setVisibility(View.GONE);
         view.findViewById(R.id.venta_finalizar_btn).setVisibility(View.GONE);
     }

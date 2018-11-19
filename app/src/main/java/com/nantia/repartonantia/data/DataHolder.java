@@ -125,6 +125,7 @@ public class DataHolder {
             for (int i = 0; i < clientes.size() && !encontre; i++){
                 if(clientes.get(i).getId() == cliente.getId()){
                     reparto.getRuta().updateCliente(cliente);
+                    encontre = true;
                 }
             }
         }

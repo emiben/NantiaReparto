@@ -45,7 +45,7 @@ public class ListaRepartoPresenter {
                 }else {
                     view.onSetProgressBarVisibility(View.GONE);
                     //TODO: implementar el manejo de errores
-                    view.showError("implementar el manejo de errores getRepartosInfo");
+                    view.showError("No hay repartos creados!!");
                 }
             }
 
