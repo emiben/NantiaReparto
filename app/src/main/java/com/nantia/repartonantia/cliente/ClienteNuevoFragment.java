@@ -1,6 +1,7 @@
 package com.nantia.repartonantia.cliente;
 
 import android.app.DatePickerDialog;
+import android.arch.persistence.room.Room;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -30,6 +31,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.nantia.repartonantia.R;
 import com.nantia.repartonantia.adapters.EnvaseSpinnerAdapter;
 import com.nantia.repartonantia.adapters.ListaDePreciosSpinAdapter;
+import com.nantia.repartonantia.data.AppDatabase;
 import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.listadeprecios.ListaDePrecio;
 import com.nantia.repartonantia.map.ClienteMapaFragment;
@@ -44,6 +46,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.nantia.repartonantia.utils.Constantes.KEY_CLIENTE;
+import static com.nantia.repartonantia.utils.Constantes.KEY_DB_NOMBRE;
 
 /**
  *
@@ -110,7 +113,9 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cliente_nuevo, container, false);
-        presenter = new ClienteNuevoPresenter(this);
+        AppDatabase db = Room.databaseBuilder(getContext(),
+                AppDatabase.class, KEY_DB_NOMBRE).build();
+        presenter = new ClienteNuevoPresenter(this, db);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         initializeViewObjects(view);
         setOnClickListeners();
@@ -585,7 +590,7 @@ public class ClienteNuevoFragment extends Fragment implements ClienteNuevoView, 
                 viernes.setChecked(isChecked);
                 break;
             case SABADO:
-                viernes.setSelected(isChecked);
+                sabado.setSelected(isChecked);
                 sabado.setChecked(isChecked);
                 break;
             default:

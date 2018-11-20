@@ -67,6 +67,15 @@ public class DataHolder {
         DataHolder.listasDePrecios = listasDePrecios;
     }
 
+    //TODO: Fix bug que agrega como lista de precios la lista ID 0 "Elegir lista de precios"
+    public static void removeListaCero(){
+        for(ListaDePrecio listaDePrecio : listasDePrecios){
+            if(listaDePrecio.getId() == 0){
+                listasDePrecios.remove(listaDePrecio);
+            }
+        }
+    }
+
 //    public static Stock getStock() {
 //        return stock;
 //    }

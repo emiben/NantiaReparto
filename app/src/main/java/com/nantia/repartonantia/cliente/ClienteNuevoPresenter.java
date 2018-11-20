@@ -1,8 +1,10 @@
 package com.nantia.repartonantia.cliente;
 
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 
+import com.nantia.repartonantia.data.AppDatabase;
 import com.nantia.repartonantia.data.DataHolder;
 import com.nantia.repartonantia.producto.Envase;
 import com.nantia.repartonantia.producto.EnvaseService;
@@ -22,9 +24,11 @@ import retrofit2.Response;
 public class ClienteNuevoPresenter {
     private final String TAG = ClienteNuevoPresenter.class.getName();
     private ClienteNuevoView view;
+    private AppDatabase db;
 
-    public ClienteNuevoPresenter(ClienteNuevoView view) {
+    public ClienteNuevoPresenter(ClienteNuevoView view, AppDatabase db) {
         this.view = view;
+        this.db = db;
     }
 
 
@@ -63,6 +67,7 @@ public class ClienteNuevoPresenter {
             public void onResponse(Call<Cliente> call, Response<Cliente> response) {
                 if (response.code() < 400){
                     DataHolder.getClientes().add(response.body());
+                    saveClienteEnDB(response.body());
                     view.onSetProgressBarVisibility(View.GONE);
                     view.navigateToClienteFragment(response.body());
                 }else {
@@ -81,6 +86,15 @@ public class ClienteNuevoPresenter {
         });
     }
 
+    private void saveClienteEnDB(final Cliente cliente){
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                db.clienteDao().insertAll(cliente);
+            }
+        });
+    }
+
     public void updateCliente(final Cliente cliente, final Cliente clienteToRemove){
         view.onSetProgressBarVisibility(View.VISIBLE);
         ClienteService clienteService = RetrofitClientInstance.getRetrofitInstance().create(ClienteService.class);
@@ -90,7 +104,8 @@ public class ClienteNuevoPresenter {
             public void onResponse(Call<Cliente> call, Response<Cliente> response) {
                 DataHolder.getClientes().remove(clienteToRemove);
                 DataHolder.getClientes().add(response.body());
-                //TODO: Guardar en base de datos
+                //TODO: Esta duplicando el cliente
+                //updateClienteEnDB(response.body(), clienteToRemove);
                 view.onSetProgressBarVisibility(View.GONE);
                 view.navigateToClienteFragment(response.body());
             }
@@ -100,6 +115,16 @@ public class ClienteNuevoPresenter {
                 Log.e(TAG, t.getMessage());
                 view.onSetProgressBarVisibility(View.GONE);
                 view.showError(t.getMessage());
+            }
+        });
+    }
+
+    private void updateClienteEnDB(final Cliente cliente, final Cliente clienteToRemove){
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                db.clienteDao().delete(clienteToRemove);
+                db.clienteDao().insertAll(cliente);
             }
         });
     }
