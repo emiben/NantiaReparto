@@ -162,7 +162,7 @@ public class VentaPresenter {
                         Iterator<EnvaseStock> envaseIterator = stock.getEnvasesStock().iterator();
                         while (envaseIterator.hasNext() && !encontreEnv){
                             EnvaseStock envaseStock = envaseIterator.next();
-                            if(productoVenta.getProducto().getEnvase().getId() == envaseStock.getEnvase().getId()){
+                            if(productoVenta.getProducto().getEnvase() != null && productoVenta.getProducto().getEnvase().getId() == envaseStock.getEnvase().getId()){
                                 stock.getEnvasesStock().remove(envaseStock);
                                 envaseStock.setCantidad(envaseStock.getCantidad() + productoVenta.getCantidad());
                                 stock.getEnvasesStock().add(envaseStock);

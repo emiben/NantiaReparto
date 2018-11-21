@@ -28,8 +28,7 @@ public class ListaDeListasDePrecioPresenter {
     public void getListasDePrecios(){
         view.onSetProgressBarVisibility(View.VISIBLE);
         if(DataHolder.getListasDePrecios() != null && DataHolder.getListasDePrecios().size() > 0){
-            DataHolder.removeListaCero();
-            view.setListasDePrecioInfo(DataHolder.getListasDePrecios());
+            view.setListasDePrecioInfo(DataHolder.removeListaCero());
             view.addListeners();
             view.onSetProgressBarVisibility(View.GONE);
         }else {
